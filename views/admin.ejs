@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard – NamasteFit</title>
+  <link rel="stylesheet" href="/style.css" />
+  <script src="https://kit.fontawesome.com/bb7a749298.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <%- include('partials/nav') %>
+
+  <main class="admin-section">
+    <h1>Admin Dashboard</h1>
+
+    <!-- Manage Programs -->
+    <section class="admin-panel">
+      <h2>Workout/Yoga Programs</h2>
+      <a href="/admin/programs/new" class="btn small">+ Add New Program</a>
+      <div class="tbl">
+        <table>
+            <thead>
+            <tr>
+                <th>SN</th>
+                <th>Title</th>
+                <th>Duration</th>
+                <th>Price</th>
+                <th>Video</th>
+                <th colspan="2">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% programs.forEach(program => { %>
+                <tr>
+                    <td>1</td>
+                    <td style="width: 60%; text-align: left;"><%= program.title %></td>
+                    <td><%= program.duration %> min</td>
+                    <td>$<%= program.price %></td>
+                    <td><a href="<%= program.videoUrl %>" target="_blank">Watch</a></td>
+                    <td>
+                        <a href="/admin/programs/edit/<%= program._id %>"><i class="fa-regular fa-pen-to-square"></i></a>
+                    </td>
+                    <td>
+                        <a href=""><i class="fa-regular fa-trash-can"></i></a>
+                    </td>
+                </tr>
+            <% }) %>
+            </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Manage Subscribers -->
+    <section class="admin-panel">
+      <h2>Subscribers</h2>
+      <div class="tbl">
+        <table>
+            <thead>
+            <tr>
+                <th>SN</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Plan</th>
+                <th>Joined On</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% subscribers.forEach(user => { %>
+                <tr>
+                    <td>1</td>
+                    <td><%= user.name %></td>
+                    <td><%= user.email %></td>
+                    <td><%= user.plan %></td>
+                    <td><%= user.joinDate %></td>
+                </tr>
+            <% }) %>
+            </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Payment History -->
+    <section class="admin-panel">
+      <h2>Payment History</h2>
+      <div class="tbl">
+        <table>
+            <thead>
+            <tr>
+                <th>SN</th>
+                <th>User</th>
+                <th>Plan</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Transaction ID</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% payments.forEach(payment => { %>
+                <tr>
+                    <td>1</td>
+                    <td><%= payment.user %></td>
+                    <td><%= payment.plan %></td>
+                    <td>$<%= payment.amount %></td>
+                    <td><%= payment.date %></td>
+                    <td><%= payment.txnId %></td>
+                </tr>
+            <% }) %>
+            </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <%- include('partials/footer') %>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Entry Card – NamasteFit</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <%- include('partials/nav') %>
+
+  <main class="entry-card-container">
+    <div class="entry-card">
+      <h2>NamasteFit Entry Pass</h2>
+      <div class="entry-content">
+        <p><strong>Name:</strong> <%= user.name %></p>
+        <p><strong>Program:</strong> <%= program.title %></p>
+        <p><strong>Purchased On:</strong> <%= purchaseDate %></p>
+        <p><strong>Valid Till:</strong> <%= expiryDate %></p>
+        <div class="qr-box">
+          <img src="<%= qrCodeUrl || '/images/qr-placeholder.png' %>" alt="QR Code" />
+          <p class="note">Scan at studio entry</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <%- include('partials/footer') %>
+</body>
+</html>
