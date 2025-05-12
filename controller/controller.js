@@ -43,6 +43,10 @@ export const userpage = (req,res) =>{
 const programs = [
   { title: "Morning Stretch", description: "Start your day fresh", duration: 30, price: 10, videoUrl: "https://youtube.com/..." },
   { title: "Core Strength", description: "Focus on abs and core", duration: 45, price: 15, videoUrl: "https://youtube.com/..." },
+  { title: "Core Strength", description: "Focus on abs and core", duration: 45, price: 15, videoUrl: "https://youtube.com/..." },
+  { title: "Core Strength", description: "Focus on abs and core", duration: 45, price: 15, videoUrl: "https://youtube.com/..." },
+  { title: "Core Strength", description: "Focus on abs and core", duration: 45, price: 15, videoUrl: "https://youtube.com/..." },
+  { title: "Core Strength", description: "Focus on abs and core", duration: 45, price: 15, videoUrl: "https://youtube.com/..." },
 ];
 
 const subscriptions = [

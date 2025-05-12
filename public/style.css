@@ -8,75 +8,75 @@
 }
 
 /******** NavBar CSS ********/
-header {
+li{
+  list-style: none;
+}
+a{
+  text-decoration: none;
+  font-size: 1rem;
+  color: #222;
   width: 100%;
-  background-color: #fff;
+  text-align: center;
+}
+a:hover{
+  color: #388E3C;
+}
+header{
+  position: relative;
+  width: 100%;
+  padding: 0 2rem;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+.navbar{
+  width: 100%;
+  height: 8vh;
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 10rem;
-  height: 8vh;
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-  position: fixed; /* better for sticky navbar */
-  top: 0;
-  z-index: 1000;
 }
-
-header h2 {
+.navbar .logo a{
+  font-size: 1.8rem;
+  font-weight: 600;
   color: #4CAF50;
 }
-
-.navbar ul {
+.navbar .links{
   display: flex;
-  gap: 20px;
+  gap: 2rem;
 }
 
-.navbar ul li {
-  list-style: none;
-  padding: 10px 20px; /* Padding on li instead of a */
+.toggle-btn{
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: none;
 }
-
-.navbar ul li a {
-  position: relative;
-  text-decoration: none;
-  color: #333;
-  font-weight: 500;
-  transition: color 0.3s;
-  display: inline-block; /* important: only as wide as text */
-}
-
-/* Underline only as wide as the text */
-.navbar ul li a::after {
-  content: "";
+.dropdown-menu{
+  display: none;
   position: absolute;
-  left: 0;
-  bottom: -3px;
-  width: 0%;
-  height: 2px;
-  background-color: #4CAF50;
-  transition: width 0.3s ease-in-out;
+  right: 2rem;
+  top: 9vh;
+  height: 0;
+  width: 200px;
+  background-color: whitesmoke;
+  overflow: hidden;
+  border-radius: 10px;
+  z-index: 99;
+  transition: height 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
+.dropdown-menu.open{
+  height: 220px;
 
-/* On hover: underline grows to text width */
-.navbar ul li a:hover::after {
-  width: 100%;
 }
-
-/* Hover color */
-.navbar ul li a:hover {
+.dropdown-menu li{
+  padding: .7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dropdown-menu li a:hover{
   color: #4CAF50;
 }
-
-/* Active link */
-.navbar ul li a.active {
-  color: #388E3C;
-}
-
-.navbar ul li a.active::after {
-  width: 100%;
-  background-color: #388E3C;
-}
-
 
 /****** Footer CSS ******/
 footer {
@@ -94,7 +94,7 @@ section {
   background-size: cover;         /* Ensures the image covers the section */
   background-position: center;    /* Keeps it centered */
   background-repeat: no-repeat;   /* Prevents image tiling */
-  height: 100vh;
+  height: auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -103,11 +103,9 @@ section {
   text-align: center;
 }
 
-/* Optional: Add a dark overlay for better text visibility */
 section::before {
   content: "";
   position: absolute;
-  inset: 0;
   background: rgba(0, 0, 0, 0.4); /* semi-transparent black */
   z-index: 1;
 }
@@ -152,58 +150,8 @@ section .content .btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 18px rgba(76, 175, 80, 0.4);
 }
-
-
-
-/****** Responsive Design ******/
-@media (max-width: 768px) {
-  header {
-    padding: 0 2rem;
-    flex-direction: column;
-    height: auto;
-    gap: 10px;
-    align-items: flex-start;
-  }
-
-  .navbar ul {
-    flex-direction: column;
-    width: 100%;
-    gap: 10px;
-  }
-
-  .navbar ul li a {
-    display: block;
-    padding: 8px 0;
-  }
-}
-
-@media (max-width: 480px) {
-  header h2 {
-    font-size: 1.2rem;
-  }
-
-  .navbar ul li a {
-    font-size: 0.9rem;
-  }
-
-  footer {
-    font-size: 0.8rem;
-    padding: 0.8rem;
-  }
-}
-@media (max-width: 600px) {
-  section .content h1 {
-    font-size: 2rem;
-  }
-
-  section .content p {
-    font-size: 1rem;
-  }
-
-  section .content .btn {
-    padding: 12px 24px;
-    font-size: 0.95rem;
-  }
+.home{
+  min-height: calc(100vh - 6vh); /* 100vh minus header and footer height */
 }
 /****** Plan CSS *****/
 .plans-section {
@@ -274,13 +222,6 @@ section .content .btn:hover {
   border: 2px solid #4CAF50;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .plan-container {
-    flex-direction: column;
-    align-items: center;
-  }
-}
 /****** Subscription CSS ****/
 .subscribe-section {
   min-height: calc(100vh - 6vh); /* 100vh minus header and footer height */
@@ -343,12 +284,6 @@ section .content .btn:hover {
   background-color: #388E3C;
 }
 
-/* Responsive */
-@media (max-width: 600px) {
-  .subscribe-form {
-    padding: 1.5rem;
-  }
-}
 /****** Login CSS ******/
 .login-section {
   min-height: calc(100vh - 6vh);
@@ -418,12 +353,6 @@ section .content .btn:hover {
   text-decoration: underline;
 }
 
-/* Responsive */
-@media (max-width: 600px) {
-  .login-form {
-    padding: 1.5rem;
-  }
-}
 /****** Register CSS *****/
 .register-section {
   min-height: calc(100vh - 6vh);
@@ -493,14 +422,6 @@ section .content .btn:hover {
   text-decoration: underline;
 }
 
-/* Responsive */
-@media (max-width: 600px) {
-  .register-form {
-    padding: 1.5rem;
-  }
-}
-/****** Admin CSS ******/
-
 /****** Admin Dashboard CSS ******/
 .admin-section {
   min-height: calc(100vh - 6vh);
@@ -564,7 +485,7 @@ section .content .btn:hover {
 
 /* Table styles */
 .tbl{
-    width: 1200px;
+    width: 100%;
     margin: 0 auto;
 }
 table {
@@ -590,37 +511,6 @@ table th {
   display: inline;
 }
 
-/* Responsive Table */
-@media (max-width: 768px) {
-  .admin-section {
-    padding: 1.5rem;
-  }
-
-  table, thead, tbody, th, td, tr {
-    display: block;
-  }
-
-  table thead {
-    display: none;
-  }
-
-  table td {
-    padding-left: 50%;
-    position: relative;
-    border: none;
-    border-bottom: 1px solid #eee;
-  }
-
-  table td::before {
-    content: attr(data-label);
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    font-weight: bold;
-    color: #4CAF50;
-  }
-}
-
 /******* User CSS ******/
 
 .program-list {
@@ -628,7 +518,7 @@ table th {
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1.5rem;
   margin-top: 1rem;
-  width: 50%;
+  width: 100%;
 }
 
 .program-card {
@@ -655,18 +545,6 @@ table th {
   color: #555;
 }
 
-/* Subscription Table already uses .admin-panel table styling */
-
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-  .program-card {
-    padding: 1rem;
-  }
-
-  .program-card h3 {
-    font-size: 1.1rem;
-  }
-}
 
 /****** Card CSS ******/
 /****** Entry Card Styles ******/
@@ -714,3 +592,62 @@ table th {
   color: #666;
 }
 
+
+
+/****** Responsive Design ******/
+@media (max-width: 726px) {
+  .navbar .links{
+    display: none;
+  }
+  .navbar .toggle-btn{
+    display: block;
+  }
+  .dropdown-menu{
+    display: block;
+  }
+  .plan-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  .admin-section {
+    padding: 1.5rem;
+  }
+  .tbl{
+    overflow-x: auto;
+  }
+  .program-card {
+    padding: 1rem;
+  }
+
+  .program-card h3 {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .dropdown-menu{
+    left: 2rem;
+    width: unset;
+  }
+  footer {
+    font-size: 0.8rem;
+    padding: 0.8rem;
+  }
+}
+@media (max-width: 600px) {
+  section .content h1 {
+    font-size: 2rem;
+  }
+
+  section .content p {
+    font-size: 1rem;
+  }
+
+  section .content .btn {
+    padding: 12px 24px;
+    font-size: 0.95rem;
+  }
+  .login-form,.register-form,.subscribe-form {
+    padding: 1.5rem;
+  }
+}

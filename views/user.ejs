@@ -42,13 +42,14 @@
                 <th>Date</th>
                 <th>Status</th>
                 <th>Action</th>
+                <th>Entry Card</th>
             </tr>
             </thead>
             <tbody>
             <% subscriptions.forEach(sub => { %>
                 <tr>
                     <td>1</td>
-                <td><%= sub.plan %></td>
+                <td style="width: 50%; text-align: left;"><%= sub.plan %></td>
                 <td>$<%= sub.amount %></td>
                 <td><%= sub.date %></td>
                 <td><%= sub.status %></td>
@@ -59,6 +60,7 @@
                     <span>N/A</span>
                     <% } %>
                 </td>
+                <td><a href="/card"><i class="fa-regular fa-address-card"></i></a></td>
                 </tr>
             <% }) %>
             </tbody>
