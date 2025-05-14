@@ -11,3 +11,8 @@ export const registerValidate = z
     message: "Passwords do not match",
     path: ["confirmPassword"],
   });
+
+  export const loginValidation = z.object({
+    email: z.string().email({message:"Email not valid"}),
+    password: z.string().min(6,{message:"Password must contain at least 6 characters"}),
+  })

@@ -1,5 +1,5 @@
-import { checkEmail, hashpass, saveData } from "../model/model.js";
-import { registerValidate } from "../validation/validation.js";
+import { checkEmail, checkPass, generateToken, hashpass, saveData } from "../model/model.js";
+import { loginValidation, registerValidate } from "../validation/validation.js";
 
 
 export const savedata = async (req,res) =>{
@@ -27,4 +27,42 @@ export const savedata = async (req,res) =>{
     console.log(id);
 
     res.redirect('/login');
+}
+
+export const loginData = async (req,res) =>{
+    //console.log(req.body);
+
+    const {data,error} = loginValidation.safeParse(req.body);
+
+    if(error){
+        req.flash("errors",error.errors[0].message);
+        return res.redirect('/login');
+    }
+
+    const {email,password} = data;
+
+    const [checkedEmail] = await checkEmail(email);
+    //console.log(checkedEmail);
+
+    if(!checkedEmail){
+        req.flash("errors","Please check email and password");
+        return res.redirect('/login');
+    }
+
+    const checkedPass = await checkPass(checkedEmail.pass,password);
+
+    if(!checkedPass){
+        req.flash("errors","Please check email or password");
+        return res.redirect('/login')
+    }
+    
+    const token = generateToken({
+        id: checkedEmail.id,
+        name: checkedEmail.name,
+        email: checkedEmail.email,
+    })
+
+    res.cookie("access-token",token);
+
+    res.redirect('/');
 }
