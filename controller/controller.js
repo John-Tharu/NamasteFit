@@ -11,7 +11,9 @@ export const subscriptionpage = (req,res) =>{
 }
 
 export const loginpage = (req,res) =>{
-    res.render('login');
+    const cookieData = req.cookies.isLoggedIn;
+    console.log(cookieData);
+    res.render('login',{msg: req.flash('errors')});
 }
 
 export const registerpage = (req,res) =>{

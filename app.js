@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import { routerdata } from './router/router.js';
 import session from 'express-session';
 import flash from 'express-flash';
+import cookieParser from 'cookie-parser';
 dotenv.config();
 
 const app = express();
@@ -18,6 +19,8 @@ app.use(session({
 }));
 
 app.use(flash());
+
+app.use(cookieParser());
 
 app.set('view engine','ejs');
 
