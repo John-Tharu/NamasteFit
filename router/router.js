@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { adminpage, cardpage, homepage, loginpage, planpage, programpage, registerpage, subscriptionpage, userpage } from "../controller/controller.js";
+import { savedata } from "../controller/post.controller.js";
 
 const router = Router();
 
@@ -11,7 +12,7 @@ router.route('/subscription').get(subscriptionpage);
 
 router.route('/login').get(loginpage);
 
-router.route('/register').get(registerpage);
+router.route('/register').get(registerpage).post(savedata);
 
 router.route('/admin').get(adminpage);
 

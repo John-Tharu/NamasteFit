@@ -15,7 +15,7 @@ export const loginpage = (req,res) =>{
 }
 
 export const registerpage = (req,res) =>{
-    res.render('register');
+    res.render('register',{msg: req.flash('errors')});
 }
 
 export const adminpage = (req,res) =>{
