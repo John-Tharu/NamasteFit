@@ -132,7 +132,9 @@ section .content p {
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
 }
 
-section .content .btn {
+.btn {
+  border: none;
+  cursor: pointer;
   display: inline-block;
   padding: 14px 30px;
   background-color: #4CAF50;
@@ -145,17 +147,17 @@ section .content .btn {
   box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
 }
 
-section .content .btn:hover {
+.btn:hover {
   background-color: #388E3C;
   transform: translateY(-2px);
   box-shadow: 0 6px 18px rgba(76, 175, 80, 0.4);
 }
 .home{
-  min-height: calc(100vh - 6vh); /* 100vh minus header and footer height */
+  min-height: calc(100vh - 14vh); /* 100vh minus header and footer height */
 }
 /****** Plan CSS *****/
 .plans-section {
-  min-height: calc(100vh - 6vh); /* 100vh minus header and footer height */
+  min-height: calc(100vh - 14vh); /* 100vh minus header and footer height */
   padding: 4rem 2rem;
   text-align: center;
   display: flex;
@@ -224,7 +226,7 @@ section .content .btn:hover {
 
 /****** Subscription CSS ****/
 .subscribe-section {
-  min-height: calc(100vh - 6vh); /* 100vh minus header and footer height */
+  min-height: calc(100vh - 14vh); /* 100vh minus header and footer height */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -592,7 +594,15 @@ table th {
   color: #666;
 }
 
-
+.error{
+  margin-bottom: 20px;
+  background-color: #c628283f;
+  padding: 16px;
+  font-size: 1rem;
+  border-radius: 5px;
+  border-left: 5px solid crimson;
+  color: rgb(143, 14, 14);
+}
 
 /****** Responsive Design ******/
 @media (max-width: 726px) {

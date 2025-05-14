@@ -33,6 +33,10 @@
         <input type="password" id="confirmPassword" name="confirmPassword" required />
       </div>
 
+     <% if(msg && msg.length > 0){ %>
+      <p class="error"><%= msg %></p>
+    <% } %>
+      
       <button type="submit" class="btn">Register</button>
       <p class="redirect">Already have an account? <a href="/login">Login here</a></p>
     </form>
