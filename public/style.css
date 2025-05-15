@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 
 * {
   margin: 0;
@@ -8,26 +8,26 @@
 }
 
 /******** NavBar CSS ********/
-li{
+li {
   list-style: none;
 }
-a{
+a {
   text-decoration: none;
   font-size: 1rem;
   color: #222;
   width: 100%;
   text-align: center;
 }
-a:hover{
-  color: #388E3C;
+a:hover {
+  color: #388e3c;
 }
-header{
+header {
   position: relative;
   width: 100%;
   padding: 0 2rem;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
-.navbar{
+.navbar {
   width: 100%;
   height: 8vh;
   max-width: 1200px;
@@ -36,22 +36,22 @@ header{
   align-items: center;
   justify-content: space-between;
 }
-.navbar .logo a{
+.navbar .logo a {
   font-size: 1.8rem;
   font-weight: 600;
-  color: #4CAF50;
+  color: #4caf50;
 }
-.navbar .links{
+.navbar .links {
   display: flex;
   gap: 2rem;
 }
 
-.toggle-btn{
+.toggle-btn {
   font-size: 1.5rem;
   cursor: pointer;
   display: none;
 }
-.dropdown-menu{
+.dropdown-menu {
   display: none;
   position: absolute;
   right: 2rem;
@@ -64,18 +64,17 @@ header{
   z-index: 99;
   transition: height 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-.dropdown-menu.open{
+.dropdown-menu.open {
   height: 220px;
-
 }
-.dropdown-menu li{
-  padding: .7rem;
+.dropdown-menu li {
+  padding: 0.7rem;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.dropdown-menu li a:hover{
-  color: #4CAF50;
+.dropdown-menu li a:hover {
+  color: #4caf50;
 }
 
 /****** Footer CSS ******/
@@ -90,10 +89,10 @@ footer {
 
 /****** Section CSS ******/
 section {
-  background-image: url('https://img.freepik.com/premium-photo/back-view-focused-young-woman-running-treadmill-modern-gym-setting-highlighting-fitness-dedication_29120-14407.jpg');
-  background-size: cover;         /* Ensures the image covers the section */
-  background-position: center;    /* Keeps it centered */
-  background-repeat: no-repeat;   /* Prevents image tiling */
+  background-image: url("https://img.freepik.com/premium-photo/back-view-focused-young-woman-running-treadmill-modern-gym-setting-highlighting-fitness-dedication_29120-14407.jpg");
+  background-size: cover; /* Ensures the image covers the section */
+  background-position: center; /* Keeps it centered */
+  background-repeat: no-repeat; /* Prevents image tiling */
   height: auto;
   display: flex;
   align-items: center;
@@ -137,7 +136,7 @@ section .content p {
   cursor: pointer;
   display: inline-block;
   padding: 14px 30px;
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   border-radius: 30px;
   font-size: 1rem;
@@ -148,11 +147,11 @@ section .content p {
 }
 
 .btn:hover {
-  background-color: #388E3C;
+  background-color: #388e3c;
   transform: translateY(-2px);
   box-shadow: 0 6px 18px rgba(76, 175, 80, 0.4);
 }
-.home{
+.home {
   min-height: calc(100vh - 14vh); /* 100vh minus header and footer height */
 }
 /****** Plan CSS *****/
@@ -192,7 +191,7 @@ section .content p {
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
 }
 .plan-card h2 {
-  color: #4CAF50;
+  color: #4caf50;
   font-size: 1.5rem;
   margin-bottom: 1rem;
 }
@@ -208,7 +207,7 @@ section .content p {
 }
 .plan-card a.btn {
   text-decoration: none;
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   padding: 10px 20px;
   border-radius: 25px;
@@ -216,12 +215,12 @@ section .content p {
   display: inline-block;
 }
 .plan-card a.btn:hover {
-  background-color: #388E3C;
+  background-color: #388e3c;
 }
 
 /* Highlight middle plan */
 .plan-card.popular {
-  border: 2px solid #4CAF50;
+  border: 2px solid #4caf50;
 }
 
 /****** Subscription CSS ****/
@@ -268,12 +267,12 @@ section .content p {
 }
 .form-group input:focus,
 .form-group select:focus {
-  border-color: #4CAF50;
+  border-color: #4caf50;
 }
 
 .subscribe-form .btn {
   display: inline-block;
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   padding: 10px 20px;
   border-radius: 25px;
@@ -283,12 +282,12 @@ section .content p {
   transition: background 0.3s;
 }
 .subscribe-form .btn:hover {
-  background-color: #388E3C;
+  background-color: #388e3c;
 }
 
 /****** Login CSS ******/
 .login-section {
-  min-height: calc(100vh - 6vh);
+  min-height: calc(100vh - 14vh);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -328,12 +327,12 @@ section .content p {
   outline: none;
 }
 .form-group input:focus {
-  border-color: #4CAF50;
+  border-color: #4caf50;
 }
 
 .login-form .btn {
   display: inline-block;
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   padding: 10px 20px;
   border-radius: 25px;
@@ -343,7 +342,7 @@ section .content p {
   transition: background 0.3s;
 }
 .login-form .btn:hover {
-  background-color: #388E3C;
+  background-color: #388e3c;
 }
 
 .redirect {
@@ -351,13 +350,13 @@ section .content p {
   text-align: center;
 }
 .redirect a {
-  color: #4CAF50;
+  color: #4caf50;
   text-decoration: underline;
 }
 
 /****** Register CSS *****/
 .register-section {
-  min-height: calc(100vh - 6vh);
+  min-height: calc(100vh - 14vh);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -388,7 +387,8 @@ section .content p {
   margin-bottom: 0.5rem;
   font-weight: 500;
 }
-.register-form input,textarea {
+.register-form input,
+textarea {
   width: 100%;
   padding: 0.75rem;
   border: 1px solid #ddd;
@@ -397,12 +397,12 @@ section .content p {
   outline: none;
 }
 .register-form input:focus {
-  border-color: #4CAF50;
+  border-color: #4caf50;
 }
 
 .register-form .btn {
   display: inline-block;
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   padding: 10px 20px;
   border-radius: 25px;
@@ -412,7 +412,7 @@ section .content p {
   transition: background 0.3s;
 }
 .register-form .btn:hover {
-  background-color: #388E3C;
+  background-color: #388e3c;
 }
 
 .redirect {
@@ -420,7 +420,7 @@ section .content p {
   text-align: center;
 }
 .redirect a {
-  color: #4CAF50;
+  color: #4caf50;
   text-decoration: underline;
 }
 
@@ -429,7 +429,7 @@ section .content p {
   min-height: calc(100vh - 6vh);
   padding: 2rem 10%;
   background-color: #f9f9f9;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 .admin-section h1 {
@@ -452,7 +452,7 @@ section .content p {
 
 .admin-panel h2 {
   font-size: 1.8rem;
-  color: #4CAF50;
+  color: #4caf50;
   margin-bottom: 1rem;
 }
 
@@ -461,7 +461,7 @@ section .content p {
   font-size: 0.9rem;
   padding: 8px 16px;
   margin: 0.3rem 0.3rem 1rem 0;
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   border: none;
   border-radius: 6px;
@@ -471,7 +471,7 @@ section .content p {
 }
 
 .btn.small:hover {
-  background-color: #388E3C;
+  background-color: #388e3c;
 }
 
 .btn.danger {
@@ -481,14 +481,14 @@ section .content p {
 .btn.danger:hover {
   background-color: #c62828;
 }
-.admin-panel::before{
-    background-color: transparent;
+.admin-panel::before {
+  background-color: transparent;
 }
 
 /* Table styles */
-.tbl{
-    width: 100%;
-    margin: 0 auto;
+.tbl {
+  width: 100%;
+  margin: 0 auto;
 }
 table {
   width: 100%;
@@ -497,7 +497,8 @@ table {
   font-size: 0.95rem;
 }
 
-table th, table td {
+table th,
+table td {
   padding: 12px 15px;
   border: 1px solid #ddd;
   text-align: center;
@@ -536,7 +537,7 @@ table th {
 }
 
 .program-card h3 {
-  color: #4CAF50;
+  color: #4caf50;
   margin-bottom: 0.5rem;
   font-size: 1.3rem;
 }
@@ -546,7 +547,6 @@ table th {
   font-size: 0.95rem;
   color: #555;
 }
-
 
 /****** Card CSS ******/
 /****** Entry Card Styles ******/
@@ -569,7 +569,7 @@ table th {
 }
 
 .entry-card h2 {
-  color: #4CAF50;
+  color: #4caf50;
   margin-bottom: 2rem;
 }
 
@@ -594,7 +594,7 @@ table th {
   color: #666;
 }
 
-.error{
+.error {
   margin-bottom: 20px;
   background-color: #c628283f;
   padding: 16px;
@@ -606,13 +606,13 @@ table th {
 
 /****** Responsive Design ******/
 @media (max-width: 726px) {
-  .navbar .links{
+  .navbar .links {
     display: none;
   }
-  .navbar .toggle-btn{
+  .navbar .toggle-btn {
     display: block;
   }
-  .dropdown-menu{
+  .dropdown-menu {
     display: block;
   }
   .plan-container {
@@ -622,7 +622,7 @@ table th {
   .admin-section {
     padding: 1.5rem;
   }
-  .tbl{
+  .tbl {
     overflow-x: auto;
   }
   .program-card {
@@ -635,7 +635,7 @@ table th {
 }
 
 @media (max-width: 480px) {
-  .dropdown-menu{
+  .dropdown-menu {
     left: 2rem;
     width: unset;
   }
@@ -657,7 +657,9 @@ table th {
     padding: 12px 24px;
     font-size: 0.95rem;
   }
-  .login-form,.register-form,.subscribe-form {
+  .login-form,
+  .register-form,
+  .subscribe-form {
     padding: 1.5rem;
   }
 }
