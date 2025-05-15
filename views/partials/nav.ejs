@@ -7,8 +7,12 @@
       <li><a href="/">Home</a></li>
       <li><a href="/plan">Plan</a></li>
       <li><a href="/subscription">Subscription</a></li>
-      <li><a href="/login">login</a></li>
+      <% if(user){ %>
+      <li><a href="/logout">Logout</a></li>
+      <% }else{ %>
+      <li><a href="/login">Login</a></li>
       <li><a href="/register">Register</a></li>
+      <% } %>
     </ul>
     <div class="toggle-btn">
       <i class="fa-solid fa-bars"></i>
@@ -16,21 +20,21 @@
   </div>
   <div class="dropdown-menu">
     <li><a href="/">Home</a></li>
-      <li><a href="/plan">Plan</a></li>
-      <li><a href="/subscription">Subscription</a></li>
-      <li><a href="/login">login</a></li>
-      <li><a href="/register">Register</a></li>
+    <li><a href="/plan">Plan</a></li>
+    <li><a href="/subscription">Subscription</a></li>
+    <li><a href="/login">login</a></li>
+    <li><a href="/register">Register</a></li>
   </div>
 </header>
 <script>
-  const toggleBtn = document.querySelector('.toggle-btn');
-  const toggleBtnIcon = document.querySelector('.toggle-btn i');
-  const dropDownMenu = document.querySelector('.dropdown-menu');
+  const toggleBtn = document.querySelector(".toggle-btn");
+  const toggleBtnIcon = document.querySelector(".toggle-btn i");
+  const dropDownMenu = document.querySelector(".dropdown-menu");
 
-  toggleBtn.onclick = function(){
-    dropDownMenu.classList.toggle('open');
-    const isOpen = dropDownMenu.classList.contains('open');
+  toggleBtn.onclick = function () {
+    dropDownMenu.classList.toggle("open");
+    const isOpen = dropDownMenu.classList.contains("open");
 
-    toggleBtnIcon.classList = isOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars'
-  }
+    toggleBtnIcon.classList = isOpen ? "fa-solid fa-xmark" : "fa-solid fa-bars";
+  };
 </script>
