@@ -8,6 +8,20 @@
       "when": 1747132741239,
       "tag": "0000_mysterious_lake",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1747389089966,
+      "tag": "0001_complex_scarlet_witch",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1747389520927,
+      "tag": "0002_good_shadowcat",
+      "breakpoints": true
     }
   ]
 }

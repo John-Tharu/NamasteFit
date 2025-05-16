@@ -4,6 +4,7 @@ import {
   generateToken,
   hashpass,
   saveData,
+  saveProgram,
 } from "../model/model.js";
 import { loginValidation, registerValidate } from "../validation/validation.js";
 
@@ -73,4 +74,21 @@ export const loginData = async (req, res) => {
   res.cookie("access_token", token);
 
   res.redirect("/");
+};
+
+export const addprogram = async (req, res) => {
+  console.log(req.body);
+  const { title, slogan, duration, plan, link } = req.body;
+
+  const saveprogram = await saveProgram({
+    title,
+    slogan,
+    duration,
+    plan,
+    link,
+  });
+
+  console.log(saveprogram);
+
+  res.redirect("/program");
 };

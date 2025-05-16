@@ -1,74 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>User Dashboard – NamasteFit</title>
-  <link rel="stylesheet" href="/style.css" />
-  <script src="https://kit.fontawesome.com/bb7a749298.js" crossorigin="anonymous"></script>
-</head>
-<body>
-  <%- include('partials/nav') %>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Dashboard – NamasteFit</title>
+    <link rel="stylesheet" href="/style.css" />
+    <script
+      src="https://kit.fontawesome.com/bb7a749298.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <%- include('partials/nav') %>
 
-  <main class="admin-section">
-    <h1>Welcome, <%= user.name %></h1>
+    <main class="admin-section">
+      <h1>Welcome, <%= user.name %></h1>
 
-    <!-- Available Programs -->
-    <section class="admin-panel">
-      <h2>Available Programs</h2>
-      <div class="program-list">
-        <% programs.forEach(program => { %>
+      <!-- Available Programs -->
+      <section class="admin-panel">
+        <h2>Available Programs</h2>
+        <div class="program-list">
+          <% programs.forEach(program => { %>
           <div class="program-card">
             <h3><%= program.title %></h3>
             <p><%= program.description %></p>
             <p><strong>Duration:</strong> <%= program.duration %> mins</p>
             <p><strong>Price:</strong> $<%= program.price %></p>
-            <a href="<%= program.videoUrl %>" class="btn small" target="_blank">Watch</a>
+            <a href="<%= program.videoUrl %>" class="btn small" target="_blank"
+              >Watch</a
+            >
           </div>
-        <% }) %>
-      </div>
-    </section>
+          <% }) %>
+        </div>
+      </section>
 
-    <!-- Subscription History -->
-    <section class="admin-panel">
-      <h2>Subscription History</h2>
-      <div class="tbl">
-        <table>
+      <!-- Subscription History -->
+      <section class="admin-panel">
+        <h2>Subscription History</h2>
+        <div class="tbl">
+          <table>
             <thead>
-            <tr>
+              <tr>
                 <th>SN</th>
                 <th>Plan</th>
                 <th>Amount</th>
                 <th>Date</th>
                 <th>Status</th>
-                <th>Action</th>
+                <th>Remaning Days</th>
+                <th>Renew</th>
                 <th>Entry Card</th>
-            </tr>
+              </tr>
             </thead>
             <tbody>
-            <% subscriptions.forEach(sub => { %>
-                <tr>
-                    <td>1</td>
-                <td style="width: 50%; text-align: left;"><%= sub.plan %></td>
+              <% subscriptions.forEach(sub => { %>
+              <tr>
+                <td>1</td>
+                <td style="width: 50%; text-align: left"><%= sub.plan %></td>
                 <td>$<%= sub.amount %></td>
                 <td><%= sub.date %></td>
                 <td><%= sub.status %></td>
                 <td>
-                    <% if(sub.status === 'Active') { %>
-                    <a href=""><i class="fa-solid fa-xmark" style="color: #dd131a;"></i></a>
-                    <% } else { %>
-                    <span>N/A</span>
-                    <% } %>
+                  <% if(sub.status === 'Active') { %>
+                  <a href=""
+                    ><i class="fa-solid fa-xmark" style="color: #dd131a"></i
+                  ></a>
+                  <% } else { %>
+                  <span>N/A</span>
+                  <% } %>
                 </td>
-                <td><a href="/card"><i class="fa-regular fa-address-card"></i></a></td>
-                </tr>
-            <% }) %>
+                <td>Renew</td>
+                <td>
+                  <a href="/card"><i class="fa-regular fa-address-card"></i></a>
+                </td>
+              </tr>
+              <% }) %>
             </tbody>
-        </table>
-      </div>
-    </section>
-  </main>
+          </table>
+        </div>
+      </section>
+    </main>
 
-  <%- include('partials/footer') %>
-</body>
+    <%- include('partials/footer') %>
+  </body>
 </html>

@@ -1,26 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Register – NamasteFit</title>
-  <link rel="stylesheet" href="/style.css" />
-  <script src="https://kit.fontawesome.com/bb7a749298.js" crossorigin="anonymous"></script>
-</head>
-<body>
-  <%- include('partials/nav') %>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register – NamasteFit</title>
+    <link rel="stylesheet" href="/style.css" />
+    <script
+      src="https://kit.fontawesome.com/bb7a749298.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <%- include('partials/nav') %>
 
-  <main class="register-section">
-    <h1>Add New Program</h1>
-    <form class="register-form" action="/register" method="POST">
-      <div class="form-group">
+    <main class="register-section">
+      <h1>Add New Program</h1>
+      <form class="register-form" action="/program" method="POST">
+        <div class="form-group">
           <label for="title">Program Title</label>
           <input type="text" name="title" id="title" required />
         </div>
 
         <div class="form-group">
-          <label for="description">Description</label>
-          <textarea name="description" id="description" rows="2" required></textarea>
+          <label for="slogan">Description</label>
+          <textarea name="slogan" id="slogan" rows="2" required></textarea>
         </div>
 
         <div class="form-group">
@@ -29,19 +32,25 @@
         </div>
 
         <div class="form-group">
-          <label for="price">Price ($)</label>
-          <input type="number" name="price" id="price" required />
+          <label for="plan">Plan</label>
+          <select name="plan" id="plan">
+            <option value="">-- Choose a Plan --</option>
+            <option value="Free Plan">Free Plan</option>
+            <option value="Basic Plan">Basic Plan</option>
+            <option value="Premium Plan">Premium Plan</option>
+            <option value="Annual Plan">Annual Plan</option>
+          </select>
         </div>
 
         <div class="form-group">
-          <label for="videoUrl">Video URL (YouTube/Vimeo)</label>
-          <input type="url" name="videoUrl" id="videoUrl" required />
+          <label for="link">Video URL (YouTube/Vimeo)</label>
+          <input type="url" name="link" id="link" required />
         </div>
 
         <button type="submit" class="btn">Add Program</button>
-    </form>
-  </main>
+      </form>
+    </main>
 
-  <%- include('partials/footer') %>
-</body>
+    <%- include('partials/footer') %>
+  </body>
 </html>

@@ -1,116 +1,204 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin Dashboard – NamasteFit</title>
-  <link rel="stylesheet" href="/style.css" />
-  <script src="https://kit.fontawesome.com/bb7a749298.js" crossorigin="anonymous"></script>
-</head>
-<body>
-  <%- include('partials/nav') %>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard – NamasteFit</title>
+    <link rel="stylesheet" href="/style.css" />
+    <script
+      src="https://kit.fontawesome.com/bb7a749298.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <%- include('partials/nav') %>
 
-  <main class="admin-section">
-    <h1>Admin Dashboard</h1>
+    <main class="admin-section">
+      <!-- <div class="model">
+        <main class="register-section">
+          <h1>Add New Program</h1>
+          <form class="register-form" action="/program" method="POST">
+            <div class="form-group">
+              <label for="title">Title</label>
+              <input type="text" id="title" name="title" required />
+            </div>
 
-    <!-- Manage Programs -->
-    <section class="admin-panel">
-      <h2>Workout/Yoga Programs</h2>
-      <a href="/admin/programs/new" class="btn small">+ Add New Program</a>
-      <div class="tbl">
-        <table>
+            <div class="form-group">
+              <label for="duration">Duration</label>
+              <input type="number" id="duration" name="duration" required />
+            </div>
+
+            <div class="form-group">
+              <label for="plan">Plan</label>
+              <select name="plan" id="plan">
+                <option value="">-- Choose a Plan --</option>
+                <option value="Free Plan">Free Plan</option>
+                <option value="Basic Plan">Basic Plan</option>
+                <option value="Premium Plan">Premium Plan</option>
+                <option value="Annual Plan">Annual Plan</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="video">Video Link</label>
+              <input type="text" name="link" id="link" />
+            </div>
+
+            <button type="submit" class="btn">Add Program</button>
+            <button type="submit" class="btn" id="cancel">Cancel</button>
+          </form>
+        </main>
+      </div> -->
+      <h1>Admin Dashboard</h1>
+      <!-- Manage Programs -->
+      <section class="admin-panel">
+        <h2>Workout/Yoga Programs</h2>
+        <a href="/program"><button class="btn" id="btn">Add Program</button></a>
+        <div class="tbl">
+          <table>
             <thead>
-            <tr>
+              <tr>
                 <th>SN</th>
                 <th>Title</th>
                 <th>Duration</th>
-                <th>Price</th>
+                <th>Plan</th>
                 <th>Video</th>
                 <th colspan="2">Actions</th>
-            </tr>
+              </tr>
             </thead>
             <tbody>
-            <% programs.forEach(program => { %>
-                <tr>
-                    <td>1</td>
-                    <td style="width: 60%; text-align: left;"><%= program.title %></td>
-                    <td><%= program.duration %> min</td>
-                    <td>$<%= program.price %></td>
-                    <td><a href="<%= program.videoUrl %>" target="_blank">Watch</a></td>
-                    <td>
-                        <a href="/admin/programs/edit/<%= program._id %>"><i class="fa-regular fa-pen-to-square"></i></a>
-                    </td>
-                    <td>
-                        <a href=""><i class="fa-regular fa-trash-can"></i></a>
-                    </td>
-                </tr>
-            <% }) %>
+              <% let count=1; programs.forEach(program => { %>
+              <tr>
+                <td><%= count %></td>
+                <td style="width: 60%; text-align: left">
+                  <%= program.title %>
+                </td>
+                <td><%= program.duration %> min</td>
+                <td><%= program.plan %></td>
+                <td>
+                  <a href="<%= program.link %>" target="_blank">Watch</a>
+                </td>
+                <td>
+                  <a href="/admin/programs/edit/<%= program._id %>"
+                    ><i class="fa-regular fa-pen-to-square"></i
+                  ></a>
+                </td>
+                <td>
+                  <a href=""><i class="fa-regular fa-trash-can"></i></a>
+                </td>
+              </tr>
+              <% count++ }) %>
             </tbody>
-        </table>
-      </div>
-    </section>
+          </table>
+        </div>
+      </section>
 
-    <!-- Manage Subscribers -->
-    <section class="admin-panel">
-      <h2>Subscribers</h2>
-      <div class="tbl">
-        <table>
+      <!-- Manage Users -->
+      <section class="admin-panel">
+        <h2>List of Users</h2>
+        <div class="tbl">
+          <table>
             <thead>
-            <tr>
+              <tr>
+                <th>SN</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Registered On</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% let sn=1; users.forEach(user => { %>
+              <tr>
+                <td><%= sn %></td>
+                <td style="width: 30%; text-align: left"><%= user.name %></td>
+                <td><%= user.email %></td>
+                <td><%= user.role %></td>
+                <td><%= (user.createdAt) %></td>
+              </tr>
+              <% sn++ }) %>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Manage Subscribers -->
+      <section class="admin-panel">
+        <h2>Subscribers</h2>
+        <div class="tbl">
+          <table>
+            <thead>
+              <tr>
                 <th>SN</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Plan</th>
                 <th>Joined On</th>
-            </tr>
+              </tr>
             </thead>
             <tbody>
-            <% subscribers.forEach(user => { %>
-                <tr>
-                    <td>1</td>
-                    <td><%= user.name %></td>
-                    <td><%= user.email %></td>
-                    <td><%= user.plan %></td>
-                    <td><%= user.joinDate %></td>
-                </tr>
-            <% }) %>
+              <% subscribers.forEach(user => { %>
+              <tr>
+                <td>1</td>
+                <td><%= user.name %></td>
+                <td><%= user.email %></td>
+                <td><%= user.plan %></td>
+                <td><%= user.joinDate %></td>
+              </tr>
+              <% }) %>
             </tbody>
-        </table>
-      </div>
-    </section>
+          </table>
+        </div>
+      </section>
 
-    <!-- Payment History -->
-    <section class="admin-panel">
-      <h2>Payment History</h2>
-      <div class="tbl">
-        <table>
+      <!-- Payment History -->
+      <section class="admin-panel">
+        <h2>Payment History</h2>
+        <div class="tbl">
+          <table>
             <thead>
-            <tr>
+              <tr>
                 <th>SN</th>
                 <th>User</th>
                 <th>Plan</th>
                 <th>Amount</th>
                 <th>Date</th>
                 <th>Transaction ID</th>
-            </tr>
+              </tr>
             </thead>
             <tbody>
-            <% payments.forEach(payment => { %>
-                <tr>
-                    <td>1</td>
-                    <td><%= payment.user %></td>
-                    <td><%= payment.plan %></td>
-                    <td>$<%= payment.amount %></td>
-                    <td><%= payment.date %></td>
-                    <td><%= payment.txnId %></td>
-                </tr>
-            <% }) %>
+              <% payments.forEach(payment => { %>
+              <tr>
+                <td>1</td>
+                <td><%= payment.user %></td>
+                <td><%= payment.plan %></td>
+                <td>$<%= payment.amount %></td>
+                <td><%= payment.date %></td>
+                <td><%= payment.txnId %></td>
+              </tr>
+              <% }) %>
             </tbody>
-        </table>
-      </div>
-    </section>
-  </main>
+          </table>
+        </div>
+      </section>
+    </main>
 
-  <%- include('partials/footer') %>
-</body>
+    <%- include('partials/footer') %>
+
+    <!-- <script>
+      document.getElementById("btn").addEventListener("click", () => {
+        document.querySelectorAll(".admin-panel").forEach((el) => {
+          el.classList.add("blur");
+        });
+        document.querySelector(".model").style.display = "block";
+      });
+
+      document.getElementById("cancel").addEventListener("click", () => {
+        document.querySelectorAll(".admin-panel").forEach((el) => {
+          el.classList.remove("blur");
+        });
+        document.querySelector(".model").style.display = "none";
+      });
+    </script> -->
+  </body>
 </html>

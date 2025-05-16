@@ -1,42 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Subscribe – NamasteFit</title>
-  <link rel="stylesheet" href="/style.css" />
-  <script src="https://kit.fontawesome.com/bb7a749298.js" crossorigin="anonymous"></script>
-</head>
-<body>
-  <%- include('partials/nav') %>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Subscribe – NamasteFit</title>
+    <link rel="stylesheet" href="/style.css" />
+    <script
+      src="https://kit.fontawesome.com/bb7a749298.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <%- include('partials/nav') %>
 
-  <main class="subscribe-section">
-    <h1>Subscribe Now</h1>
-    <form class="subscribe-form" action="/subscribe" method="POST">
-      <div class="form-group">
-        <label for="name">Full Name</label>
-        <input type="text" id="name" name="name" required />
-      </div>
+    <main class="subscribe-section">
+      <h1>Subscribe Now</h1>
+      <form class="subscribe-form" action="/subscribe" method="POST">
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" name="name" required />
+        </div>
 
-      <div class="form-group">
-        <label for="email">Email Address</label>
-        <input type="email" id="email" name="email" required />
-      </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" required />
+        </div>
 
-      <div class="form-group">
-        <label for="plan">Select Plan</label>
-        <select id="plan" name="plan" required>
-          <option value="">-- Choose a Plan --</option>
-          <option value="basic">Basic – $9.99/month</option>
-          <option value="standard">Standard – $19.99/month</option>
-          <option value="premium">Premium – $29.99/month</option>
-        </select>
-      </div>
+        <div class="form-group">
+          <label for="plan">Select Plan</label>
+          <select id="plan" name="plan" required>
+            <% if(title){ %>
+            <option value="<%= title %>"><%= title %>/month</option>
+            <% }else{ %>
+            <option value="">-- Choose a Plan --</option>
+            <% } %>
+            <option value="basic">Basic – $9.99/month</option>
+            <option value="standard">Standard – $19.99/month</option>
+            <option value="premium">Premium – $29.99/month</option>
+          </select>
+        </div>
 
-      <button type="submit" class="btn">Proceed to Payment</button>
-    </form>
-  </main>
+        <button type="submit" class="btn">Proceed to Payment</button>
+      </form>
+    </main>
 
-  <%- include('partials/footer') %>
-</body>
+    <%- include('partials/footer') %>
+  </body>
 </html>

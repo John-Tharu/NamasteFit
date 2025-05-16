@@ -11,13 +11,19 @@ import {
   subscriptionpage,
   userpage,
 } from "../controller/controller.js";
-import { loginData, savedata } from "../controller/post.controller.js";
+import {
+  addprogram,
+  loginData,
+  savedata,
+} from "../controller/post.controller.js";
 
 const router = Router();
 
 router.route("/").get(homepage);
 
 router.route("/plan").get(planpage);
+
+router.route("/subscription/:title").get(subscriptionpage);
 
 router.route("/subscription").get(subscriptionpage);
 
@@ -29,7 +35,7 @@ router.route("/admin").get(adminpage);
 
 router.route("/user").get(userpage);
 
-router.route("/program").get(programpage);
+router.route("/program").get(programpage).post(addprogram);
 
 router.route("/card").get(cardpage);
 
