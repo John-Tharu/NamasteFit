@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { db } from "../config/db.js";
-import { usersTable } from "../drizzle/schema.js";
+import { planTable, usersTable } from "../drizzle/schema.js";
 import argon2 from "argon2";
 import jwt from "jsonwebtoken";
 
@@ -31,4 +31,19 @@ export const generateToken = ({ id, name, email, role }) => {
 
 export const verifytoken = (token) => {
   return jwt.verify(token, process.env.JWT_SECRET);
+};
+
+export const saveProgram = async ({ title, slogan, duration, plan, link }) => {
+  return await db
+    .insert(planTable)
+    .values({ title, slogan, duration, plan, link })
+    .$returningId();
+};
+
+export const getProgram = async () => {
+  return await db.select().from(planTable);
+};
+
+export const getUser = async () => {
+  return await db.select().from(usersTable);
 };

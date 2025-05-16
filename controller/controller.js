@@ -1,13 +1,63 @@
+import { getProgram, getUser } from "../model/model.js";
+
 export const homepage = (req, res) => {
   res.render("homepage");
 };
 
 export const planpage = (req, res) => {
-  res.render("planpage");
+  const plan = [
+    {
+      title: "Namaste Starter  Free Plan",
+      slogan: "ideal for curious beginners",
+      features: [
+        "Limited access to beginner video content",
+        "Live class per month",
+        "No downloads or offline access",
+        "No membership card",
+      ],
+      price: "0",
+    },
+    {
+      title: "Wellness Seeker  Basic Plan",
+      slogan: "for fitness enthusiastic starting their journey",
+      features: [
+        "Access to begineer & intermediate workouts",
+        "2 live class per month",
+        "Downloads & offline access",
+        "Access of studio at 12:00 PM",
+      ],
+      price: "499",
+    },
+    {
+      title: "Professional Yogi  Premium Plan",
+      slogan: "Full body wellness experience",
+      features: [
+        "Unlimited access to all video",
+        "Unlimited live classes",
+        "Downloads & offline access",
+        "Access of studio",
+        "Digital Membership Card",
+      ],
+      price: "999",
+    },
+    {
+      title: "Unlimited Wellness  Annual Plan",
+      slogan: "Best for long-term commitment",
+      features: [
+        "Everything in premium",
+        "Free wellness merchandise after 6 months",
+        "Early access to new content",
+        "Access of studio at 12:00 PM",
+      ],
+      price: "9999",
+    },
+  ];
+  res.render("planpage", { plan });
 };
 
 export const subscriptionpage = (req, res) => {
-  res.render("subscription");
+  const title = req.params.title;
+  res.render("subscription", { title });
 };
 
 export const loginpage = (req, res) => {
@@ -20,29 +70,13 @@ export const registerpage = (req, res) => {
   res.render("register", { msg: req.flash("errors") });
 };
 
-export const adminpage = (req, res) => {
-  if (req.user.role != "User") {
-    return res.redirect("/");
-  }
-  const programs = [
-    {
-      _id: 1,
-      title: "Morning Yoga",
-      description: "Relaxing yoga",
-      duration: 30,
-      price: 9.99,
-      videoUrl: "https://youtube.com/...",
-    },
-    {
-      _id: 2,
-      title: "HIIT Workout",
-      description: "High intensity",
-      duration: 45,
-      price: 14.99,
-      videoUrl: "https://vimeo.com/...",
-    },
-  ];
+export const adminpage = async (req, res) => {
+  const programs = await getProgram();
+  //console.log(programs);
 
+  const users = await getUser();
+
+  console.log(users);
   const subscribers = [
     {
       name: "Aarav Sharma",
@@ -62,15 +96,11 @@ export const adminpage = (req, res) => {
     },
   ];
 
-  res.render("admin", { programs, subscribers, payments });
+  res.render("admin", { programs, users, subscribers, payments });
 };
 
 export const userpage = (req, res) => {
-  if (!req.user) {
-    return res.redirect("/404");
-  }
-
-  const user = { name: req.user.name };
+  const user = { name: "JOhn" };
 
   const programs = [
     {

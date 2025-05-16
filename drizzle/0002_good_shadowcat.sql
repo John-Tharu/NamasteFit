@@ -1,0 +1,1 @@
+ALTER TABLE `plan_table` ADD `slogan` varchar(255) NOT NULL;

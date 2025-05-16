@@ -16,54 +16,21 @@
     <main class="plans-section">
       <h1>Choose Your Plan</h1>
       <div class="plan-container">
+        <% plan.forEach((value) => { %>
         <div class="plan-card">
-          <h2>Basic</h2>
-          <p>Access to 5 yoga sessions/month</p>
-          <h3>$9.99/month</h3>
-          <a href="#"><button class="btn">Subscribe</button></a>
+          <h2><%= value.title %></h2>
+          <p><%= value.slogan %></p>
+
+          <% value.features.forEach((key) => { %>
+          <p><%= key %></p>
+          <% }) %>
+
+          <h3>NPR. <%= value.price %>/month</h3>
+          <a href="/subscription/<%= value.title %> - NPR. <%= value.price %>"
+            ><button class="btn">Subscribe</button></a
+          >
         </div>
-        <div class="plan-card popular">
-          <h2>Standard</h2>
-          <p>Unlimited classes + diet guidance</p>
-          <h3>$19.99/month</h3>
-          <a href="#"><button class="btn">Subscribe</button></a>
-        </div>
-        <div class="plan-card">
-          <h2>Premium</h2>
-          <p>Everything + 1-on-1 coaching</p>
-          <h3>$29.99/month</h3>
-          <a href="#"><button class="btn">Subscribe</button></a>
-        </div>
-        <div class="plan-card">
-          <h2>Premium</h2>
-          <p>Everything + 1-on-1 coaching</p>
-          <h3>$29.99/month</h3>
-          <a href="#"><button class="btn">Subscribe</button></a>
-        </div>
-        <div class="plan-card">
-          <h2>Premium</h2>
-          <p>Everything + 1-on-1 coaching</p>
-          <h3>$29.99/month</h3>
-          <a href="#"><button class="btn">Subscribe</button></a>
-        </div>
-        <div class="plan-card">
-          <h2>Premium</h2>
-          <p>Everything + 1-on-1 coaching</p>
-          <h3>$29.99/month</h3>
-          <a href="#"><button class="btn">Subscribe</button></a>
-        </div>
-        <div class="plan-card">
-          <h2>Premium</h2>
-          <p>Everything + 1-on-1 coaching</p>
-          <h3>$29.99/month</h3>
-          <a href="#"><button class="btn">Subscribe</button></a>
-        </div>
-        <div class="plan-card">
-          <h2>Premium</h2>
-          <p>Everything + 1-on-1 coaching</p>
-          <h3>$29.99/month</h3>
-          <a href="#"><button class="btn">Subscribe</button></a>
-        </div>
+        <% }) %>
       </div>
     </main>
 
