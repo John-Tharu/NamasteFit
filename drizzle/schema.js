@@ -1,5 +1,6 @@
 import { duration } from "drizzle-orm/gel-core";
 import {
+  float,
   int,
   mysqlTable,
   serial,
@@ -24,6 +25,18 @@ export const planTable = mysqlTable("plan_table", {
   duration: int().notNull(),
   plan: varchar("plan", { length: 50 }).notNull(),
   link: varchar({ length: 255 }).notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow().onUpdateNow(),
+});
+
+export const paymentTable = mysqlTable("payment_table", {
+  id: serial().primaryKey(),
+  name: varchar({ length: 255 }).notNull(),
+  email: varchar({ length: 255 }).notNull(),
+  plan: varchar({ length: 255 }).notNull(),
+  amount: float().notNull(),
+  txId: varchar("txid", { length: 255 }).notNull().unique(),
+  uId: int().notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow().onUpdateNow(),
 });

@@ -1,13 +1,16 @@
-import { getProgram, getUser } from "../model/model.js";
+import { getPayment, getProgram, getUser } from "../model/model.js";
 
 export const homepage = (req, res) => {
+  if (!req.user) return res.redirect("/login");
   res.render("homepage");
 };
 
 export const planpage = (req, res) => {
+  if (!req.user) return res.redirect("/login");
   const plan = [
     {
-      title: "Namaste Starter  Free Plan",
+      title: "Namaste Starter",
+      plan: "Free",
       slogan: "ideal for curious beginners",
       features: [
         "Limited access to beginner video content",
@@ -18,7 +21,8 @@ export const planpage = (req, res) => {
       price: "0",
     },
     {
-      title: "Wellness Seeker  Basic Plan",
+      title: "Wellness Seeker",
+      plan: "Basic",
       slogan: "for fitness enthusiastic starting their journey",
       features: [
         "Access to begineer & intermediate workouts",
@@ -29,7 +33,8 @@ export const planpage = (req, res) => {
       price: "499",
     },
     {
-      title: "Professional Yogi  Premium Plan",
+      title: "Professional Yogi",
+      plan: "Premium",
       slogan: "Full body wellness experience",
       features: [
         "Unlimited access to all video",
@@ -41,7 +46,8 @@ export const planpage = (req, res) => {
       price: "999",
     },
     {
-      title: "Unlimited Wellness  Annual Plan",
+      title: "Unlimited Wellness",
+      plan: "Annual",
       slogan: "Best for long-term commitment",
       features: [
         "Everything in premium",
@@ -56,8 +62,10 @@ export const planpage = (req, res) => {
 };
 
 export const subscriptionpage = (req, res) => {
+  if (!req.user) return res.redirect("/login");
   const title = req.params.title;
-  res.render("subscription", { title });
+  const { name, email } = req.user;
+  res.render("subscription", { title, name, email });
 };
 
 export const loginpage = (req, res) => {
@@ -71,35 +79,19 @@ export const registerpage = (req, res) => {
 };
 
 export const adminpage = async (req, res) => {
+  if (!req.user) return res.redirect("/login");
   const programs = await getProgram();
   //console.log(programs);
 
   const users = await getUser();
 
-  console.log(users);
-  const subscribers = [
-    {
-      name: "Aarav Sharma",
-      email: "aarav@example.com",
-      plan: "Monthly Plan",
-      joinDate: "2025-05-01",
-    },
-  ];
+  const payment = await getPayment();
 
-  const payments = [
-    {
-      user: "Sneha Gurung",
-      plan: "HIIT Workout",
-      amount: 14.99,
-      date: "2025-05-05",
-      txnId: "TXN123456",
-    },
-  ];
-
-  res.render("admin", { programs, users, subscribers, payments });
+  res.render("admin", { programs, users, payment });
 };
 
 export const userpage = (req, res) => {
+  if (!req.user) return res.redirect("/login");
   const user = { name: "JOhn" };
 
   const programs = [
@@ -168,10 +160,12 @@ export const userpage = (req, res) => {
 };
 
 export const programpage = (req, res) => {
+  if (!req.user) return res.redirect("/login");
   res.render("programpage");
 };
 
 export const cardpage = (req, res) => {
+  if (!req.user) return res.redirect("/login");
   const user = { name: "Ramesh Koirala" };
   const program = { title: "Power HIIT Burn" };
   const purchaseDate = "2025-05-10";

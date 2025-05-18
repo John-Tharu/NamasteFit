@@ -14,6 +14,7 @@ import {
 import {
   addprogram,
   loginData,
+  payment,
   savedata,
 } from "../controller/post.controller.js";
 
@@ -25,7 +26,7 @@ router.route("/plan").get(planpage);
 
 router.route("/subscription/:title").get(subscriptionpage);
 
-router.route("/subscription").get(subscriptionpage);
+router.route("/subscription").get(subscriptionpage).post(payment);
 
 router.route("/login").get(loginpage).post(loginData);
 

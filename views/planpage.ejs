@@ -19,6 +19,7 @@
         <% plan.forEach((value) => { %>
         <div class="plan-card">
           <h2><%= value.title %></h2>
+          <h2><%= value.plan %> Plan</h2>
           <p><%= value.slogan %></p>
 
           <% value.features.forEach((key) => { %>
@@ -26,7 +27,7 @@
           <% }) %>
 
           <h3>NPR. <%= value.price %>/month</h3>
-          <a href="/subscription/<%= value.title %> - NPR. <%= value.price %>"
+          <a href="/subscription/<%= value.plan %> - NPR. <%= value.price %>"
             ><button class="btn">Subscribe</button></a
           >
         </div>

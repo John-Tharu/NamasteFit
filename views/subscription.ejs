@@ -15,15 +15,27 @@
 
     <main class="subscribe-section">
       <h1>Subscribe Now</h1>
-      <form class="subscribe-form" action="/subscribe" method="POST">
+      <form class="subscribe-form" action="/subscription" method="POST">
         <div class="form-group">
           <label for="name">Full Name</label>
-          <input type="text" id="name" name="name" required />
+          <input
+            type="text"
+            value="<%= name %>"
+            id="name"
+            name="name"
+            readonly
+          />
         </div>
 
         <div class="form-group">
           <label for="email">Email Address</label>
-          <input type="email" id="email" name="email" required />
+          <input
+            type="email"
+            value="<%= email %>"
+            id="email"
+            name="email"
+            readonly
+          />
         </div>
 
         <div class="form-group">
@@ -34,9 +46,11 @@
             <% }else{ %>
             <option value="">-- Choose a Plan --</option>
             <% } %>
-            <option value="basic">Basic – $9.99/month</option>
-            <option value="standard">Standard – $19.99/month</option>
-            <option value="premium">Premium – $29.99/month</option>
+            <option value="free">Free – NPR. 0/month</option>
+            <option value="basic">Basic – NPR. 499/month</option>
+            <option value="standard">Standard – NPR. 999/month</option>
+            <option value="premium">Premium – NPR. 9999/month</option>
+            <option value="annual">Annual – NPR. 11111/year</option>
           </select>
         </div>
 
