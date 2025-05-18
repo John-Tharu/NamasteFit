@@ -114,7 +114,12 @@
                 <td style="width: 30%; text-align: left"><%= user.name %></td>
                 <td><%= user.email %></td>
                 <td><%= user.role %></td>
-                <td><%= (user.createdAt) %></td>
+                <td
+                  class="local-date"
+                  data-date="<%= user.createdAt.toISOString() %>"
+                >
+                  Loading...
+                </td>
               </tr>
               <% sn++ }) %>
             </tbody>
@@ -123,7 +128,7 @@
       </section>
 
       <!-- Manage Subscribers -->
-      <section class="admin-panel">
+      <!-- <section class="admin-panel">
         <h2>Subscribers</h2>
         <div class="tbl">
           <table>
@@ -137,19 +142,24 @@
               </tr>
             </thead>
             <tbody>
-              <% subscribers.forEach(user => { %>
+              <% payment.forEach(user => { %>
               <tr>
                 <td>1</td>
                 <td><%= user.name %></td>
                 <td><%= user.email %></td>
                 <td><%= user.plan %></td>
-                <td><%= user.joinDate %></td>
+                <td
+                  class="local-date"
+                  data-date="<%= user.createdAt.toISOString() %>"
+                >
+                  Loading...
+                </td>
               </tr>
               <% }) %>
             </tbody>
           </table>
         </div>
-      </section>
+      </section> -->
 
       <!-- Payment History -->
       <section class="admin-panel">
@@ -163,18 +173,30 @@
                 <th>Plan</th>
                 <th>Amount</th>
                 <th>Date</th>
+                <th>Expiry</th>
                 <th>Transaction ID</th>
               </tr>
             </thead>
             <tbody>
-              <% payments.forEach(payment => { %>
+              <% payment.forEach(payment => { %>
               <tr>
                 <td>1</td>
-                <td><%= payment.user %></td>
+                <td><%= payment.name %></td>
                 <td><%= payment.plan %></td>
                 <td>$<%= payment.amount %></td>
-                <td><%= payment.date %></td>
-                <td><%= payment.txnId %></td>
+                <td
+                  class="local-date"
+                  data-date="<%= payment.createdAt.toISOString() %>"
+                >
+                  Loading...
+                </td>
+                <td
+                  class="expiry"
+                  data-expiry="<%= payment.createdAt.toISOString() %>"
+                >
+                  Loading...
+                </td>
+                <td><%= payment.txId %></td>
               </tr>
               <% }) %>
             </tbody>
@@ -200,5 +222,37 @@
         document.querySelector(".model").style.display = "none";
       });
     </script> -->
+    <script>
+      // This function converts UTC to Nepal time and updates the DOM
+      function convertDatesToLocal() {
+        const dateElements = document.querySelectorAll(".local-date");
+
+        dateElements.forEach((el) => {
+          const utcDateStr = el.getAttribute("data-date");
+          if (utcDateStr) {
+            el.textContent = new Date(utcDateStr).toLocaleString("en-US", {
+              timeZone: "Asia/Kathmandu",
+            });
+          }
+        });
+
+        const expiryElements = document.querySelectorAll(".expiry");
+
+        expiryElements.forEach((el) => {
+          const utcDateStr = el.getAttribute("data-expiry");
+          if (utcDateStr) {
+            const oneMonthLater = new Date(utcDateStr);
+            oneMonthLater.setMonth(oneMonthLater.getMonth() + 1);
+
+            el.textContent = oneMonthLater.toLocaleString("en-US", {
+              timeZone: "Asia/Kathmandu",
+            });
+          }
+        });
+      }
+
+      // Run after DOM is loaded
+      window.addEventListener("DOMContentLoaded", convertDatesToLocal);
+    </script>
   </body>
 </html>

@@ -3,10 +3,12 @@ import {
   checkPass,
   generateToken,
   hashpass,
+  paymentdata,
   saveData,
   saveProgram,
 } from "../model/model.js";
 import { loginValidation, registerValidate } from "../validation/validation.js";
+import { randomBytes } from "crypto";
 
 export const savedata = async (req, res) => {
   if (req.user) return res.redirect("/");
@@ -91,4 +93,33 @@ export const addprogram = async (req, res) => {
   console.log(saveprogram);
 
   res.redirect("/program");
+};
+
+export const payment = async (req, res) => {
+  const plans = {
+    free: 0,
+    basic: 499,
+    standard: 999,
+    premium: 9999,
+    annual: 11111,
+  };
+
+  // console.log(req.body);
+  // console.log(req.user);
+  const { id, name, email } = req.user;
+  const { plan } = req.body;
+  const amount = plans[plan];
+  const txId = randomBytes(4).toString("hex").toUpperCase();
+  const uId = id;
+
+  const paymentData = await paymentdata({
+    name,
+    email,
+    plan,
+    amount,
+    txId,
+    uId,
+  });
+  console.log(paymentData);
+  res.redirect("/subscription");
 };

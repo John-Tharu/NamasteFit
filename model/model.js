@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { db } from "../config/db.js";
-import { planTable, usersTable } from "../drizzle/schema.js";
+import { paymentTable, planTable, usersTable } from "../drizzle/schema.js";
 import argon2 from "argon2";
 import jwt from "jsonwebtoken";
 
@@ -46,4 +46,15 @@ export const getProgram = async () => {
 
 export const getUser = async () => {
   return await db.select().from(usersTable);
+};
+
+export const paymentdata = async ({ name, email, plan, amount, txId, uId }) => {
+  return await db
+    .insert(paymentTable)
+    .values({ name, email, plan, amount, txId, uId })
+    .$returningId();
+};
+
+export const getPayment = async () => {
+  return await db.select().from(paymentTable);
 };
