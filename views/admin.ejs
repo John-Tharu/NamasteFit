@@ -118,7 +118,7 @@
                   class="local-date"
                   data-date="<%= user.createdAt.toISOString() %>"
                 >
-                  Loading...
+                  <%= user.createdAt.toISOString().split('T')[0] %>
                 </td>
               </tr>
               <% sn++ }) %>
@@ -171,6 +171,7 @@
                 <th>SN</th>
                 <th>User</th>
                 <th>Plan</th>
+                <th>Package</th>
                 <th>Amount</th>
                 <th>Date</th>
                 <th>Expiry</th>
@@ -183,20 +184,28 @@
                 <td>1</td>
                 <td><%= payment.name %></td>
                 <td><%= payment.plan %></td>
+                <td><%= payment.package %></td>
                 <td>$<%= payment.amount %></td>
                 <td
                   class="local-date"
                   data-date="<%= payment.createdAt.toISOString() %>"
                 >
-                  Loading...
+                  <%= payment.createdAt.toISOString().split('T')[0] %>
                 </td>
                 <td
                   class="expiry"
                   data-expiry="<%= payment.createdAt.toISOString() %>"
                 >
-                  Loading...
+                  <% const createdDate = new Date(payment.createdAt); const
+                  packageType = payment.package; let monthsToAdd = 0; if
+                  (packageType === "monthly") { monthsToAdd = 1; } else if
+                  (packageType === "semiannual") { monthsToAdd = 6; } else if
+                  (packageType === "annual") { monthsToAdd = 12; }
+                  createdDate.setMonth(createdDate.getMonth() + monthsToAdd);
+                  const expiryDate = createdDate.toISOString().split('T')[0]; %>
+                  <%= expiryDate %>
                 </td>
-                <td><%= payment.txId %></td>
+                <td><%= payment.transId %></td>
               </tr>
               <% }) %>
             </tbody>
@@ -222,37 +231,5 @@
         document.querySelector(".model").style.display = "none";
       });
     </script> -->
-    <script>
-      // This function converts UTC to Nepal time and updates the DOM
-      function convertDatesToLocal() {
-        const dateElements = document.querySelectorAll(".local-date");
-
-        dateElements.forEach((el) => {
-          const utcDateStr = el.getAttribute("data-date");
-          if (utcDateStr) {
-            el.textContent = new Date(utcDateStr).toLocaleString("en-US", {
-              timeZone: "Asia/Kathmandu",
-            });
-          }
-        });
-
-        const expiryElements = document.querySelectorAll(".expiry");
-
-        expiryElements.forEach((el) => {
-          const utcDateStr = el.getAttribute("data-expiry");
-          if (utcDateStr) {
-            const oneMonthLater = new Date(utcDateStr);
-            oneMonthLater.setMonth(oneMonthLater.getMonth() + 1);
-
-            el.textContent = oneMonthLater.toLocaleString("en-US", {
-              timeZone: "Asia/Kathmandu",
-            });
-          }
-        });
-      }
-
-      // Run after DOM is loaded
-      window.addEventListener("DOMContentLoaded", convertDatesToLocal);
-    </script>
   </body>
 </html>

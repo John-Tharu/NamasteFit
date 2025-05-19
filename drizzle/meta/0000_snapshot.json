@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "9accd3d1-3e1b-4b11-93f7-ab25ed92e7ac",
+  "id": "eb2446ec-9a18-480d-b97f-f99b8adb9836",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "payment_table": {
@@ -30,7 +30,14 @@
         },
         "plan": {
           "name": "plan",
-          "type": "varchar(255)",
+          "type": "varchar(15)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "package": {
+          "name": "package",
+          "type": "varchar(10)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -42,15 +49,22 @@
           "notNull": true,
           "autoincrement": false
         },
-        "txid": {
-          "name": "txid",
+        "transId": {
+          "name": "transId",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "uId": {
-          "name": "uId",
+        "status": {
+          "name": "status",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "user_id": {
+          "name": "user_id",
           "type": "int",
           "primaryKey": false,
           "notNull": true,
@@ -75,7 +89,21 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "payment_table_user_id_users_table_id_fk": {
+          "name": "payment_table_user_id_users_table_id_fk",
+          "tableFrom": "payment_table",
+          "tableTo": "users_table",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {
         "payment_table_id": {
           "name": "payment_table_id",
@@ -85,10 +113,10 @@
         }
       },
       "uniqueConstraints": {
-        "payment_table_txid_unique": {
-          "name": "payment_table_txid_unique",
+        "payment_table_transId_unique": {
+          "name": "payment_table_transId_unique",
           "columns": [
-            "txid"
+            "transId"
           ]
         }
       },

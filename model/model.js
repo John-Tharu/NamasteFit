@@ -48,13 +48,38 @@ export const getUser = async () => {
   return await db.select().from(usersTable);
 };
 
-export const paymentdata = async ({ name, email, plan, amount, txId, uId }) => {
+export const paymentdata = async ({
+  name,
+  email,
+  plan,
+  pkg,
+  total,
+  status,
+  transId,
+  userId,
+}) => {
   return await db
     .insert(paymentTable)
-    .values({ name, email, plan, amount, txId, uId })
+    .values({
+      name,
+      email,
+      plan,
+      package: pkg,
+      amount: total,
+      status,
+      transId,
+      userId,
+    })
     .$returningId();
 };
 
 export const getPayment = async () => {
   return await db.select().from(paymentTable);
+};
+
+export const getSubscription = async (id) => {
+  return await db
+    .select()
+    .from(paymentTable)
+    .where(eq(paymentTable.userId, id));
 };

@@ -1,4 +1,9 @@
-import { getPayment, getProgram, getUser } from "../model/model.js";
+import {
+  getPayment,
+  getProgram,
+  getSubscription,
+  getUser,
+} from "../model/model.js";
 
 export const homepage = (req, res) => {
   if (!req.user) return res.redirect("/login");
@@ -34,7 +39,7 @@ export const planpage = (req, res) => {
     },
     {
       title: "Professional Yogi",
-      plan: "Premium",
+      plan: "Standard",
       slogan: "Full body wellness experience",
       features: [
         "Unlimited access to all video",
@@ -43,11 +48,11 @@ export const planpage = (req, res) => {
         "Access of studio",
         "Digital Membership Card",
       ],
-      price: "999",
+      price: "799",
     },
     {
       title: "Unlimited Wellness",
-      plan: "Annual",
+      plan: "Premium",
       slogan: "Best for long-term commitment",
       features: [
         "Everything in premium",
@@ -55,7 +60,7 @@ export const planpage = (req, res) => {
         "Early access to new content",
         "Access of studio at 12:00 PM",
       ],
-      price: "9999",
+      price: "899",
     },
   ];
   res.render("planpage", { plan });
@@ -63,9 +68,17 @@ export const planpage = (req, res) => {
 
 export const subscriptionpage = (req, res) => {
   if (!req.user) return res.redirect("/login");
-  const title = req.params.title;
+
+  const plans = {
+    Free: 0,
+    Basic: 499,
+    Standard: 799,
+    Premium: 899,
+  };
   const { name, email } = req.user;
-  res.render("subscription", { title, name, email });
+  const title = req.params.title;
+  const amount = plans[title];
+  res.render("subscription", { title, amount, name, email });
 };
 
 export const loginpage = (req, res) => {
@@ -90,73 +103,15 @@ export const adminpage = async (req, res) => {
   res.render("admin", { programs, users, payment });
 };
 
-export const userpage = (req, res) => {
+export const userpage = async (req, res) => {
   if (!req.user) return res.redirect("/login");
-  const user = { name: "JOhn" };
+  const { id, name, email } = req.user;
 
-  const programs = [
-    {
-      title: "Morning Stretch",
-      description: "Start your day fresh",
-      duration: 30,
-      price: 10,
-      videoUrl: "https://youtube.com/...",
-    },
-    {
-      title: "Core Strength",
-      description: "Focus on abs and core",
-      duration: 45,
-      price: 15,
-      videoUrl: "https://youtube.com/...",
-    },
-    {
-      title: "Core Strength",
-      description: "Focus on abs and core",
-      duration: 45,
-      price: 15,
-      videoUrl: "https://youtube.com/...",
-    },
-    {
-      title: "Core Strength",
-      description: "Focus on abs and core",
-      duration: 45,
-      price: 15,
-      videoUrl: "https://youtube.com/...",
-    },
-    {
-      title: "Core Strength",
-      description: "Focus on abs and core",
-      duration: 45,
-      price: 15,
-      videoUrl: "https://youtube.com/...",
-    },
-    {
-      title: "Core Strength",
-      description: "Focus on abs and core",
-      duration: 45,
-      price: 15,
-      videoUrl: "https://youtube.com/...",
-    },
-  ];
+  const programs = await getProgram();
 
-  const subscriptions = [
-    {
-      _id: 1,
-      plan: "Morning Stretch",
-      amount: 10,
-      date: "2025-05-01",
-      status: "Active",
-    },
-    {
-      _id: 2,
-      plan: "Core Strength",
-      amount: 15,
-      date: "2025-04-01",
-      status: "Cancelled",
-    },
-  ];
+  const subscriptions = await getSubscription(id);
 
-  res.render("user", { user, programs, subscriptions });
+  res.render("user", { name, programs, subscriptions });
 };
 
 export const programpage = (req, res) => {

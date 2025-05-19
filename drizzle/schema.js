@@ -1,4 +1,4 @@
-import { duration } from "drizzle-orm/gel-core";
+import { relations } from "drizzle-orm";
 import {
   float,
   int,
@@ -31,12 +31,27 @@ export const planTable = mysqlTable("plan_table", {
 
 export const paymentTable = mysqlTable("payment_table", {
   id: serial().primaryKey(),
-  name: varchar({ length: 255 }).notNull(),
-  email: varchar({ length: 255 }).notNull(),
-  plan: varchar({ length: 255 }).notNull(),
-  amount: float().notNull(),
-  txId: varchar("txid", { length: 255 }).notNull().unique(),
-  uId: int().notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
+  email: varchar("email", { length: 255 }).notNull(),
+  plan: varchar("plan", { length: 15 }).notNull(),
+  package: varchar("package", { length: 10 }).notNull(),
+  amount: float("amount").notNull(),
+  transId: varchar("transId", { length: 255 }).notNull().unique(),
+  status: varchar("status", { length: 10 }).notNull(),
+  userId: int("user_id")
+    .notNull()
+    .references(() => usersTable.id),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow().onUpdateNow(),
 });
+
+export const userRelation = relations(usersTable, ({ many }) => ({
+  payment: many(paymentTable),
+}));
+
+export const paymentRelation = relations(paymentTable, ({ one }) => ({
+  user: one(usersTable, {
+    fields: [paymentTable.userId],
+    references: [usersTable.id],
+  }),
+}));

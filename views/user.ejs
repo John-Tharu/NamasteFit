@@ -14,7 +14,7 @@
     <%- include('partials/nav') %>
 
     <main class="admin-section">
-      <h1>Welcome, <%= user.name %></h1>
+      <h1>Welcome, <%= name %></h1>
 
       <!-- Available Programs -->
       <section class="admin-panel">
@@ -47,33 +47,38 @@
                 <th>Date</th>
                 <th>Status</th>
                 <th>Remaning Days</th>
-                <th>Renew</th>
                 <th>Entry Card</th>
               </tr>
             </thead>
             <tbody>
-              <% subscriptions.forEach(sub => { %>
+              <% let count = 1; subscriptions.forEach(sub => { %>
               <tr>
-                <td>1</td>
-                <td style="width: 50%; text-align: left"><%= sub.plan %></td>
+                <td><%= count %></td>
+                <td style="width: 40%; text-align: left"><%= sub.plan %></td>
                 <td>$<%= sub.amount %></td>
-                <td><%= sub.date %></td>
-                <td><%= sub.status %></td>
-                <td>
-                  <% if(sub.status === 'Active') { %>
-                  <a href=""
-                    ><i class="fa-solid fa-xmark" style="color: #dd131a"></i
-                  ></a>
-                  <% } else { %>
-                  <span>N/A</span>
-                  <% } %>
+                <td
+                  class="local-date"
+                  data-date="<%= sub.createdAt.toISOString() %>"
+                >
+                  <%= sub.createdAt.toISOString().split('T')[0] %>
                 </td>
-                <td>Renew</td>
+                <td
+                  class="status"
+                  data-status="<%= sub.createdAt.toISOString() %>"
+                >
+                  <%= sub.status %>
+                </td>
+                <td
+                  class="expiry"
+                  data-expiry="<%= sub.createdAt.toISOString() %>"
+                >
+                  <%= sub.createdAt.toISOString().split('T')[0] %>
+                </td>
                 <td>
                   <a href="/card"><i class="fa-regular fa-address-card"></i></a>
                 </td>
               </tr>
-              <% }) %>
+              <% count++ }) %>
             </tbody>
           </table>
         </div>
@@ -81,5 +86,67 @@
     </main>
 
     <%- include('partials/footer') %>
+    <!-- <script>
+      // This function converts UTC to Nepal time and updates the DOM
+      function convertDatesToLocal() {
+        const dateElements = document.querySelectorAll(".local-date");
+
+        dateElements.forEach((el) => {
+          const utcDateStr = el.getAttribute("data-date");
+          if (utcDateStr) {
+            el.textContent = new Date(utcDateStr).toISOString().split("T")[0];
+          }
+        });
+
+        const expiryElements = document.querySelectorAll(".expiry");
+        const status = document.querySelectorAll(".status");
+
+        expiryElements.forEach((el) => {
+          const utcDateStr = el.getAttribute("data-expiry");
+          if (utcDateStr) {
+            const originalDate = new Date();
+            const oneMonthLater = new Date(utcDateStr);
+            oneMonthLater.setMonth(oneMonthLater.getMonth() + 1);
+
+            const diffTime = oneMonthLater - originalDate; // difference in milliseconds
+            const diffDays = diffTime / (1000 * 60 * 60 * 24); // convert to days
+
+            el.textContent = `${Math.round(diffDays)} days`;
+
+            status.forEach((al) => {
+              if (Math.round(diffDays) <= 0) {
+                al.textContent = "Disable";
+                el.textContent = "0 Days";
+              } else {
+                al.textContent = "Active";
+              }
+            });
+          }
+        });
+
+        // status.forEach((el) => {
+        //   const utcDateStr = el.getAttribute("data-status");
+        //   if (utcDateStr) {
+        //     const originalDate = new Date();
+        //     const oneMonthLater = new Date(utcDateStr);
+        //     oneMonthLater.setMonth(oneMonthLater.getMonth() + 1);
+
+        //     const diffTime = oneMonthLater - originalDate; // difference in milliseconds
+        //     const diffDays = diffTime / (1000 * 60 * 60 * 24); // convert to days
+
+        //     el.textContent = `${Math.round(diffDays)} days`;
+
+        //     if (Math.round(diffDays) <= 0) {
+        //       el.textContent = "Disable";
+        //     } else {
+        //       el.textContent = "Active";
+        //     }
+        //   }
+        // });
+      }
+
+      // Run after DOM is loaded
+      window.addEventListener("DOMContentLoaded", convertDatesToLocal);
+    </script> -->
   </body>
 </html>

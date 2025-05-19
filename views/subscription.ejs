@@ -41,17 +41,37 @@
         <div class="form-group">
           <label for="plan">Select Plan</label>
           <select id="plan" name="plan" required>
-            <% if(title){ %>
-            <option value="<%= title %>"><%= title %>/month</option>
-            <% }else{ %>
-            <option value="">-- Choose a Plan --</option>
+            <% if (!title) { %>
+              <option value="" disabled selected>-- Choose a Plan --</option>
             <% } %>
-            <option value="free">Free – NPR. 0/month</option>
-            <option value="basic">Basic – NPR. 499/month</option>
-            <option value="standard">Standard – NPR. 999/month</option>
-            <option value="premium">Premium – NPR. 9999/month</option>
-            <option value="annual">Annual – NPR. 11111/year</option>
+
+            <option value="Free" <%= title === 'Free' ? 'selected' : '' %>>Free – NPR. 0/month</option>
+            <option value="Basic" <%= title === 'Basic' ? 'selected' : '' %>>Basic – NPR. 499/month</option>
+            <option value="Standard" <%= title === 'Standard' ? 'selected' : '' %>>Standard – NPR. 799/month</option>
+            <option value="Premium" <%= title === 'Premium' ? 'selected' : '' %>>Premium – NPR. 899/month</option>
           </select>
+        </div>
+
+
+        <div class="form-group">
+          <label for="pkg">Select Package</label>
+          <select name="pkg" id="pkg">
+            <option value="">-- Choose a Package --</option>
+            <option value="monthly">monthly package</option>
+            <option value="semiannual">Semi annual package</option>
+            <option value="annual">annual package</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="total">Total amount</label>
+          <input
+            type="text"
+            value="<%= amount %>"
+            id="total"
+            name="total"
+            readonly
+          />
         </div>
 
         <button type="submit" class="btn">Proceed to Payment</button>
@@ -59,5 +79,39 @@
     </main>
 
     <%- include('partials/footer') %>
+    <script>
+        const planSelect = document.getElementById("plan");
+        const packageSelect = document.getElementById("pkg");
+        const totalInput = document.getElementById("total");
+
+        const plans = {
+          Free: 0,
+          Basic: 499,
+          Standard: 799,
+          Premium: 899,
+        };
+
+        function calculateTotal(plan, duration) {
+          const base = plans[plan] || 0;
+          const multiplier = duration === "monthly" ? 1 : duration === "semiannual" ? 6 : duration === "annual" ? 12 : 1;
+          return base * multiplier;
+        }
+
+        // Shared update function
+        function updateTotal() {
+          const selectedPlan = planSelect.value;
+          const selectedPackage = packageSelect.value;
+          const total = calculateTotal(selectedPlan, selectedPackage);
+          totalInput.value = total;
+        }
+
+        // Add event listeners ONCE
+        planSelect.addEventListener("change", updateTotal);
+        packageSelect.addEventListener("change", updateTotal);
+
+        // Run once on page load (handles default selection)
+        window.addEventListener("DOMContentLoaded", updateTotal);
+</script>
+
   </body>
 </html>
