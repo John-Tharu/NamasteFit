@@ -65,7 +65,8 @@ header {
   transition: height 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 .dropdown-menu.open {
-  height: 220px;
+  height: auto;
+  padding: 10px 0;
 }
 .dropdown-menu li {
   padding: 0.7rem;
@@ -552,13 +553,16 @@ table th {
 /****** Card CSS ******/
 /****** Entry Card Styles ******/
 .entry-card-container {
-  min-height: calc(100vh - 6vh);
+  min-height: calc(100vh - 14vh);
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 4rem 2rem;
 }
-
+.download {
+  margin-bottom: 20px;
+}
 .entry-card {
   width: 100%;
   max-width: 400px;

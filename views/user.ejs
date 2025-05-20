@@ -16,19 +16,16 @@
     <main class="admin-section">
       <h1>Welcome, <%= name %></h1>
 
-      <!-- Available Programs -->
+      <!-- Programs -->
       <section class="admin-panel">
         <h2>Available Programs</h2>
         <div class="program-list">
-          <% programs.forEach(program => { %>
+          <% programs.forEach(p => { %>
           <div class="program-card">
-            <h3><%= program.title %></h3>
-            <p><%= program.description %></p>
-            <p><strong>Duration:</strong> <%= program.duration %> mins</p>
-            <p><strong>Price:</strong> $<%= program.price %></p>
-            <a href="<%= program.videoUrl %>" class="btn small" target="_blank"
-              >Watch</a
-            >
+            <h3><%= p.title %></h3>
+            <p><%= p.slogan %></p>
+            <p><strong>Duration:</strong> <%= p.duration %> mins</p>
+            <a href="<%= p.link %>" class="btn small" target="_blank">Watch</a>
           </div>
           <% }) %>
         </div>
@@ -43,42 +40,41 @@
               <tr>
                 <th>SN</th>
                 <th>Plan</th>
+                <th>Package</th>
                 <th>Amount</th>
                 <th>Date</th>
+                <th>Expiry</th>
+                <th>Remaining</th>
                 <th>Status</th>
-                <th>Remaning Days</th>
                 <th>Entry Card</th>
               </tr>
             </thead>
             <tbody>
-              <% let count = 1; subscriptions.forEach(sub => { %>
+              <% let count = 1; subscriptions.forEach(sub => { const created =
+              new Date(sub.createdAt); const today = new Date(); const addMonths
+              = { monthly: 1, semiannual: 6, annual: 12 }; const expiry = new
+              Date(created.setMonth(created.getMonth() + (addMonths[sub.package]
+              || 0))); expiry.setHours(0,0,0,0); today.setHours(0,0,0,0); const
+              remaining = Math.max(Math.ceil((expiry - today) / (1000 * 60 * 60
+              * 24)), 0); const status = remaining > 0 ? "Active" : "Disable";
+              %>
               <tr>
-                <td><%= count %></td>
-                <td style="width: 40%; text-align: left"><%= sub.plan %></td>
-                <td>$<%= sub.amount %></td>
-                <td
-                  class="local-date"
-                  data-date="<%= sub.createdAt.toISOString() %>"
-                >
-                  <%= sub.createdAt.toISOString().split('T')[0] %>
-                </td>
-                <td
-                  class="status"
-                  data-status="<%= sub.createdAt.toISOString() %>"
-                >
-                  <%= sub.status %>
-                </td>
-                <td
-                  class="expiry"
-                  data-expiry="<%= sub.createdAt.toISOString() %>"
-                >
-                  <%= sub.createdAt.toISOString().split('T')[0] %>
-                </td>
+                <td><%= count++ %></td>
+                <td><%= sub.plan %></td>
+                <td><%= sub.package %></td>
+                <td style="text-align: right">NPR. <%= sub.amount %></td>
+                <td><%= sub.createdAt.toISOString().split('T')[0] %></td>
+                <td><%= expiry.toISOString().split('T')[0] %></td>
+                <td><%= remaining %> Days</td>
+                <td><%= status %></td>
                 <td>
-                  <a href="/card"><i class="fa-regular fa-address-card"></i></a>
+                  <a
+                    href="/card?plan=<%= sub.plan %>&pkg=<%= sub.package %>&purchase=<%= sub.createdAt.toISOString().split('T')[0] %>&expire=<%= expiry.toISOString().split('T')[0] %>"
+                    ><i class="fa-regular fa-address-card"></i
+                  ></a>
                 </td>
               </tr>
-              <% count++ }) %>
+              <% }) %>
             </tbody>
           </table>
         </div>
@@ -86,67 +82,5 @@
     </main>
 
     <%- include('partials/footer') %>
-    <!-- <script>
-      // This function converts UTC to Nepal time and updates the DOM
-      function convertDatesToLocal() {
-        const dateElements = document.querySelectorAll(".local-date");
-
-        dateElements.forEach((el) => {
-          const utcDateStr = el.getAttribute("data-date");
-          if (utcDateStr) {
-            el.textContent = new Date(utcDateStr).toISOString().split("T")[0];
-          }
-        });
-
-        const expiryElements = document.querySelectorAll(".expiry");
-        const status = document.querySelectorAll(".status");
-
-        expiryElements.forEach((el) => {
-          const utcDateStr = el.getAttribute("data-expiry");
-          if (utcDateStr) {
-            const originalDate = new Date();
-            const oneMonthLater = new Date(utcDateStr);
-            oneMonthLater.setMonth(oneMonthLater.getMonth() + 1);
-
-            const diffTime = oneMonthLater - originalDate; // difference in milliseconds
-            const diffDays = diffTime / (1000 * 60 * 60 * 24); // convert to days
-
-            el.textContent = `${Math.round(diffDays)} days`;
-
-            status.forEach((al) => {
-              if (Math.round(diffDays) <= 0) {
-                al.textContent = "Disable";
-                el.textContent = "0 Days";
-              } else {
-                al.textContent = "Active";
-              }
-            });
-          }
-        });
-
-        // status.forEach((el) => {
-        //   const utcDateStr = el.getAttribute("data-status");
-        //   if (utcDateStr) {
-        //     const originalDate = new Date();
-        //     const oneMonthLater = new Date(utcDateStr);
-        //     oneMonthLater.setMonth(oneMonthLater.getMonth() + 1);
-
-        //     const diffTime = oneMonthLater - originalDate; // difference in milliseconds
-        //     const diffDays = diffTime / (1000 * 60 * 60 * 24); // convert to days
-
-        //     el.textContent = `${Math.round(diffDays)} days`;
-
-        //     if (Math.round(diffDays) <= 0) {
-        //       el.textContent = "Disable";
-        //     } else {
-        //       el.textContent = "Active";
-        //     }
-        //   }
-        // });
-      }
-
-      // Run after DOM is loaded
-      window.addEventListener("DOMContentLoaded", convertDatesToLocal);
-    </script> -->
   </body>
 </html>

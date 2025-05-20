@@ -60,6 +60,7 @@
               <tr>
                 <th>SN</th>
                 <th>Title</th>
+                <th>Description</th>
                 <th>Duration</th>
                 <th>Plan</th>
                 <th>Video</th>
@@ -70,9 +71,8 @@
               <% let count=1; programs.forEach(program => { %>
               <tr>
                 <td><%= count %></td>
-                <td style="width: 60%; text-align: left">
-                  <%= program.title %>
-                </td>
+                <td style="text-align: left"><%= program.title %></td>
+                <td><%= program.slogan %></td>
                 <td><%= program.duration %> min</td>
                 <td><%= program.plan %></td>
                 <td>
