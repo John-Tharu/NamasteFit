@@ -1,30 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Entry Card – NamasteFit</title>
-  <link rel="stylesheet" href="/style.css" />
-</head>
-<body>
-  <%- include('partials/nav') %>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Entry Card – NamasteFit</title>
+    <link rel="stylesheet" href="/style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script
+      src="https://kit.fontawesome.com/bb7a749298.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <%- include('partials/nav') %>
 
-  <main class="entry-card-container">
-    <div class="entry-card">
-      <h2>NamasteFit Entry Pass</h2>
-      <div class="entry-content">
-        <p><strong>Name:</strong> <%= user.name %></p>
-        <p><strong>Program:</strong> <%= program.title %></p>
-        <p><strong>Purchased On:</strong> <%= purchaseDate %></p>
-        <p><strong>Valid Till:</strong> <%= expiryDate %></p>
-        <div class="qr-box">
-          <img src="<%= qrCodeUrl || '/images/qr-placeholder.png' %>" alt="QR Code" />
-          <p class="note">Scan at studio entry</p>
+    <main class="entry-card-container">
+      <div class="download">
+        <button class="btn" onclick="downloadCard()">
+          <i class="fa-solid fa-download"></i>
+          Download Card
+        </button>
+      </div>
+      <div class="entry-card" id="card">
+        <h2>NamasteFit Entry Pass</h2>
+        <div class="entry-content">
+          <p><strong>Name:</strong> <%= user %></p>
+          <p><strong>Program:</strong> <%= plan %></p>
+          <p><strong>Package:</strong> <%= pkg %></p>
+          <p><strong>Purchased On:</strong> <%= purchase %></p>
+          <p><strong>Valid Till:</strong> <%= expire %></p>
+          <div class="qr-box">
+            <img
+              src="<%= qrCodeUrl || '/images/qr-placeholder.png' %>"
+              alt="QR Code"
+            />
+            <p class="note">Scan at studio entry</p>
+          </div>
         </div>
       </div>
-    </div>
-  </main>
+    </main>
 
-  <%- include('partials/footer') %>
-</body>
+    <%- include('partials/footer') %>
+    <script>
+      function downloadCard() {
+        const card = document.getElementById("card");
+
+        html2canvas(card, { useCORS: true, scale: 2 }).then((canvas) => {
+          const link = document.createElement("a");
+          link.download = "NamasteFit_Entry_Card.png";
+          link.href = canvas.toDataURL("image/png");
+          link.click();
+        });
+      }
+    </script>
+  </body>
 </html>

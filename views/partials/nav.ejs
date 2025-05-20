@@ -22,8 +22,12 @@
     <li><a href="/">Home</a></li>
     <li><a href="/plan">Plan</a></li>
     <li><a href="/subscription">Subscription</a></li>
-    <li><a href="/login">login</a></li>
+    <% if(user){ %>
+    <li><a href="/logout">Logout</a></li>
+    <% }else{ %>
+    <li><a href="/login">Login</a></li>
     <li><a href="/register">Register</a></li>
+    <% } %>
   </div>
 </header>
 <script>

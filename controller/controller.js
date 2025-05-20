@@ -121,14 +121,22 @@ export const programpage = (req, res) => {
 
 export const cardpage = (req, res) => {
   if (!req.user) return res.redirect("/login");
-  const user = { name: "Ramesh Koirala" };
-  const program = { title: "Power HIIT Burn" };
-  const purchaseDate = "2025-05-10";
-  const expiryDate = "2025-06-10";
-  const qrCodeUrl =
-    "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Ramesh+PowerHIIT";
 
-  res.render("card", { user, program, purchaseDate, expiryDate, qrCodeUrl });
+  const { plan, pkg, purchase, expire } = req.query;
+  const user = req.user.name;
+  const qrData = {
+    name: user,
+    plan: plan,
+    package: pkg,
+    date: purchase,
+    expiry: expire,
+  };
+
+  const jsonString = JSON.stringify(qrData);
+  const encodedData = encodeURIComponent(jsonString);
+  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodedData}`;
+
+  res.render("card", { user, plan, pkg, purchase, expire, qrCodeUrl });
 };
 
 export const logout = (req, res) => {

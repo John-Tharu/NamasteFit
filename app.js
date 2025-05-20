@@ -38,6 +38,10 @@ app.use((req, res, next) => {
 
 app.use(routerdata);
 
+app.use((req, res) => {
+  res.send("The page is not found");
+});
+
 app.listen(PORT, () => {
   console.log(`Localhost is running on port ${PORT}`);
 });
