@@ -18,7 +18,15 @@ a {
   width: 100%;
   text-align: center;
 }
-a:hover {
+.del {
+  font-size: 1rem;
+  color: #222;
+  background-color: transparent;
+  cursor: pointer;
+  border: none;
+}
+a:hover,
+.del:hover {
   color: #388e3c;
 }
 header {
@@ -44,6 +52,7 @@ header {
 .navbar .links {
   display: flex;
   gap: 2rem;
+  align-items: center;
 }
 
 .toggle-btn {
@@ -601,12 +610,19 @@ table th {
 
 .error {
   margin-bottom: 20px;
-  background-color: #c628283f;
+  background-color: #c628281c;
   padding: 16px;
   font-size: 1rem;
   border-radius: 5px;
   border-left: 5px solid crimson;
   color: rgb(143, 14, 14);
+}
+.good {
+  color: green;
+  background-color: #388e3c4f;
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-size: 0.8rem;
 }
 
 /****** Admin Form CSS ****/

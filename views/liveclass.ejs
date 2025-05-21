@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Register – NamasteFit</title>
+    <title>Live Class – NamasteFit</title>
     <link rel="stylesheet" href="/style.css" />
     <script
       src="https://kit.fontawesome.com/bb7a749298.js"
@@ -14,21 +14,16 @@
     <%- include('partials/nav') %>
 
     <main class="register-section">
-      <h1>Add New Program</h1>
-      <form class="register-form" action="/program" method="POST">
+      <h1>Add Live Class</h1>
+      <form class="register-form" action="/liveClass" method="POST">
         <div class="form-group">
-          <label for="title">Program Title</label>
+          <label for="title">Class Title</label>
           <input type="text" name="title" id="title" required />
         </div>
 
         <div class="form-group">
-          <label for="slogan">Description</label>
-          <textarea name="slogan" id="slogan" rows="2" required></textarea>
-        </div>
-
-        <div class="form-group">
-          <label for="duration">Duration (in minutes)</label>
-          <input type="number" name="duration" id="duration" required />
+          <label for="slogan">Slogan</label>
+          <input type="text" name="slogan" id="slogan" required />
         </div>
 
         <div class="form-group">
@@ -43,11 +38,16 @@
         </div>
 
         <div class="form-group">
-          <label for="link">Video URL (YouTube/Vimeo)</label>
+          <label for="time">Class Start Time</label>
+          <input type="time" name="time" id="time" required />
+        </div>
+
+        <div class="form-group">
+          <label for="link">Joining Link</label>
           <input type="url" name="link" id="link" required />
         </div>
 
-        <button type="submit" class="btn">Add Program</button>
+        <button type="submit" class="btn">Add Class</button>
       </form>
     </main>
 

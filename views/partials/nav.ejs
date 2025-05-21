@@ -4,12 +4,19 @@
       <a href="/">NamasteFit</a>
     </div>
     <ul class="links">
+      <% if(user){ %>
+      <li><a href="/">Home</a></li>
+      <li><a href="/plan">Plan</a></li>
+      <li><a href="/dashboard">Dashboard</a></li>
+      <li><a href="/profile">Profile</a></li>
+      <li><a href="/logout">Logout</a></li>
+      <li class="good">
+        <span><i class="fa-solid fa-circle-check"></i> You are logged In</span>
+      </li>
+      <% }else{ %>
       <li><a href="/">Home</a></li>
       <li><a href="/plan">Plan</a></li>
       <li><a href="/subscription">Subscription</a></li>
-      <% if(user){ %>
-      <li><a href="/logout">Logout</a></li>
-      <% }else{ %>
       <li><a href="/login">Login</a></li>
       <li><a href="/register">Register</a></li>
       <% } %>
@@ -19,12 +26,16 @@
     </div>
   </div>
   <div class="dropdown-menu">
+    <% if(user){ %>
+    <li><a href="/">Home</a></li>
+    <li><a href="/plan">Plan</a></li>
+    <li><a href="/dashboard">Dashboard</a></li>
+    <li><a href="/profile">Profile</a></li>
+    <li><a href="/logout">Logout</a></li>
+    <% }else{ %>
     <li><a href="/">Home</a></li>
     <li><a href="/plan">Plan</a></li>
     <li><a href="/subscription">Subscription</a></li>
-    <% if(user){ %>
-    <li><a href="/logout">Logout</a></li>
-    <% }else{ %>
     <li><a href="/login">Login</a></li>
     <li><a href="/register">Register</a></li>
     <% } %>

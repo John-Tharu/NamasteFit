@@ -14,27 +14,45 @@
     <%- include('partials/nav') %>
 
     <main class="register-section">
-      <h1>Add New Program</h1>
-      <form class="register-form" action="/program" method="POST">
+      <h1>Update Program</h1>
+      <form
+        class="register-form"
+        action="/edit/<%= programs.id %>"
+        method="POST"
+      >
         <div class="form-group">
           <label for="title">Program Title</label>
-          <input type="text" name="title" id="title" required />
+          <input
+            type="text"
+            value="<%= programs.title %>"
+            name="title"
+            id="title"
+            required
+          />
         </div>
 
         <div class="form-group">
           <label for="slogan">Description</label>
-          <textarea name="slogan" id="slogan" rows="2" required></textarea>
+          <textarea name="slogan" id="slogan" rows="2" required>
+<%= programs.slogan %></textarea
+          >
         </div>
 
         <div class="form-group">
           <label for="duration">Duration (in minutes)</label>
-          <input type="number" name="duration" id="duration" required />
+          <input
+            type="number"
+            value="<%= programs.duration %>"
+            name="duration"
+            id="duration"
+            required
+          />
         </div>
 
         <div class="form-group">
           <label for="plan">Plan</label>
           <select name="plan" id="plan">
-            <option value="">-- Choose a Plan --</option>
+            <option value="<%= programs.plan %>"><%= programs.plan %></option>
             <option value="Free">Free Plan</option>
             <option value="Basic">Basic Plan</option>
             <option value="Standard">Standard Plan</option>
@@ -44,10 +62,16 @@
 
         <div class="form-group">
           <label for="link">Video URL (YouTube/Vimeo)</label>
-          <input type="url" name="link" id="link" required />
+          <input
+            type="url"
+            value="<%= programs.link %>"
+            name="link"
+            id="link"
+            required
+          />
         </div>
 
-        <button type="submit" class="btn">Add Program</button>
+        <button type="submit" class="btn">Update</button>
       </form>
     </main>
 

@@ -2,6 +2,8 @@ import { Router } from "express";
 import {
   adminpage,
   cardpage,
+  editprogram,
+  getLiveClass,
   homepage,
   loginpage,
   logout,
@@ -13,9 +15,11 @@ import {
 } from "../controller/controller.js";
 import {
   addprogram,
+  deleteProgram,
   loginData,
   payment,
   savedata,
+  updateProgram,
 } from "../controller/post.controller.js";
 
 const router = Router();
@@ -34,12 +38,18 @@ router.route("/register").get(registerpage).post(savedata);
 
 router.route("/admin").get(adminpage);
 
-router.route("/user").get(userpage);
+router.route("/dashboard").get(userpage);
 
 router.route("/program").get(programpage).post(addprogram);
 
 router.route("/card").get(cardpage);
 
 router.route("/logout").get(logout);
+
+router.route("/edit/:id").get(editprogram).post(updateProgram);
+
+router.route("/delete/:id").post(deleteProgram);
+
+router.route("/liveClass").get(getLiveClass);
 
 export const routerdata = router;

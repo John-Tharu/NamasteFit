@@ -79,12 +79,16 @@
                   <a href="<%= program.link %>" target="_blank">Watch</a>
                 </td>
                 <td>
-                  <a href="/admin/programs/edit/<%= program._id %>"
+                  <a href="/edit/<%= program.id %>"
                     ><i class="fa-regular fa-pen-to-square"></i
                   ></a>
                 </td>
                 <td>
-                  <a href=""><i class="fa-regular fa-trash-can"></i></a>
+                  <form action="/delete/<%= program.id %>" method="post">
+                    <button type="submit" class="del">
+                      <i class="fa-regular fa-trash-can"></i>
+                    </button>
+                  </form>
                 </td>
               </tr>
               <% count++ }) %>
