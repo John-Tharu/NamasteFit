@@ -4,6 +4,7 @@ import { routerdata } from "./router/router.js";
 import session from "express-session";
 import flash from "express-flash";
 import cookieParser from "cookie-parser";
+import requestIp from "request-ip";
 import { verfiyToken } from "./middlewares/middleware.js";
 dotenv.config();
 
@@ -28,6 +29,8 @@ app.use(cookieParser());
 app.set("view engine", "ejs");
 
 app.use(express.static("public"));
+
+app.use(requestIp.mw());
 
 app.use(verfiyToken);
 

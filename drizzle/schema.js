@@ -1,4 +1,5 @@
 import { relations } from "drizzle-orm";
+import { boolean, text } from "drizzle-orm/gel-core";
 import {
   float,
   int,
@@ -14,6 +15,18 @@ export const usersTable = mysqlTable("users_table", {
   email: varchar("email", { length: 255 }).notNull().unique(),
   pass: varchar("pass", { length: 255 }).notNull(),
   role: varchar("role", { length: 8 }).notNull().default("User"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow().onUpdateNow(),
+});
+
+export const sessionTable = mysqlTable("session_table", {
+  id: int().autoincrement().primaryKey(),
+  userId: int("user_id")
+    .notNull()
+    .references(() => usersTable.id),
+  valid: boolean().default(true).notNull(),
+  userAgent: text("user_agent"),
+  ip: varchar({ length: 255 }),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow().onUpdateNow(),
 });
@@ -45,13 +58,33 @@ export const paymentTable = mysqlTable("payment_table", {
   updatedAt: timestamp("updated_at").notNull().defaultNow().onUpdateNow(),
 });
 
+export const liveClassTable = mysqlTable("liveclass_table", {
+  id: int().autoincrement().primaryKey(),
+  title: varchar("title", { length: 255 }).notNull(),
+  slogan: varchar("slogan", { length: 255 }).notNull(),
+  plan: varchar("plan", { length: 50 }).notNull(),
+  programTime: varchar("program_time", { length: 20 }).notNull(),
+  link: varchar({ length: 255 }).notNull(),
+  status: boolean().default(true).notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow().onUpdateNow(),
+});
+
 export const userRelation = relations(usersTable, ({ many }) => ({
   payment: many(paymentTable),
+  session: many(sessionTable),
 }));
 
 export const paymentRelation = relations(paymentTable, ({ one }) => ({
   user: one(usersTable, {
     fields: [paymentTable.userId],
     references: [usersTable.id],
+  }),
+}));
+
+export const sessionRelation = relations(sessionTable, ({ one }) => ({
+  user: one(usersTable, {
+    fields: [sessionTable.userId], //Foregin Key
+    references: [usersTable.id], // Refrences
   }),
 }));

@@ -16,18 +16,42 @@
     <main class="admin-section">
       <h1>Welcome, <%= name %></h1>
 
+      <!-- Live Class -->
+      <section class="admin-panel">
+        <h2>Live Classes</h2>
+        <div class="program-list">
+          <div class="program-card">
+            <h3>Zumba Class</h3>
+            <p>Fell free and fit</p>
+            <p><strong>Standard Plan</strong></p>
+            <p><strong>Time:</strong> 3:00 AM</p>
+            <a
+              href="https://meet.google.com/ira-ojij-tbg"
+              class="btn small"
+              target="_blank"
+              >Join</a
+            >
+          </div>
+        </div>
+      </section>
+
       <!-- Programs -->
       <section class="admin-panel">
         <h2>Available Programs</h2>
         <div class="program-list">
-          <% programs.forEach(p => { %>
+          <% if(programs.length === 0){ %>
+          <div class="plan_btn">
+            <a href="/plan"><button class="btn">See Plans</button></a>
+          </div>
+          <% }else{ programs.forEach(p => { %>
           <div class="program-card">
             <h3><%= p.title %></h3>
             <p><%= p.slogan %></p>
+            <p><strong><%= p.plan %> Plan</strong></p>
             <p><strong>Duration:</strong> <%= p.duration %> mins</p>
             <a href="<%= p.link %>" class="btn small" target="_blank">Watch</a>
           </div>
-          <% }) %>
+          <% })} %>
         </div>
       </section>
 
@@ -41,7 +65,7 @@
                 <th>SN</th>
                 <th>Plan</th>
                 <th>Package</th>
-                <th>Amount</th>
+                <th>Amount (NPR)</th>
                 <th>Date</th>
                 <th>Expiry</th>
                 <th>Remaining</th>
@@ -50,31 +74,43 @@
               </tr>
             </thead>
             <tbody>
-              <% let count = 1; subscriptions.forEach(sub => { const created =
-              new Date(sub.createdAt); const today = new Date(); const addMonths
-              = { monthly: 1, semiannual: 6, annual: 12 }; const expiry = new
-              Date(created.setMonth(created.getMonth() + (addMonths[sub.package]
-              || 0))); expiry.setHours(0,0,0,0); today.setHours(0,0,0,0); const
-              remaining = Math.max(Math.ceil((expiry - today) / (1000 * 60 * 60
-              * 24)), 0); const status = remaining > 0 ? "Active" : "Disable";
-              %>
+              <% if(subscriptions.length === 0){ %>
+              <tr>
+                <td colspan="9">No data found</td>
+              </tr>
+              <% }else{ let count = 1; subscriptions.forEach(sub => { const
+              created = new Date(sub.createdAt); const today = new Date(); const
+              addMonths = { monthly: 1, semiannual: 6, annual: 12 }; const
+              expiry = new Date(created.setMonth(created.getMonth() +
+              (addMonths[sub.package] || 0))); expiry.setHours(0,0,0,0);
+              today.setHours(0,0,0,0); const remaining =
+              Math.max(Math.ceil((expiry - today) / (1000 * 60 * 60 * 24)), 0);
+              const status = remaining > 0 ? "Active" : "Disable"; const card =
+              remaining > 0 ? "card" : "No card"; %>
               <tr>
                 <td><%= count++ %></td>
                 <td><%= sub.plan %></td>
                 <td><%= sub.package %></td>
-                <td style="text-align: right">NPR. <%= sub.amount %></td>
+                <td style="text-align: right">
+                  <%= sub.amount.toLocaleString('en-IN', {
+                  minimumFractionDigits: 2, maximumFractionDigits: 2 }) %>
+                </td>
                 <td><%= sub.createdAt.toISOString().split('T')[0] %></td>
                 <td><%= expiry.toISOString().split('T')[0] %></td>
                 <td><%= remaining %> Days</td>
                 <td><%= status %></td>
+                <% if(remaining > 0){ %>
                 <td>
                   <a
                     href="/card?plan=<%= sub.plan %>&pkg=<%= sub.package %>&purchase=<%= sub.createdAt.toISOString().split('T')[0] %>&expire=<%= expiry.toISOString().split('T')[0] %>"
-                    ><i class="fa-regular fa-address-card"></i
+                    ><i class="fa-solid fa-id-card"></i
                   ></a>
                 </td>
+                <%}else{ %>
+                <td>No Card</td>
+                <% } %>
               </tr>
-              <% }) %>
+              <% }) }%>
             </tbody>
           </table>
         </div>

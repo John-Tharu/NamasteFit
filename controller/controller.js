@@ -1,6 +1,9 @@
+import { z } from "zod";
 import {
   getPayment,
   getProgram,
+  getProgramById,
+  getPrograms,
   getSubscription,
   getUser,
 } from "../model/model.js";
@@ -93,7 +96,7 @@ export const registerpage = (req, res) => {
 
 export const adminpage = async (req, res) => {
   if (!req.user) return res.redirect("/login");
-  const programs = await getProgram();
+  const programs = await getPrograms();
   //console.log(programs);
 
   const users = await getUser();
@@ -105,11 +108,13 @@ export const adminpage = async (req, res) => {
 
 export const userpage = async (req, res) => {
   if (!req.user) return res.redirect("/login");
-  const { id, name, email } = req.user;
-
-  const programs = await getProgram();
-
+  const { id, name } = req.user;
   const subscriptions = await getSubscription(id);
+  //console.log(subscriptions);
+
+  const planList = subscriptions.map((p) => p.plan);
+
+  const programs = await getProgram(planList);
 
   res.render("user", { name, programs, subscriptions });
 };
@@ -142,4 +147,25 @@ export const cardpage = (req, res) => {
 export const logout = (req, res) => {
   res.clearCookie("access_token");
   res.redirect("/");
+};
+
+export const editprogram = async (req, res) => {
+  const { data: id, error } = z.coerce.number().int().safeParse(req.params.id);
+
+  if (error) return res.status(404).send("Page Not found");
+
+  try {
+    const [programs] = await getProgramById(id);
+    console.log(programs);
+    if (!programs) {
+      return res.status(404).send("Page not found");
+    }
+    res.render("editprogram", { programs });
+  } catch (error) {
+    return res.status(404).send("Page Not found");
+  }
+};
+
+export const getLiveClass = (req, res) => {
+  res.render("liveclass");
 };
