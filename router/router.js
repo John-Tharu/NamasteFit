@@ -2,11 +2,14 @@ import { Router } from "express";
 import {
   adminpage,
   cardpage,
+  editclass,
   editprogram,
   getLiveClass,
   homepage,
   loginpage,
   logout,
+  pageNot,
+  paymentPage,
   planpage,
   programpage,
   registerpage,
@@ -14,7 +17,9 @@ import {
   userpage,
 } from "../controller/controller.js";
 import {
+  addLiveClass,
   addprogram,
+  deleteClass,
   deleteProgram,
   loginData,
   payment,
@@ -50,6 +55,14 @@ router.route("/edit/:id").get(editprogram).post(updateProgram);
 
 router.route("/delete/:id").post(deleteProgram);
 
-router.route("/liveClass").get(getLiveClass);
+router.route("/liveClass").get(getLiveClass).post(addLiveClass);
+
+router.route("/classedit/:id").get(editclass);
+
+router.route("/deleteClass/:id").post(deleteClass);
+
+router.route("/paymentdone").get(paymentPage);
+
+router.route("/404").get(pageNot);
 
 export const routerdata = router;

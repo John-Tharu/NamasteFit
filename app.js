@@ -42,7 +42,7 @@ app.use((req, res, next) => {
 app.use(routerdata);
 
 app.use((req, res) => {
-  res.send("The page is not found");
+  res.redirect("/404");
 });
 
 app.listen(PORT, () => {

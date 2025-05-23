@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "638e9042-7744-4481-927a-ed850def18b7",
+  "id": "1e078050-a269-425a-b6c6-91cf22be1c21",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "liveclass_table": {
@@ -23,6 +23,13 @@
         },
         "slogan": {
           "name": "slogan",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "instructor": {
+          "name": "instructor",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true,

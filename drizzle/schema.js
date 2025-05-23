@@ -62,6 +62,7 @@ export const liveClassTable = mysqlTable("liveclass_table", {
   id: int().autoincrement().primaryKey(),
   title: varchar("title", { length: 255 }).notNull(),
   slogan: varchar("slogan", { length: 255 }).notNull(),
+  instructor: varchar("instructor", { length: 255 }).notNull(),
   plan: varchar("plan", { length: 50 }).notNull(),
   programTime: varchar("program_time", { length: 20 }).notNull(),
   link: varchar({ length: 255 }).notNull(),

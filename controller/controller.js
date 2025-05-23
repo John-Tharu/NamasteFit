@@ -1,15 +1,18 @@
 import { z } from "zod";
 import {
+  changeStatus,
+  getClassLink,
+  getLiveClassData,
   getPayment,
   getProgram,
   getProgramById,
   getPrograms,
+  getStatus,
   getSubscription,
   getUser,
 } from "../model/model.js";
 
 export const homepage = (req, res) => {
-  if (!req.user) return res.redirect("/login");
   res.render("homepage");
 };
 
@@ -81,7 +84,13 @@ export const subscriptionpage = (req, res) => {
   const { name, email } = req.user;
   const title = req.params.title;
   const amount = plans[title];
-  res.render("subscription", { title, amount, name, email });
+  res.render("subscription", {
+    title,
+    amount,
+    name,
+    email,
+    msg: req.flash("errors"),
+  });
 };
 
 export const loginpage = (req, res) => {
@@ -96,6 +105,7 @@ export const registerpage = (req, res) => {
 
 export const adminpage = async (req, res) => {
   if (!req.user) return res.redirect("/login");
+  if (req.user.role != "Admin") return res.redirect("/404");
   const programs = await getPrograms();
   //console.log(programs);
 
@@ -103,7 +113,9 @@ export const adminpage = async (req, res) => {
 
   const payment = await getPayment();
 
-  res.render("admin", { programs, users, payment });
+  const liveclasses = await getLiveClassData();
+
+  res.render("admin", { liveclasses, programs, users, payment });
 };
 
 export const userpage = async (req, res) => {
@@ -116,11 +128,15 @@ export const userpage = async (req, res) => {
 
   const programs = await getProgram(planList);
 
-  res.render("user", { name, programs, subscriptions });
+  const classLinks = await getClassLink(planList);
+  console.log(classLinks);
+
+  res.render("user", { name, programs, subscriptions, classLinks });
 };
 
 export const programpage = (req, res) => {
   if (!req.user) return res.redirect("/login");
+  if (req.user.role != "Admin") return res.redirect("/404");
   res.render("programpage");
 };
 
@@ -150,22 +166,66 @@ export const logout = (req, res) => {
 };
 
 export const editprogram = async (req, res) => {
+  if (!req.user) return res.redirect("/login");
+  if (req.user.role != "Admin") return res.redirect("/404");
+
   const { data: id, error } = z.coerce.number().int().safeParse(req.params.id);
 
-  if (error) return res.status(404).send("Page Not found");
+  if (error) return res.status(200).send("Internal Server Error");
 
   try {
     const [programs] = await getProgramById(id);
     console.log(programs);
     if (!programs) {
-      return res.status(404).send("Page not found");
+      return res.res.status(200).send("Internal Server Error");
     }
     res.render("editprogram", { programs });
   } catch (error) {
-    return res.status(404).send("Page Not found");
+    return rres.status(200).send("Internal Server Error");
   }
 };
 
-export const getLiveClass = (req, res) => {
-  res.render("liveclass");
+export const getLiveClass = async (req, res) => {
+  if (!req.user) return res.redirect("/login");
+  try {
+    res.render("liveclass", { msg: req.flash("errors") });
+  } catch (error) {
+    res.status(400).send("Inernal Server error");
+  }
+};
+
+export const editclass = async (req, res) => {
+  //Check cookie present or not
+  if (!req.user) return res.redirect("/login");
+
+  //Check Admin login or not
+  if (req.user.role != "Admin") return res.redirect("/404");
+
+  //Id converted into integer using zod
+  const { data: id, error } = z.coerce.number().int().safeParse(req.params.id);
+
+  //Check if there is any error
+  if (error) return res.status(200).send("Internal Server Error");
+
+  //Get status data from database
+  const [stat] = await getStatus(id);
+
+  //Check status ture or false and change opposite of that
+  if (stat.status == true) {
+    await changeStatus(id, false);
+  } else {
+    await changeStatus(id, true);
+  }
+
+  //After successful redirect to admin page.
+  res.redirect("/admin");
+};
+
+export const paymentPage = (req, res) => {
+  if (!req.user) return res.redirect("/login");
+  res.render("paymentdone");
+};
+
+export const pageNot = (req, res) => {
+  res.render("404");
 };

@@ -617,12 +617,17 @@ table th {
   border-left: 5px solid crimson;
   color: rgb(143, 14, 14);
 }
-.good {
+.good,
+.inactive {
   color: green;
   background-color: #388e3c4f;
   padding: 5px 10px;
   border-radius: 10px;
   font-size: 0.8rem;
+}
+.inactive {
+  background-color: #c628283b;
+  color: crimson;
 }
 
 /****** Admin Form CSS ****/
@@ -638,6 +643,30 @@ table th {
 .blur {
   display: none;
 }
+.donelogo {
+  text-align: center;
+}
+.donelogo .fa-solid {
+  font-size: 5rem;
+  color: #388e3c;
+  margin-bottom: 1rem;
+}
+.heading,
+.donebtn {
+  text-align: center;
+}
+.pagenot {
+  display: flex;
+  width: 100vw;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  flex-direction: column;
+}
+.pagenot h1 {
+  margin-bottom: 20px;
+}
+
 /****** Responsive Design ******/
 @media (max-width: 726px) {
   .navbar .links {

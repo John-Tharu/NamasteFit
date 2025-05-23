@@ -1,6 +1,7 @@
-import { eq, inArray } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import { db } from "../config/db.js";
 import {
+  liveClassTable,
   paymentTable,
   planTable,
   sessionTable,
@@ -157,4 +158,52 @@ export const updateProgramData = async ({
 
 export const deleteProgramData = async (id) => {
   return await db.delete(planTable).where(eq(planTable.id, id));
+};
+
+export const liveClass = async ({
+  title,
+  slogan,
+  instructor,
+  plan,
+  time,
+  link,
+}) => {
+  return await db
+    .insert(liveClassTable)
+    .values({ title, slogan, instructor, plan, programTime: time, link })
+    .$returningId();
+};
+
+export const getLiveClassData = async () => {
+  return await db.select().from(liveClassTable);
+};
+
+export const getClassLink = async (planList) => {
+  return await db
+    .select()
+    .from(liveClassTable)
+    .where(
+      and(
+        inArray(liveClassTable.plan, planList),
+        eq(liveClassTable.status, true)
+      )
+    );
+};
+
+export const getStatus = async (id) => {
+  return await db
+    .select()
+    .from(liveClassTable)
+    .where(eq(liveClassTable.id, id));
+};
+
+export const changeStatus = async (id, value) => {
+  await db
+    .update(liveClassTable)
+    .set({ status: value })
+    .where(eq(liveClassTable.id, id));
+};
+
+export const deleteClassData = async (id) => {
+  return await db.delete(liveClassTable).where(eq(liveClassTable.id, id));
 };
