@@ -27,6 +27,11 @@
         </div>
 
         <div class="form-group">
+          <label for="instructor">Instructor Name</label>
+          <input type="text" name="instructor" id="instructor" required />
+        </div>
+
+        <div class="form-group">
           <label for="plan">Plan</label>
           <select name="plan" id="plan">
             <option value="">-- Choose a Plan --</option>
@@ -46,6 +51,10 @@
           <label for="link">Joining Link</label>
           <input type="url" name="link" id="link" required />
         </div>
+
+        <% if(msg && msg.length > 0){ %>
+        <p class="error"><%= msg %></p>
+        <% } %>
 
         <button type="submit" class="btn">Add Class</button>
       </form>

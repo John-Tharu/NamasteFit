@@ -5,15 +5,21 @@ import {
   createAccessToken,
   createRefreshToken,
   createSession,
+  deleteClassData,
   deleteProgramData,
   // generateToken,
   hashpass,
+  liveClass,
   paymentdata,
   saveData,
   saveProgram,
   updateProgramData,
 } from "../model/model.js";
-import { loginValidation, registerValidate } from "../validation/validation.js";
+import {
+  liveClassValidation,
+  loginValidation,
+  registerValidate,
+} from "../validation/validation.js";
 import { randomBytes } from "crypto";
 import {
   ACCESS_TOKEN_EXPIRY,
@@ -121,7 +127,10 @@ export const loginData = async (req, res) => {
 };
 
 export const addprogram = async (req, res) => {
-  console.log(req.body);
+  if (!req.user) return res.redirect("/login");
+
+  if (req.user.role != "Admin") return res.redirect("/404");
+  //console.log(req.body);
   const { title, slogan, duration, plan, link } = req.body;
 
   const saveprogram = await saveProgram({
@@ -142,7 +151,7 @@ export const payment = async (req, res) => {
   const { name, email } = req.user;
   const { plan, pkg, total } = req.body;
   const status = "Active";
-  const transId = randomBytes(4).toString("hex");
+  const transId = randomBytes(4).toString("hex").toUpperCase();
   const paymentData = await paymentdata({
     name,
     email,
@@ -154,13 +163,16 @@ export const payment = async (req, res) => {
     userId: req.user.id,
   });
   console.log(paymentData);
-  res.redirect("/subscription");
+  res.redirect("/paymentdone");
 };
 
 export const updateProgram = async (req, res) => {
+  if (!req.user) return res.redirect("/login");
+
+  if (req.user.role != "Admin") return res.redirect("/404");
   const { data: id, error } = z.coerce.number().int().safeParse(req.params.id);
   if (error) {
-    return res.status(404).send("Page not found");
+    return res.status(200).send("Internal Server Error");
   }
 
   try {
@@ -173,14 +185,19 @@ export const updateProgram = async (req, res) => {
       link,
       id,
     });
+    console.log(newUpdateProgram);
   } catch (error) {
-    return res.status(200).send("Internal Server Erro");
+    return res.status(200).send("Internal Server Error");
   }
 
   res.redirect("/admin");
 };
 
 export const deleteProgram = async (req, res) => {
+  if (!req.user) return res.redirect("/login");
+
+  if (req.user.role != "Admin") return res.redirect("/404");
+
   const { data: id, error } = z.coerce.number().int().safeParse(req.params.id);
   if (error) {
     return res.status(200).send("Something missing");
@@ -189,6 +206,55 @@ export const deleteProgram = async (req, res) => {
     await deleteProgramData(id);
     res.redirect("/admin");
   } catch (error) {
+    return res.status(200).send("Internal server error");
+  }
+};
+
+export const addLiveClass = async (req, res) => {
+  if (!req.user) return res.redirect("/login");
+  if (req.user.role != "Admin") return res.redirect("/404");
+  //console.log(req.body);
+
+  const { data, error } = liveClassValidation.safeParse(req.body);
+  console.log(data);
+  if (error) {
+    req.flash("errors", error.errors[0].message);
+    return res.redirect("/liveclass");
+  }
+
+  const { title, slogan, instructor, plan, time, link } = data;
+
+  try {
+    const liveclass = await liveClass({
+      title,
+      slogan,
+      instructor,
+      plan,
+      time,
+      link,
+    });
+    console.log(liveclass);
+  } catch (error) {
+    req.flash("errors", "Internal server error");
+    return res.redirect("/liveclass");
+  }
+
+  res.redirect("/admin");
+};
+
+export const deleteClass = async (req, res) => {
+  if (!req.user) return res.redirect("/login");
+  if (req.user.role != "Admin") return res.redirect("/404");
+
+  const { data: id, error } = z.coerce.number().int().safeParse(req.params.id);
+  if (error) {
+    return res.status(200).send("Something missing");
+  }
+  try {
+    await deleteClassData(id);
+    res.redirect("/admin");
+  } catch (error) {
+    console.log(error);
     return res.status(200).send("Internal server error");
   }
 };

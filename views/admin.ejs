@@ -53,7 +53,11 @@
       <!-- Manage Programs -->
       <section class="admin-panel">
         <h2>Workout/Yoga Programs</h2>
-        <a href="/program"><button class="btn" id="btn">Add Program</button></a>
+        <div class="buttonline">
+          <a href="/program"
+            ><button class="btn" id="btn">Add Program</button></a
+          >
+        </div>
         <div class="tbl">
           <table>
             <thead>
@@ -68,7 +72,11 @@
               </tr>
             </thead>
             <tbody>
-              <% let count=1; programs.forEach(program => { %>
+              <% if(programs.length === 0){ %>
+              <tr>
+                <td colspan="7">No Data Found</td>
+              </tr>
+              <% } else{ let count=1; programs.forEach(program => { %>
               <tr>
                 <td><%= count %></td>
                 <td style="text-align: left"><%= program.title %></td>
@@ -91,7 +99,7 @@
                   </form>
                 </td>
               </tr>
-              <% count++ }) %>
+              <% count++ }) } %>
             </tbody>
           </table>
         </div>
@@ -112,7 +120,11 @@
               </tr>
             </thead>
             <tbody>
-              <% let sn=1; users.forEach(user => { %>
+              <% if(users.length === 0){ %>
+              <tr>
+                <td colspan="5">No Data Found</td>
+              </tr>
+              <% } else{ let sn=1; users.forEach(user => { %>
               <tr>
                 <td><%= sn %></td>
                 <td style="width: 30%; text-align: left"><%= user.name %></td>
@@ -125,7 +137,7 @@
                   <%= user.createdAt.toISOString().split('T')[0] %>
                 </td>
               </tr>
-              <% sn++ }) %>
+              <% sn++ }) } %>
             </tbody>
           </table>
         </div>
@@ -183,13 +195,21 @@
               </tr>
             </thead>
             <tbody>
-              <% payment.forEach(payment => { %>
+              <% let amount = 0 %> <% if(payment.length === 0){%>
               <tr>
-                <td>1</td>
+                <td colspan="8">No Data Found</td>
+              </tr>
+              <% }else{ let num=1; payment.forEach(payment => { amount = amount
+              + payment.amount %>
+              <tr>
+                <td><%= num %></td>
                 <td><%= payment.name %></td>
                 <td><%= payment.plan %></td>
                 <td><%= payment.package %></td>
-                <td>$<%= payment.amount %></td>
+                <td style="text-align: right">
+                  <%= payment.amount.toLocaleString('en-IN', {
+                  minimumFractionDigits: 2, maximumFractionDigits: 2 }) %>
+                </td>
                 <td
                   class="local-date"
                   data-date="<%= payment.createdAt.toISOString() %>"
@@ -211,11 +231,81 @@
                 </td>
                 <td><%= payment.transId %></td>
               </tr>
+              <% num++ }) } %>
+              <tr>
+                <td colspan="8">
+                  <strong>
+                    Total : NPR. <%= amount.toLocaleString('en-IN', {
+                    minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                    %></strong
+                  >
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Manage Live Classes -->
+      <% if(liveclasses){ %>
+      <section class="admin-panel">
+        <h2>Live Classes</h2>
+        <div class="buttonline">
+          <a href="/liveClass"
+            ><button class="btn" id="btn">Add Class</button></a
+          >
+        </div>
+        <div class="tbl">
+          <table>
+            <thead>
+              <tr>
+                <th>SN</th>
+                <th>Title</th>
+                <th>Slogan</th>
+                <th>Instructor</th>
+                <th>Plan</th>
+                <th>Time</th>
+                <th>Status</th>
+                <th>Class Link</th>
+                <th colspan="2">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% let nums=1; liveclasses.forEach((classes)=>{ %>
+              <tr>
+                <td><%= nums %></td>
+                <td style="text-align: left"><%= classes.title %></td>
+                <td><%= classes.slogan %></td>
+                <td><%= classes.instructor %></td>
+                <td><%= classes.plan %></td>
+                <td><%= classes.programTime %></td>
+                <% if(classes.status == 1){ %>
+                <td><span class="good">Active</span></td>
+                <% }else{%>
+                <td><span class="inactive">Disable</span></td>
+                <% nums++ } %>
+                <td>
+                  <a href="<%= classes.link %>" target="_blank">Link</a>
+                </td>
+                <td>
+                  <a href="/classedit/<%= classes.id %>"
+                    ><i class="fa-regular fa-pen-to-square"></i
+                  ></a>
+                </td>
+                <td>
+                  <form action="/deleteClass/<%= classes.id %>" method="post">
+                    <button type="submit" class="del">
+                      <i class="fa-regular fa-trash-can"></i>
+                    </button>
+                  </form>
+                </td>
+              </tr>
               <% }) %>
             </tbody>
           </table>
         </div>
       </section>
+      <% } %>
     </main>
 
     <%- include('partials/footer') %>

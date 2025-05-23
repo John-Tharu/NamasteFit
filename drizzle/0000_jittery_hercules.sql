@@ -2,6 +2,7 @@ CREATE TABLE `liveclass_table` (
 	`id` int AUTO_INCREMENT NOT NULL,
 	`title` varchar(255) NOT NULL,
 	`slogan` varchar(255) NOT NULL,
+	`instructor` varchar(255) NOT NULL,
 	`plan` varchar(50) NOT NULL,
 	`program_time` varchar(20) NOT NULL,
 	`link` varchar(255) NOT NULL,
