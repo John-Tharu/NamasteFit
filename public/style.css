@@ -259,6 +259,7 @@ section .content p {
   text-align: left;
 }
 .form-group {
+  position: relative;
   margin-bottom: 1.5rem;
 }
 .form-group label {
@@ -279,7 +280,16 @@ section .content p {
 .form-group select:focus {
   border-color: #4caf50;
 }
-
+.form-group .fa-eye,
+.form-group .fa-eye-slash {
+  position: absolute;
+  right: 10px;
+  top: 70%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #888;
+  font-size: 20px;
+}
 .subscribe-form .btn {
   display: inline-block;
   background-color: #4caf50;
@@ -436,7 +446,7 @@ textarea {
 
 /****** Admin Dashboard CSS ******/
 .admin-section {
-  min-height: calc(100vh - 6vh);
+  min-height: calc(100vh - 14vh);
   padding: 2rem 10%;
   background-color: #f9f9f9;
   font-family: "Inter", sans-serif;
@@ -526,18 +536,22 @@ table th {
 
 /******* User CSS ******/
 
-.program-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  margin-top: 1rem;
+.program-list,
+.user_profile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
+  gap: 1rem;
+}
+.user_profile {
+  width: 50%;
 }
 
 .program-card {
   background-color: #fff;
   padding: 1.5rem;
-  max-width: 300px;
+  width: 300px;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
   transition: transform 0.2s ease;
@@ -666,6 +680,17 @@ table th {
 .pagenot h1 {
   margin-bottom: 20px;
 }
+.profile_pic {
+  padding: 30px;
+  margin-bottom: 20px;
+}
+.profile_pic span {
+  padding: 3rem;
+  background-color: #f0f0f0;
+  border-radius: 50%;
+  font-size: 2rem;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
 
 /****** Responsive Design ******/
 @media (max-width: 726px) {
@@ -694,6 +719,11 @@ table th {
 
   .program-card h3 {
     font-size: 1.1rem;
+  }
+  .program-list,
+  .user_profile {
+    flex-direction: column;
+    align-items: center;
   }
 }
 

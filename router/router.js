@@ -11,6 +11,7 @@ import {
   pageNot,
   paymentPage,
   planpage,
+  profilePage,
   programpage,
   registerpage,
   subscriptionpage,
@@ -64,5 +65,7 @@ router.route("/deleteClass/:id").post(deleteClass);
 router.route("/paymentdone").get(paymentPage);
 
 router.route("/404").get(pageNot);
+
+router.route("/profile").get(profilePage);
 
 export const routerdata = router;
