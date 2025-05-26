@@ -51,7 +51,39 @@ export const savedata = async (req, res) => {
   const [id] = await saveData({ name, email, pass });
   console.log(id);
 
-  res.redirect("/login");
+  //Saving sessions into the database
+  const session = await createSession(id.id, {
+    ip: req.clientIp,
+    userAgent: req.headers["user-agent"],
+  });
+  const role = "User";
+  //Create Access Token
+  const accessToken = createAccessToken({
+    id: id.id,
+    name: name,
+    email: email,
+    role: role,
+    sessionId: session.id,
+  });
+
+  //Create Refresh Token
+  const refreshToken = createRefreshToken(session.id);
+
+  const baseConfig = { httpOnly: true, secure: true };
+
+  //Setting Access Token to the client PC
+  res.cookie("access_token", accessToken, {
+    ...baseConfig,
+    maxAge: ACCESS_TOKEN_EXPIRY,
+  });
+
+  //Setting Refresh Token to the client PC
+  res.cookie("refresh_token", refreshToken, {
+    ...baseConfig,
+    maxAge: REFRESH_TOKEN_EXPIRY,
+  });
+
+  res.redirect("/");
 };
 
 export const loginData = async (req, res) => {

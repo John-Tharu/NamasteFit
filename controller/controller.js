@@ -1,6 +1,8 @@
 import { z } from "zod";
 import {
   changeStatus,
+  clearUserSession,
+  findUserById,
   getClassLink,
   getLiveClassData,
   getPayment,
@@ -160,8 +162,10 @@ export const cardpage = (req, res) => {
   res.render("card", { user, plan, pkg, purchase, expire, qrCodeUrl });
 };
 
-export const logout = (req, res) => {
+export const logout = async (req, res) => {
+  await clearUserSession(req.user.sessionId);
   res.clearCookie("access_token");
+  res.clearCookie("refresh_token");
   res.redirect("/");
 };
 
@@ -181,7 +185,7 @@ export const editprogram = async (req, res) => {
     }
     res.render("editprogram", { programs });
   } catch (error) {
-    return rres.status(200).send("Internal Server Error");
+    return res.status(200).send("Internal Server Error");
   }
 };
 
@@ -228,4 +232,10 @@ export const paymentPage = (req, res) => {
 
 export const pageNot = (req, res) => {
   res.render("404");
+};
+
+export const profilePage = async (req, res) => {
+  const user = await findUserById(req.user.id);
+  if (!user) return res.redirect("/login");
+  res.render("profile", { user });
 };

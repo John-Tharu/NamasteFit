@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Profile – NamasteFit</title>
+    <link rel="stylesheet" href="/style.css" />
+    <script
+      src="https://kit.fontawesome.com/bb7a749298.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <%- include('partials/nav') %>
+
+    <main class="admin-section">
+      <h1>Your Profile</h1>
+      <section class="admin-panel">
+        <div class="user_profile">
+          <div class="profile_pic">
+            <span><%= user.name.charAt(0).toUpperCase() %></span>
+          </div>
+          <div class="user_info">
+            <h2>Your Information</h2>
+            <table>
+              <tr>
+                <td>Name</td>
+                <td><%= user.name %></td>
+              </tr>
+              <tr>
+                <td>Email</td>
+                <td><%= user.email %></td>
+              </tr>
+              <tr>
+                <td>Role</td>
+                <td><%= user.role %></td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <%- include('partials/footer') %>
+  </body>
+</html>

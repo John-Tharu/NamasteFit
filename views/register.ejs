@@ -1,47 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Register – NamasteFit</title>
-  <link rel="stylesheet" href="/style.css" />
-  <script src="https://kit.fontawesome.com/bb7a749298.js" crossorigin="anonymous"></script>
-</head>
-<body>
-  <%- include('partials/nav') %>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register – NamasteFit</title>
+    <link rel="stylesheet" href="/style.css" />
+    <script
+      src="https://kit.fontawesome.com/bb7a749298.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <%- include('partials/nav') %>
 
-  <main class="register-section">
-    <h1>Create Your Account</h1>
-    <form class="register-form" action="/register" method="POST">
-      <div class="form-group">
-        <label for="name">Full Name</label>
-        <input type="text" id="name" name="name" required />
-      </div>
+    <main class="register-section">
+      <h1>Create Your Account</h1>
+      <form class="register-form" action="/register" method="POST">
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" name="name" required />
+        </div>
 
-      <div class="form-group">
-        <label for="email">Email Address</label>
-        <input type="email" id="email" name="email" required />
-      </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" required />
+        </div>
 
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" required />
-      </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required />
+          <i class="fa-regular fa-eye"></i>
+        </div>
 
-      <div class="form-group">
-        <label for="confirmPassword">Confirm Password</label>
-        <input type="password" id="confirmPassword" name="confirmPassword" required />
-      </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <input
+            type="password"
+            id="confirmPassword"
+            name="confirmPassword"
+            required
+          />
+          <i class="fa-regular fa-eye ceye"></i>
+        </div>
 
-     <% if(msg && msg.length > 0){ %>
-      <p class="error"><%= msg %></p>
-    <% } %>
-      
-      <button type="submit" class="btn">Register</button>
-      <p class="redirect">Already have an account? <a href="/login">Login here</a></p>
-    </form>
-  </main>
+        <% if(msg && msg.length > 0){ %>
+        <p class="error"><%= msg %></p>
+        <% } %>
 
-  <%- include('partials/footer') %>
-</body>
+        <button type="submit" class="btn">Register</button>
+        <p class="redirect">
+          Already have an account? <a href="/login">Login here</a>
+        </p>
+      </form>
+    </main>
+
+    <%- include('partials/footer') %>
+    <script>
+      const passwordInput = document.getElementById("password");
+      const confirmPasswordInput = document.getElementById("confirmPassword");
+      const eyeIconPassword = document.querySelector(".ceye"); // For confirm password
+      const eyeIcon = document.querySelector(".fa-eye"); // For password
+
+      eyeIcon.addEventListener("click", () => {
+        const isPassword = passwordInput.type === "password";
+        passwordInput.type = isPassword ? "text" : "password";
+        eyeIcon.classList.toggle("fa-eye");
+        eyeIcon.classList.toggle("fa-eye-slash");
+      });
+
+      eyeIconPassword.addEventListener("click", () => {
+        const isConfirmPassword = confirmPasswordInput.type === "password";
+        confirmPasswordInput.type = isConfirmPassword ? "text" : "password";
+        eyeIconPassword.classList.toggle("fa-eye");
+        eyeIconPassword.classList.toggle("fa-eye-slash");
+      });
+    </script>
+  </body>
 </html>

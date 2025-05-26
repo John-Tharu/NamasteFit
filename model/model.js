@@ -207,3 +207,63 @@ export const changeStatus = async (id, value) => {
 export const deleteClassData = async (id) => {
   return await db.delete(liveClassTable).where(eq(liveClassTable.id, id));
 };
+
+export const findUserById = async (userId) => {
+  const [user] = await db
+    .select()
+    .from(usersTable)
+    .where(eq(usersTable.id, userId));
+
+  return user;
+};
+
+const findSessionById = async (sessionId) => {
+  const [session] = await db
+    .select()
+    .from(sessionTable)
+    .where(eq(sessionTable.id, sessionId));
+
+  return session;
+};
+
+export const refreshTokens = async (refreshToken) => {
+  try {
+    const decodedToken = verifytoken(refreshToken);
+    const currentSession = await findSessionById(decodedToken.sessionId);
+
+    if (!currentSession || !currentSession.valid) {
+      throw new Error("Invalid Session");
+    }
+
+    const user = await findUserById(currentSession.userId);
+
+    if (!user) throw new Error("Invalid User");
+
+    const userInfo = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      sessionId: currentSession,
+    };
+
+    //Create Access Token
+    const newAccessToken = createAccessToken(userInfo);
+
+    //Create Refresh Token
+    const newRefreshToken = createRefreshToken(currentSession.id);
+
+    return {
+      newAccessToken,
+      newRefreshToken,
+      userInfo,
+    };
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+//Clear User Session
+export const clearUserSession = async (sessionId) => {
+  return await db.delete(sessionTable).where(eq(sessionTable.id, sessionId));
+};
