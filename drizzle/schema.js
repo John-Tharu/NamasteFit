@@ -1,4 +1,4 @@
-import { relations } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import { boolean, text } from "drizzle-orm/gel-core";
 import {
   float,
@@ -9,11 +9,24 @@ import {
   varchar,
 } from "drizzle-orm/mysql-core";
 
+export const emailValidTable = mysqlTable("is_email_valid_table", {
+  id: int().autoincrement().primaryKey(),
+  userId: int("user_id")
+    .notNull()
+    .references(() => usersTable.id, { onDelete: "cascade" }),
+  token: varchar("token", { length: 8 }).notNull(),
+  expiresAt: timestamp("expires_at")
+    .default(sql`(CURRENT_TIMESTAMP + INTERVAL 1 DAY)`)
+    .notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
 export const usersTable = mysqlTable("users_table", {
-  id: serial().primaryKey(),
+  id: int().autoincrement().primaryKey(),
   name: varchar("name", { length: 255 }).notNull(),
   email: varchar("email", { length: 255 }).notNull().unique(),
   pass: varchar("pass", { length: 255 }).notNull(),
+  isEmailValid: boolean("is_email_valid").default(false).notNull(),
   role: varchar("role", { length: 8 }).notNull().default("User"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow().onUpdateNow(),
@@ -32,7 +45,7 @@ export const sessionTable = mysqlTable("session_table", {
 });
 
 export const planTable = mysqlTable("plan_table", {
-  id: serial().primaryKey(),
+  id: int().autoincrement().primaryKey(),
   title: varchar("title", { length: 255 }).notNull(),
   slogan: varchar("slogan", { length: 255 }).notNull(),
   duration: int().notNull(),
@@ -43,7 +56,7 @@ export const planTable = mysqlTable("plan_table", {
 });
 
 export const paymentTable = mysqlTable("payment_table", {
-  id: serial().primaryKey(),
+  id: int().autoincrement().primaryKey(),
   name: varchar("name", { length: 255 }).notNull(),
   email: varchar("email", { length: 255 }).notNull(),
   plan: varchar("plan", { length: 15 }).notNull(),

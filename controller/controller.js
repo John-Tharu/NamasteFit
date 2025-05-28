@@ -2,7 +2,9 @@ import { z } from "zod";
 import {
   changeStatus,
   clearUserSession,
+  createEmailLink,
   findUserById,
+  generateEmailToken,
   getClassLink,
   getLiveClassData,
   getPayment,
@@ -12,7 +14,9 @@ import {
   getStatus,
   getSubscription,
   getUser,
+  insertEmailToken,
 } from "../model/model.js";
+import { sendEmail } from "../lib/nodemailer.js";
 
 export const homepage = (req, res) => {
   res.render("homepage");
@@ -163,6 +167,7 @@ export const cardpage = (req, res) => {
 };
 
 export const logout = async (req, res) => {
+  // console.log(req.user.sessionId);
   await clearUserSession(req.user.sessionId);
   res.clearCookie("access_token");
   res.clearCookie("refresh_token");
@@ -238,4 +243,52 @@ export const profilePage = async (req, res) => {
   const user = await findUserById(req.user.id);
   if (!user) return res.redirect("/login");
   res.render("profile", { user });
+};
+
+export const verifyEmail = async (req, res) => {
+  if (!req.user) return res.redirect("/login");
+
+  const user = await findUserById(req.user.id);
+
+  if (!user || user.isEmailValid) return res.redirect("/");
+
+  return res.render("emailVerify", {
+    email: user.email,
+  });
+};
+
+export const resendCode = async (req, res) => {
+  //Check user loggedin or not
+  if (!req.user) return res.redirect("/login");
+
+  //Calling function to find user by it's ID
+  const user = await findUserById(req.user.id);
+
+  //Checking email is true or not
+  if (!user || user.isEmailValid) return res.redirect("/");
+
+  //Calling function to generate email verification token
+  const emailVerifyToken = generateEmailToken();
+
+  //Calling function to insert generated token and user id into database
+  await insertEmailToken({
+    userId: req.user.id,
+    token: emailVerifyToken,
+  });
+
+  //Calling function to create email link to verify
+  const verifyEmailLink = createEmailLink({
+    token: emailVerifyToken,
+    email: req.user.email,
+  });
+
+  //Calling funtion to sending email to loggedin user
+  sendEmail({
+    to: req.user.email,
+    subject: "Verify your Email",
+    html: `<h1>Click the link below to verify the email</h1>
+    <p>You can use token: ${emailVerifyToken}</p>
+    <a href="${verifyEmailLink}">Click me</a>`,
+  }).catch(console.error);
+  return res.redirect("/verify-email");
 };

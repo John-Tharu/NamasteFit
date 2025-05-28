@@ -1,3 +1,7 @@
+import {
+  ACCESS_TOKEN_EXPIRY,
+  REFRESH_TOKEN_EXPIRY,
+} from "../config/constant.js";
 import { refreshTokens, verifytoken } from "../model/model.js";
 
 // export const verfiyToken = (req, res, next) => {

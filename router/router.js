@@ -14,8 +14,10 @@ import {
   profilePage,
   programpage,
   registerpage,
+  resendCode,
   subscriptionpage,
   userpage,
+  verifyEmail,
 } from "../controller/controller.js";
 import {
   addLiveClass,
@@ -67,5 +69,9 @@ router.route("/paymentdone").get(paymentPage);
 router.route("/404").get(pageNot);
 
 router.route("/profile").get(profilePage);
+
+router.route("/verify-email").get(verifyEmail);
+
+router.route("/resendCode").post(resendCode);
 
 export const routerdata = router;
