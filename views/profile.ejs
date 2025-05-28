@@ -3,44 +3,56 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>User Profile – NamasteFit</title>
+    <title>NamasteFit - User Profile</title>
+    <link rel="stylesheet" href="/profile.css" />
     <link rel="stylesheet" href="/style.css" />
-    <script
-      src="https://kit.fontawesome.com/bb7a749298.js"
-      crossorigin="anonymous"
-    ></script>
   </head>
   <body>
     <%- include('partials/nav') %>
-
-    <main class="admin-section">
-      <h1>Your Profile</h1>
-      <section class="admin-panel">
-        <div class="user_profile">
-          <div class="profile_pic">
-            <span><%= user.name.charAt(0).toUpperCase() %></span>
-          </div>
-          <div class="user_info">
-            <h2>Your Information</h2>
-            <table>
-              <tr>
-                <td>Name</td>
-                <td><%= user.name %></td>
-              </tr>
-              <tr>
-                <td>Email</td>
-                <td><%= user.email %></td>
-              </tr>
-              <tr>
-                <td>Role</td>
-                <td><%= user.role %></td>
-              </tr>
-            </table>
-          </div>
+    <div class="container">
+      <!-- Profile Header -->
+      <div class="profile-header">
+        <img
+          src="https://images.icon-icons.com/1378/PNG/512/avatardefault_92824.png"
+          alt="Profile"
+          class="profile-img"
+        />
+        <div class="profile-info">
+          <h2><%= user.name %></h2>
+          <p>Email: <%= user.email %></p>
+          <p class="active-subscription">
+            Date of Joining: <%= user.createdAt.toISOString().split('T')[0] %>
+          </p>
+          <p class="active-subscription">
+            Role: <%= user.role %>
+          </p>
         </div>
-      </section>
-    </main>
-
-    <%- include('partials/footer') %>
+      </div>
+      <!-- Verify Email -->
+      <div class="verify-email">
+        <% if (user.isEmailValid) { %>
+          <div class="alert success">
+  ✅ Your email has been successfully Verified!
+</div>
+        <% } else { %>
+          <div class="alert warning">
+        ⚠️ Your email is not Verified. Click the link to verify your email. <a href="/verify-email">Click here</a>
+      </div>
+        <% } %>
+      <!-- Action Details -->
+      <div class="card">
+        <div class="edit-btn">
+          <a href="/edit-profile"><button class="btn">Edit Profile</button></a>
+        </div>
+        <div class="edit-btn">
+          <a href="/edit-profile"
+            ><button class="btn">Change Password</button></a
+          >
+        </div>
+        <div class="edit-btn">
+          <a href="/logout"><button class="btn">Logout</button></a>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

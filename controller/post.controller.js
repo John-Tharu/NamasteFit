@@ -62,6 +62,7 @@ export const savedata = async (req, res) => {
     id: id.id,
     name: name,
     email: email,
+    isEmailValid: false,
     role: role,
     sessionId: session.id,
   });
@@ -134,6 +135,7 @@ export const loginData = async (req, res) => {
     id: user.id,
     name: user.name,
     email: user.email,
+    isEmailValid: user.isEmailValid,
     role: user.role,
     sessionId: session.id,
   });

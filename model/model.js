@@ -1,6 +1,8 @@
-import { and, eq, inArray } from "drizzle-orm";
+import { and, eq, inArray, lt, sql } from "drizzle-orm";
+import crypto from "crypto";
 import { db } from "../config/db.js";
 import {
+  emailValidTable,
   liveClassTable,
   paymentTable,
   planTable,
@@ -244,7 +246,7 @@ export const refreshTokens = async (refreshToken) => {
       name: user.name,
       email: user.email,
       role: user.role,
-      sessionId: currentSession,
+      sessionId: currentSession.id,
     };
 
     //Create Access Token
@@ -266,4 +268,34 @@ export const refreshTokens = async (refreshToken) => {
 //Clear User Session
 export const clearUserSession = async (sessionId) => {
   return await db.delete(sessionTable).where(eq(sessionTable.id, sessionId));
+};
+
+//Function to genereate email verification token
+export const generateEmailToken = (digit = 8) => {
+  const min = 10 ** (digit - 1); //10000000
+  const max = 10 ** digit; //100000000
+
+  return crypto.randomInt(min, max).toString();
+};
+
+//Function to insert generated token and user id into database
+export const insertEmailToken = async ({ userId, token }) => {
+  //Delete Expired tokens
+  await db
+    .delete(emailValidTable)
+    .where(lt(emailValidTable.expiresAt, sql`CURRENT_TIMESTAMP`));
+
+  //Inserted new Tokens
+  return await db
+    .insert(emailValidTable)
+    .values({ userId, token })
+    .$returningId();
+};
+
+//Function to create email link to verify
+export const createEmailLink = ({ token, email }) => {
+  //Encoded Email for URL
+  const urlEncodedEmail = encodeURIComponent(email);
+
+  return `${process.env.HOST}/verify-email-token?token=${token}&email=${urlEncodedEmail}`;
 };

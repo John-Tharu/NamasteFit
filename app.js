@@ -41,9 +41,9 @@ app.use((req, res, next) => {
 
 app.use(routerdata);
 
-app.use((req, res) => {
-  res.redirect("/404");
-});
+// app.use((req, res) => {
+//   res.redirect("/404");
+// });
 
 app.listen(PORT, () => {
   console.log(`Localhost is running on port ${PORT}`);

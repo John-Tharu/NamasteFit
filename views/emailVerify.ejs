@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NamasteFit - User Profile</title>
+    <link rel="stylesheet" href="/profile.css" />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <%- include('partials/nav') %>
+    <div class="container">
+      <div class="email-verify">
+        <h1>Verify Your email</h1>
+        <span><strong>Email :</strong> <%= email %></span>
+        <p>
+          Your email has not been Verified yet. Please verify your email by
+          entring 8 digit code or by requesting new verification link.
+        </p>
+        <form action="/resendCode" method="post">
+          <div class="verify-btn">
+            <button class="btn">Resend Verification Link</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="container">
+      <div class="email-verify">
+        <form action="" method="post">
+          <input
+            type="number"
+            name="verifyCode"
+            placeholder="Verification Code"
+            id="verifyCode"
+          />
+          <button class="btn" type="submit">Submit</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
