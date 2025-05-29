@@ -18,6 +18,7 @@ import {
   subscriptionpage,
   userpage,
   verifyEmail,
+  verifyEmailToken,
 } from "../controller/controller.js";
 import {
   addLiveClass,
@@ -73,5 +74,7 @@ router.route("/profile").get(profilePage);
 router.route("/verify-email").get(verifyEmail);
 
 router.route("/resendCode").post(resendCode);
+
+router.route("/verify-email-token").get(verifyEmailToken);
 
 export const routerdata = router;

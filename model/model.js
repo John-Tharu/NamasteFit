@@ -1,4 +1,4 @@
-import { and, eq, inArray, lt, sql } from "drizzle-orm";
+import { and, eq, gte, inArray, lt, sql } from "drizzle-orm";
 import crypto from "crypto";
 import { db } from "../config/db.js";
 import {
@@ -280,22 +280,96 @@ export const generateEmailToken = (digit = 8) => {
 
 //Function to insert generated token and user id into database
 export const insertEmailToken = async ({ userId, token }) => {
-  //Delete Expired tokens
-  await db
-    .delete(emailValidTable)
-    .where(lt(emailValidTable.expiresAt, sql`CURRENT_TIMESTAMP`));
+  //Using transaction for rollback if there is any error
+  return db.transaction(async (tx) => {
+    try {
+      //Delete Expired tokens
+      await tx
+        .delete(emailValidTable)
+        .where(lt(emailValidTable.expiresAt, sql`CURRENT_TIMESTAMP`));
 
-  //Inserted new Tokens
-  return await db
-    .insert(emailValidTable)
-    .values({ userId, token })
-    .$returningId();
+      //Delete All tokens of user
+      await tx
+        .delete(emailValidTable)
+        .where(eq(emailValidTable.userId, userId));
+
+      //Inserted new Tokens
+      await tx.insert(emailValidTable).values({ userId, token });
+    } catch (error) {
+      console.error("Failed to insert verification token: ", error);
+      throw new Error("Unable to create vcerification token");
+    }
+  });
 };
 
 //Function to create email link to verify
 export const createEmailLink = ({ token, email }) => {
-  //Encoded Email for URL
-  const urlEncodedEmail = encodeURIComponent(email);
+  //Creating new URL
+  const url = new URL(`${process.env.HOST}/verify-email-token`);
 
-  return `${process.env.HOST}/verify-email-token?token=${token}&email=${urlEncodedEmail}`;
+  //Adding parameters on URL
+  url.searchParams.append("token", token);
+  url.searchParams.append("email", email);
+
+  return url.toString();
+};
+
+//Function for findVerificationToken
+export const findVerificationToken = async ({ token, email }) => {
+  //Getting UserId,token and expiresAt from emailValidTable using token and expire time
+  const tokenData = await db
+    .select({
+      userId: emailValidTable.userId,
+      token: emailValidTable.token,
+      expiresAt: emailValidTable.expiresAt,
+    })
+    .from(emailValidTable)
+    .where(
+      and(
+        eq(emailValidTable.token, token),
+        gte(emailValidTable.expiresAt, sql`CURRENT_TIMESTAMP`)
+      )
+    );
+
+  //checking tokenData is present or not
+  if (!tokenData.length) return null;
+
+  //Assigning Userid from tokenData to UserId
+  const { userId } = tokenData[0];
+  //console.log(`User ID: ${userId}`);
+
+  //Using UserId finding email and UserID of User
+  const userData = await db
+    .select({
+      userId: usersTable.id,
+      email: usersTable.email,
+    })
+    .from(usersTable)
+    .where(eq(usersTable.id, userId));
+
+  //Checking userData present or not
+  if (!userData.length) return null;
+
+  //Returning Needed Datas
+  return {
+    userId: userData[0].userId,
+    email: userData[0].email,
+    token: tokenData[0].token,
+    expiresAt: tokenData[0].expiresAt,
+  };
+};
+
+//Function of VerifyEmailAndUpdate
+export const verifyEmailAndUpdate = async (email) => {
+  return await db
+    .update(usersTable)
+    .set({ isEmailValid: true })
+    .where(eq(usersTable.email, email));
+};
+
+//Function of clearVerifyEmailTokens
+export const clearVerifyEmailTokens = async (userId) => {
+  return await db
+    .delete(emailValidTable)
+    .where(eq(emailValidTable.userId, userId));
 };

@@ -26,13 +26,14 @@
     </div>
     <div class="container">
       <div class="email-verify">
-        <form action="" method="post">
+        <form action="/verify-email-token" method="get">
           <input
             type="number"
-            name="verifyCode"
+            name="token"
             placeholder="Verification Code"
-            id="verifyCode"
+            id="token"
           />
+          <input type="hidden" name="email" value="<%= email %>" />
           <button class="btn" type="submit">Submit</button>
         </form>
       </div>
