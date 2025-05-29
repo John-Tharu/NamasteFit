@@ -2,8 +2,10 @@ import { z } from "zod";
 import {
   changeStatus,
   clearUserSession,
+  clearVerifyEmailTokens,
   createEmailLink,
   findUserById,
+  findVerificationToken,
   generateEmailToken,
   getClassLink,
   getLiveClassData,
@@ -15,8 +17,10 @@ import {
   getSubscription,
   getUser,
   insertEmailToken,
+  verifyEmailAndUpdate,
 } from "../model/model.js";
 import { sendEmail } from "../lib/nodemailer.js";
+import { verifyTokenEmail } from "../validation/validation.js";
 
 export const homepage = (req, res) => {
   res.render("homepage");
@@ -291,4 +295,21 @@ export const resendCode = async (req, res) => {
     <a href="${verifyEmailLink}">Click me</a>`,
   }).catch(console.error);
   return res.redirect("/verify-email");
+};
+
+export const verifyEmailToken = async (req, res) => {
+  const { data, error } = verifyTokenEmail.safeParse(req.query);
+
+  if (error)
+    return res.status(400).send("Varification link invalid or expired");
+
+  const token = await findVerificationToken(data);
+
+  if (!token) return res.send("Varification link invalid or expired");
+
+  await verifyEmailAndUpdate(token.email);
+
+  await clearVerifyEmailTokens(token.userId);
+
+  res.redirect("/profile");
 };

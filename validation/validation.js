@@ -33,3 +33,8 @@ export const liveClassValidation = z.object({
   time: z.string().nonempty({ message: "Please enter time" }),
   link: z.string().url({ message: "Invalid URL format" }),
 });
+
+export const verifyTokenEmail = z.object({
+  token: z.string().trim().length(8),
+  email: z.string().trim().email(),
+});
