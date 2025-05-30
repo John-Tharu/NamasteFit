@@ -243,6 +243,7 @@ export const refreshTokens = async (refreshToken) => {
     }
 
     const user = await findUserById(currentSession.userId);
+    //console.log(user);
 
     if (!user) throw new Error("Invalid User");
 
