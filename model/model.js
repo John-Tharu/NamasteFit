@@ -16,6 +16,11 @@ import {
   MILISECONDS_PER_SECOND,
   REFRESH_TOKEN_EXPIRY,
 } from "../config/constant.js";
+import { sendEmail } from "../lib/nodemailer.js";
+import fs from "fs/promises";
+import path from "path";
+import mjml2html from "mjml";
+import ejs from "ejs";
 
 export const checkEmail = async (email) => {
   return await db.select().from(usersTable).where(eq(usersTable.email, email));
@@ -316,47 +321,23 @@ export const createEmailLink = ({ token, email }) => {
 
 //Function for findVerificationToken
 export const findVerificationToken = async ({ token, email }) => {
-  //Getting UserId,token and expiresAt from emailValidTable using token and expire time
-  const tokenData = await db
+  //Marge Two tables and get output from two tables
+  return await db
     .select({
-      userId: emailValidTable.userId,
       token: emailValidTable.token,
       expiresAt: emailValidTable.expiresAt,
+      userId: usersTable.id,
+      email: usersTable.email,
     })
     .from(emailValidTable)
     .where(
       and(
         eq(emailValidTable.token, token),
-        gte(emailValidTable.expiresAt, sql`CURRENT_TIMESTAMP`)
+        gte(emailValidTable.expiresAt, sql`CURRENT_TIMESTAMP`),
+        eq(usersTable.email, email)
       )
-    );
-
-  //checking tokenData is present or not
-  if (!tokenData.length) return null;
-
-  //Assigning Userid from tokenData to UserId
-  const { userId } = tokenData[0];
-  //console.log(`User ID: ${userId}`);
-
-  //Using UserId finding email and UserID of User
-  const userData = await db
-    .select({
-      userId: usersTable.id,
-      email: usersTable.email,
-    })
-    .from(usersTable)
-    .where(eq(usersTable.id, userId));
-
-  //Checking userData present or not
-  if (!userData.length) return null;
-
-  //Returning Needed Datas
-  return {
-    userId: userData[0].userId,
-    email: userData[0].email,
-    token: tokenData[0].token,
-    expiresAt: tokenData[0].expiresAt,
-  };
+    )
+    .innerJoin(usersTable, eq(usersTable.id, emailValidTable.userId));
 };
 
 //Function of VerifyEmailAndUpdate
@@ -372,4 +353,49 @@ export const clearVerifyEmailTokens = async (userId) => {
   return await db
     .delete(emailValidTable)
     .where(eq(emailValidTable.userId, userId));
+};
+
+export const newEmailLink = async ({ userId, email }) => {
+  //Calling function to find user by it's ID
+  const user = await findUserById(userId);
+
+  //Checking email is true or not
+  if (!user || user.isEmailValid) return res.redirect("/");
+
+  //Calling function to generate email verification token
+  const emailVerifyToken = generateEmailToken();
+
+  //Calling function to insert generated token and user id into database
+  await insertEmailToken({
+    userId,
+    token: emailVerifyToken,
+  });
+
+  //Calling function to create email link to verify
+  const verifyEmailLink = createEmailLink({
+    token: emailVerifyToken,
+    email,
+  });
+
+  //Reading verify-email.mjml file (Email Template)
+  const emailTemplate = await fs.readFile(
+    path.join(import.meta.dirname, "..", "emails", "verify-email.mjml"),
+    "utf-8"
+  );
+
+  //Replacing placeholders with actual data
+  const filledTemplete = ejs.render(emailTemplate, {
+    code: emailVerifyToken,
+    link: verifyEmailLink,
+  });
+
+  //Converting mjml file to html
+  const htmlOutput = mjml2html(filledTemplete).html;
+
+  //Calling funtion to sending email to loggedin user
+  sendEmail({
+    to: email,
+    subject: "Verify your Email",
+    html: htmlOutput,
+  }).catch(console.error);
 };

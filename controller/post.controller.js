@@ -10,6 +10,7 @@ import {
   // generateToken,
   hashpass,
   liveClass,
+  newEmailLink,
   paymentdata,
   saveData,
   saveProgram,
@@ -39,7 +40,7 @@ export const savedata = async (req, res) => {
   const { name, email, password } = data;
 
   const [checkedEmail] = await checkEmail(email);
-  console.log(checkedEmail);
+  //console.log(checkedEmail);
 
   if (checkedEmail) {
     req.flash("errors", "Email already exists !!!!");
@@ -56,6 +57,7 @@ export const savedata = async (req, res) => {
     ip: req.clientIp,
     userAgent: req.headers["user-agent"],
   });
+
   const role = "User";
   //Create Access Token
   const accessToken = createAccessToken({
@@ -83,6 +85,8 @@ export const savedata = async (req, res) => {
     ...baseConfig,
     maxAge: REFRESH_TOKEN_EXPIRY,
   });
+
+  await newEmailLink({ userId: id.id, email });
 
   res.redirect("/");
 };

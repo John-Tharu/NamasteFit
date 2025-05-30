@@ -17,6 +17,7 @@ import {
   getSubscription,
   getUser,
   insertEmailToken,
+  newEmailLink,
   verifyEmailAndUpdate,
 } from "../model/model.js";
 import { sendEmail } from "../lib/nodemailer.js";
@@ -265,35 +266,8 @@ export const resendCode = async (req, res) => {
   //Check user loggedin or not
   if (!req.user) return res.redirect("/login");
 
-  //Calling function to find user by it's ID
-  const user = await findUserById(req.user.id);
+  await newEmailLink({ userId: req.user.id, email: req.user.email });
 
-  //Checking email is true or not
-  if (!user || user.isEmailValid) return res.redirect("/");
-
-  //Calling function to generate email verification token
-  const emailVerifyToken = generateEmailToken();
-
-  //Calling function to insert generated token and user id into database
-  await insertEmailToken({
-    userId: req.user.id,
-    token: emailVerifyToken,
-  });
-
-  //Calling function to create email link to verify
-  const verifyEmailLink = createEmailLink({
-    token: emailVerifyToken,
-    email: req.user.email,
-  });
-
-  //Calling funtion to sending email to loggedin user
-  sendEmail({
-    to: req.user.email,
-    subject: "Verify your Email",
-    html: `<h1>Click the link below to verify the email</h1>
-    <p>You can use token: ${emailVerifyToken}</p>
-    <a href="${verifyEmailLink}">Click me</a>`,
-  }).catch(console.error);
   return res.redirect("/verify-email");
 };
 
@@ -303,7 +277,7 @@ export const verifyEmailToken = async (req, res) => {
   if (error)
     return res.status(400).send("Varification link invalid or expired");
 
-  const token = await findVerificationToken(data);
+  const [token] = await findVerificationToken(data);
 
   if (!token) return res.send("Varification link invalid or expired");
 
