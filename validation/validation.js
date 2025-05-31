@@ -1,19 +1,27 @@
 import { z } from "zod";
 
+const nameSchema = z
+  .string()
+  .trim()
+  .nonempty({ message: "Fill name field" })
+  .max(50);
+
+const emailSchema = z.string().email({ message: "Email not valid" });
+
+const passwordSchema = z
+  .string()
+  .min(6, { message: "Password must contain at least 6 characters" });
+
 export const loginValidation = z.object({
-  email: z.string().email({ message: "Email not valid" }),
-  password: z
-    .string()
-    .min(6, { message: "Password must contain at least 6 characters" }),
+  email: emailSchema,
+  password: passwordSchema,
 });
 
 export const registerValidate = loginValidation
   .extend({
-    name: z.string().trim().nonempty({ message: "Fill name field" }).max(50),
-    email: z.string().email({ message: "Email not valid" }),
-    password: z
-      .string()
-      .min(6, { message: "Password must contain at least 6 characters" }),
+    name: nameSchema,
+    email: emailSchema,
+    password: passwordSchema,
     confirmPassword: z.string().min(6, {
       message: "Confirm password must contain at least 6 characters",
     }),
@@ -36,5 +44,28 @@ export const liveClassValidation = z.object({
 
 export const verifyTokenEmail = z.object({
   token: z.string().trim().length(8),
-  email: z.string().trim().email(),
+  email: emailSchema,
 });
+
+export const nameValidation = z.object({
+  name: nameSchema,
+});
+
+export const verifyChangePassword = z
+  .object({
+    currentPassword: z
+      .string()
+      .min(1, { message: "Current Password Required" }),
+    newPassword: z
+      .string()
+      .min(6, { message: "New Password must containt atleast 6 character" }),
+    confirmPassword: z
+      .string()
+      .min(6, {
+        message: "Confirm Password must containt atleast 6 character",
+      }),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Password not matched",
+    path: ["confirmPassword"],
+  });

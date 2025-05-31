@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Profile – NamasteFit</title>
+    <link rel="stylesheet" href="/style.css" />
+    <script
+      src="https://kit.fontawesome.com/bb7a749298.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <%- include('partials/nav') %>
+
+    <main class="register-section">
+      <h1>Edit Your Profile</h1>
+      <form class="register-form" action="/edit-profile" method="POST">
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" value="<%= name %>" name="name" required />
+        </div>
+
+        <% if(msg && msg.length > 0){ %>
+        <p class="error"><%= msg %></p>
+        <% } %>
+
+        <button type="submit" class="btn">Update</button>
+      </form>
+    </main>
+
+    <%- include('partials/footer') %>
+  </body>
+</html>

@@ -2,7 +2,9 @@ import { Router } from "express";
 import {
   adminpage,
   cardpage,
+  changePasswordPage,
   editclass,
+  editProfile,
   editprogram,
   getLiveClass,
   homepage,
@@ -23,11 +25,13 @@ import {
 import {
   addLiveClass,
   addprogram,
+  changePassword,
   deleteClass,
   deleteProgram,
   loginData,
   payment,
   savedata,
+  updateProfile,
   updateProgram,
 } from "../controller/post.controller.js";
 
@@ -76,5 +80,9 @@ router.route("/verify-email").get(verifyEmail);
 router.route("/resendCode").post(resendCode);
 
 router.route("/verify-email-token").get(verifyEmailToken);
+
+router.route("/edit-profile").get(editProfile).post(updateProfile);
+
+router.route("/change-password").get(changePasswordPage).post(changePassword);
 
 export const routerdata = router;

@@ -7,6 +7,7 @@ import {
   createSession,
   deleteClassData,
   deleteProgramData,
+  findUserById,
   // generateToken,
   hashpass,
   liveClass,
@@ -14,12 +15,16 @@ import {
   paymentdata,
   saveData,
   saveProgram,
+  updateNameById,
+  updatePassword,
   updateProgramData,
 } from "../model/model.js";
 import {
   liveClassValidation,
   loginValidation,
+  nameValidation,
   registerValidate,
+  verifyChangePassword,
 } from "../validation/validation.js";
 import { randomBytes } from "crypto";
 import {
@@ -295,4 +300,45 @@ export const deleteClass = async (req, res) => {
     console.log(error);
     return res.status(200).send("Internal server error");
   }
+};
+
+export const updateProfile = async (req, res) => {
+  const { data, error } = nameValidation.safeParse(req.body);
+
+  if (error) {
+    console.log(error);
+    req.flash("errors", error.errors[0].message);
+    return res.redirect("/edit-profile");
+  }
+
+  await updateNameById({ userId: req.user.id, name: data.name });
+
+  res.redirect("/profile");
+};
+
+export const changePassword = async (req, res) => {
+  const { data, error } = verifyChangePassword.safeParse(req.body);
+
+  if (error) {
+    const errorMessage = error.errors.map((error) => error.message);
+    req.flash("errors", errorMessage);
+    return res.redirect("/change-password");
+  }
+
+  const { currentPassword, newPassword } = data;
+
+  const user = await findUserById(req.user.id);
+
+  const checkedPass = await checkPass(user.pass, currentPassword);
+
+  if (!checkedPass) {
+    req.flash("errors", "Current password that you entered invalid");
+    return res.redirect("/change-password");
+  }
+
+  const pass = await hashpass(newPassword);
+
+  await updatePassword({ userId: user.id, pass });
+
+  res.redirect("/profile");
 };
