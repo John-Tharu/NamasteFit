@@ -20,7 +20,7 @@ import {
   newEmailLink,
   verifyEmailAndUpdate,
 } from "../model/model.js";
-import { sendEmail } from "../lib/nodemailer.js";
+//import { sendEmail } from "../lib/nodemailer.js";
 import { verifyTokenEmail } from "../validation/validation.js";
 
 export const homepage = (req, res) => {
@@ -286,4 +286,19 @@ export const verifyEmailToken = async (req, res) => {
   await clearVerifyEmailTokens(token.userId);
 
   res.redirect("/profile");
+};
+
+export const editProfile = async (req, res) => {
+  if (!req.user) return res.redirect("/login");
+
+  console.log(req.user.id);
+
+  const user = await findUserById(req.user.id);
+
+  res.render("editprofile", { name: user.name, msg: req.flash("errors") });
+};
+
+export const changePasswordPage = (req, res) => {
+  if (!req.user) return res.redirect("/login");
+  res.render("changepass", { msg: req.flash("errors") });
 };

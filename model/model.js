@@ -16,7 +16,8 @@ import {
   MILISECONDS_PER_SECOND,
   REFRESH_TOKEN_EXPIRY,
 } from "../config/constant.js";
-import { sendEmail } from "../lib/nodemailer.js";
+// import { sendEmail } from "../lib/nodemailer.js";
+import { sendEmail } from "../lib/resend-email.js";
 import fs from "fs/promises";
 import path from "path";
 import mjml2html from "mjml";
@@ -399,4 +400,18 @@ export const newEmailLink = async ({ userId, email }) => {
     subject: "Verify your Email",
     html: htmlOutput,
   }).catch(console.error);
+};
+
+export const updateNameById = async ({ userId, name }) => {
+  return await db
+    .update(usersTable)
+    .set({ name })
+    .where(eq(usersTable.id, userId));
+};
+
+export const updatePassword = async ({ userId, pass }) => {
+  return await db
+    .update(usersTable)
+    .set({ pass })
+    .where(eq(usersTable.id, userId));
 };
