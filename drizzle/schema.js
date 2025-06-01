@@ -71,6 +71,18 @@ export const paymentTable = mysqlTable("payment_table", {
   updatedAt: timestamp("updated_at").notNull().defaultNow().onUpdateNow(),
 });
 
+export const forgotPasswordTable = mysqlTable("forgot_password_table", {
+  id: int().autoincrement().primaryKey(),
+  userId: int("user_id")
+    .notNull()
+    .references(() => usersTable.id, { onDelete: "cascade" }),
+  hashToken: text("hash_token").notNull(),
+  expiresAt: timestamp("expires_at")
+    .default(sql`(CURRENT_TIMESTAMP + INTERVAL 1 DAY)`)
+    .notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
 export const liveClassTable = mysqlTable("liveclass_table", {
   id: int().autoincrement().primaryKey(),
   title: varchar("title", { length: 255 }).notNull(),

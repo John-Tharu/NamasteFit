@@ -4,6 +4,7 @@ import {
   checkPass,
   createAccessToken,
   createRefreshToken,
+  createResetPasswordLink,
   createSession,
   deleteClassData,
   deleteProgramData,
@@ -25,12 +26,15 @@ import {
   nameValidation,
   registerValidate,
   verifyChangePassword,
+  verifyEmail,
 } from "../validation/validation.js";
 import { randomBytes } from "crypto";
 import {
   ACCESS_TOKEN_EXPIRY,
   REFRESH_TOKEN_EXPIRY,
 } from "../config/constant.js";
+import { getForgotPasswordLinkPage } from "../lib/forgot-password-email.js";
+import { sendEmail } from "../lib/resend-email.js";
 
 export const savedata = async (req, res) => {
   if (req.user) return res.redirect("/");
@@ -341,4 +345,39 @@ export const changePassword = async (req, res) => {
   await updatePassword({ userId: user.id, pass });
 
   res.redirect("/profile");
+};
+
+export const forgotPassword = async (req, res) => {
+  //Validate Email is valid or not
+  const { data, error } = verifyEmail.safeParse(req.body);
+
+  //Check errors
+  if (error) {
+    const errorMessage = error.errors.map((err) => err.message);
+    req.flash("errors", errorMessage);
+    return res.redirect("/reset-password");
+  }
+
+  //Getting all data of user if it exists by email
+  const [user] = await checkEmail(data.email);
+
+  if (user) {
+    const resetPasswordLink = await createResetPasswordLink({
+      userId: user.id,
+    });
+
+    const html = await getForgotPasswordLinkPage("resend-email", {
+      name: user.name,
+      link: resetPasswordLink,
+    });
+    // console.log(html);
+
+    sendEmail({
+      to: user.email,
+      subject: "Reset Your Password",
+      html,
+    });
+  }
+  req.flash("formsubmitted", true);
+  return res.redirect("/reset-password");
 };

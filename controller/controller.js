@@ -302,3 +302,10 @@ export const changePasswordPage = (req, res) => {
   if (!req.user) return res.redirect("/login");
   res.render("changepass", { msg: req.flash("errors") });
 };
+
+export const forgotPasswordPage = (req, res) => {
+  res.render("forgotPassword", {
+    formSubmittted: req.flash("formsubmitted")[0],
+    msg: req.flash("errors"),
+  });
+};

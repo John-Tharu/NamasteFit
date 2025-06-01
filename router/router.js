@@ -6,6 +6,7 @@ import {
   editclass,
   editProfile,
   editprogram,
+  forgotPasswordPage,
   getLiveClass,
   homepage,
   loginpage,
@@ -28,6 +29,7 @@ import {
   changePassword,
   deleteClass,
   deleteProgram,
+  forgotPassword,
   loginData,
   payment,
   savedata,
@@ -84,5 +86,7 @@ router.route("/verify-email-token").get(verifyEmailToken);
 router.route("/edit-profile").get(editProfile).post(updateProfile);
 
 router.route("/change-password").get(changePasswordPage).post(changePassword);
+
+router.route("/reset-password").get(forgotPasswordPage).post(forgotPassword);
 
 export const routerdata = router;

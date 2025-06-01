@@ -3,6 +3,7 @@ import crypto from "crypto";
 import { db } from "../config/db.js";
 import {
   emailValidTable,
+  forgotPasswordTable,
   liveClassTable,
   paymentTable,
   planTable,
@@ -414,4 +415,26 @@ export const updatePassword = async ({ userId, pass }) => {
     .update(usersTable)
     .set({ pass })
     .where(eq(usersTable.id, userId));
+};
+
+export const createResetPasswordLink = async ({ userId }) => {
+  //Generate Random 64 character token
+  const randomToken = crypto.randomBytes(32).toString("hex");
+
+  //hashing the token
+  const hashToken = crypto
+    .createHash("sha256")
+    .update(randomToken)
+    .digest("hex");
+
+  //Delete previous data of user
+  await db
+    .delete(forgotPasswordTable)
+    .where(eq(forgotPasswordTable.userId, userId));
+
+  //Insert into the database
+  await db.insert(forgotPasswordTable).values({ userId, hashToken });
+
+  //Create a link and return
+  return `${process.env.HOST}/reset-password/${randomToken}`;
 };
