@@ -3,10 +3,8 @@ import {
   changeStatus,
   clearUserSession,
   clearVerifyEmailTokens,
-  createEmailLink,
   findUserById,
   findVerificationToken,
-  generateEmailToken,
   getClassLink,
   getLiveClassData,
   getPayment,
@@ -16,8 +14,8 @@ import {
   getStatus,
   getSubscription,
   getUser,
-  insertEmailToken,
   newEmailLink,
+  resetPasswordData,
   verifyEmailAndUpdate,
 } from "../model/model.js";
 //import { sendEmail } from "../lib/nodemailer.js";
@@ -306,6 +304,25 @@ export const changePasswordPage = (req, res) => {
 export const forgotPasswordPage = (req, res) => {
   res.render("forgotPassword", {
     formSubmittted: req.flash("formsubmitted")[0],
+    msg: req.flash("errors"),
+  });
+};
+
+//Function fot resetPasswordPage
+export const resetPasswordPage = async (req, res) => {
+  //Getting the token from the URL
+  const { token } = req.params;
+
+  //Getting the user data from database
+  const user = await resetPasswordData(token);
+
+  //Checking the user exist or not. if not then redirect to expire page
+  if (!user) return res.render("expirepage");
+
+  //If all the above condition right then render the resetpage with some additional value
+  res.render("resetpage", {
+    formSubmittted: req.flash("formsubmitted")[0],
+    token,
     msg: req.flash("errors"),
   });
 };

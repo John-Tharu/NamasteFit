@@ -18,6 +18,7 @@ import {
   programpage,
   registerpage,
   resendCode,
+  resetPasswordPage,
   subscriptionpage,
   userpage,
   verifyEmail,
@@ -32,6 +33,7 @@ import {
   forgotPassword,
   loginData,
   payment,
+  resetPassword,
   savedata,
   updateProfile,
   updateProgram,
@@ -88,5 +90,10 @@ router.route("/edit-profile").get(editProfile).post(updateProfile);
 router.route("/change-password").get(changePasswordPage).post(changePassword);
 
 router.route("/reset-password").get(forgotPasswordPage).post(forgotPassword);
+
+router
+  .route("/reset-password/:token")
+  .get(resetPasswordPage)
+  .post(resetPassword);
 
 export const routerdata = router;

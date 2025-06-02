@@ -2,6 +2,8 @@ import { z } from "zod";
 import {
   checkEmail,
   checkPass,
+  clearResetPasswordToken,
+  clearVerifyEmailTokens,
   createAccessToken,
   createRefreshToken,
   createResetPasswordLink,
@@ -14,6 +16,7 @@ import {
   liveClass,
   newEmailLink,
   paymentdata,
+  resetPasswordData,
   saveData,
   saveProgram,
   updateNameById,
@@ -25,6 +28,7 @@ import {
   loginValidation,
   nameValidation,
   registerValidate,
+  resetPasswordValidation,
   verifyChangePassword,
   verifyEmail,
 } from "../validation/validation.js";
@@ -380,4 +384,43 @@ export const forgotPassword = async (req, res) => {
   }
   req.flash("formsubmitted", true);
   return res.redirect("/reset-password");
+};
+
+export const resetPassword = async (req, res) => {
+  //Getting the token from the URL
+  const { token } = req.params;
+
+  //Getting the user data from database
+  const tokenData = await resetPasswordData(token);
+
+  //Checking the user exist or not. if not then redirect to expire page
+  if (!tokenData) return res.render("expirepage");
+
+  //Checking the New Password and current password using zod
+  const { data, error } = resetPasswordValidation.safeParse(req.body);
+
+  //For error handing
+  if (error) {
+    const errorMessage = error.errors.map((err) => err.message);
+    req.flash("errors", errorMessage);
+    res.redirect(`/reset-password/${token}`);
+  }
+
+  //Extract newPassword from data
+  const { newPassword } = data;
+
+  //Getting all data of user
+  const user = await findUserById(tokenData.userId);
+
+  //Deleting all the previous token of a user
+  await clearResetPasswordToken(user.id);
+
+  //Hashing the password to save into database
+  const pass = await hashpass(newPassword);
+
+  //Updating the password of a user
+  await updatePassword({ userId: user.id, pass });
+
+  //Redirect to the login page
+  res.redirect("/login");
 };

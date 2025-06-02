@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expire Password – NamasteFit</title>
+    <link rel="stylesheet" href="/style.css" />
+    <script
+      src="https://kit.fontawesome.com/bb7a749298.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <%- include('partials/nav') %>
+
+    <main class="register-section">
+      <h1>Expire Password</h1>
+      <form class="register-form" action="/reset-password" method="POST">
+        <p>
+          Your reset password link is expired. Please request another link for
+          reset your password. You can redirect to verify email by
+          <a href="/reset-password" style="color: blue">Click Here</a>.
+        </p>
+      </form>
+    </main>
+
+    <%- include('partials/footer') %>
+  </body>
+</html>

@@ -427,7 +427,7 @@ export const createResetPasswordLink = async ({ userId }) => {
     .update(randomToken)
     .digest("hex");
 
-  //Delete previous data of user
+  //Delete previous token of user
   await db
     .delete(forgotPasswordTable)
     .where(eq(forgotPasswordTable.userId, userId));
@@ -437,4 +437,30 @@ export const createResetPasswordLink = async ({ userId }) => {
 
   //Create a link and return
   return `${process.env.HOST}/reset-password/${randomToken}`;
+};
+
+//Reset Passsword Token
+export const resetPasswordData = async (token) => {
+  //Hashing the token
+  const hashToken = crypto.createHash("sha256").update(token).digest("hex");
+
+  //Getting all data where hashToken matched and token not expired
+  const [user] = await db
+    .select()
+    .from(forgotPasswordTable)
+    .where(
+      and(
+        eq(forgotPasswordTable.hashToken, hashToken),
+        gte(forgotPasswordTable.expiresAt, sql`CURRENT_TIMESTAMP`)
+      )
+    );
+
+  //Returning the data in user
+  return user;
+};
+
+export const clearResetPasswordToken = async (userId) => {
+  return await db
+    .delete(forgotPasswordTable)
+    .where(eq(forgotPasswordTable.userId, userId));
 };

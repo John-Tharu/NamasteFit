@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reset Password – NamasteFit</title>
+    <link rel="stylesheet" href="/style.css" />
+    <script
+      src="https://kit.fontawesome.com/bb7a749298.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <%- include('partials/nav') %>
+
+    <main class="register-section">
+      <h1>Reset Your Password</h1>
+      <form class="register-form" action="/reset-password/<%= token %>" method="POST">
+        <div class="form-group">
+          <label for="newPassword">New Password</label>
+          <input type="password" id="newPassword" name="newPassword" placeholder="Enter your new password" required />
+          <i class="fa-regular fa-eye neweye"></i>
+        </div>
+
+        <div class="form-group">
+            <div class="instruction">
+                <p>Password must</p>
+                <ul>
+                    <li><span>Be atleast 8 character long</span></li>
+                    <li><span>Contain a number</span></li>
+                    <li><span>Include uppercase and lowercase letters</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <input
+            type="password"
+            id="confirmPassword"
+            name="confirmPassword"
+            placeholder="Enter your confirm password"
+            required
+          />
+          <i class="fa-regular fa-eye confirmeye"></i>
+        </div>
+
+        <% if(msg && msg.length > 0){ 
+            msg.map((error)=>{ %>
+                <p class="error"><%= error %></p>
+           <% }) } %>
+
+        <button type="submit" class="btn">Change Password</button>
+      </form>
+    </main>
+
+    <%- include('partials/footer') %>
+    <script>
+      const passwordInput = document.getElementById("newPassword");
+      const confirmPasswordInput = document.getElementById("confirmPassword");
+      const eyeIconPassword = document.querySelector(".confirmeye"); // For confirm password
+      const eyeIcon = document.querySelector(".neweye"); // For password
+
+      eyeIcon.addEventListener("click", () => {
+        const isPassword = passwordInput.type === "password";
+        passwordInput.type = isPassword ? "text" : "password";
+        eyeIcon.classList.toggle("fa-eye");
+        eyeIcon.classList.toggle("fa-eye-slash");
+      });
+
+      eyeIconPassword.addEventListener("click", () => {
+        const isConfirmPassword = confirmPasswordInput.type === "password";
+        confirmPasswordInput.type = isConfirmPassword ? "text" : "password";
+        eyeIconPassword.classList.toggle("fa-eye");
+        eyeIconPassword.classList.toggle("fa-eye-slash");
+      });
+    </script>
+  </body>
+</html>

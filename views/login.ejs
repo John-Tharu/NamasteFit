@@ -36,9 +36,15 @@
         <% } %>
 
         <button type="submit" class="btn">Login</button>
-        <p class="redirect">
-          Don't have an account? <a href="/register">Register here</a>
-        </p>
+        <div class="or-login-line">or login with</div>
+        <div class="opt">
+          <a href="/google"><button type="button" class="login-with" >
+            Sign in with Google
+          </button></a>
+        </div>
+        <div class="opt">
+            <a href="/github"><button type="button" class="login-with github">Sign in with GitHub</button></a>
+          </div>
       </form>
     </main>
 

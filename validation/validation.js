@@ -71,3 +71,17 @@ export const verifyChangePassword = z
 export const verifyEmail = z.object({
   email: emailSchema,
 });
+
+export const resetPasswordValidation = z
+  .object({
+    newPassword: z
+      .string()
+      .min(6, { message: "New Password must containt atleast 6 character" }),
+    confirmPassword: z.string().min(6, {
+      message: "Confirm Password must containt atleast 6 character",
+    }),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Password not matched",
+    path: ["confirmPassword"],
+  });
