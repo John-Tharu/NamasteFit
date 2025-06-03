@@ -5,6 +5,7 @@ import {
   emailValidTable,
   forgotPasswordTable,
   liveClassTable,
+  oauthTable,
   paymentTable,
   planTable,
   sessionTable,
@@ -235,6 +236,42 @@ const findSessionById = async (sessionId) => {
   return session;
 };
 
+//Function for authenticateUser
+export const authenticateUser = async ({ req, res, user, name, email }) => {
+  //Saving sessions into the database
+  const session = await createSession(user.id, {
+    ip: req.clientIp,
+    userAgent: req.headers["user-agent"],
+  });
+
+  const role = "User";
+  //Create Access Token
+  const accessToken = createAccessToken({
+    id: user.id,
+    name: user.name || name,
+    email: user.email || email,
+    role: user.role || role,
+    sessionId: session.id,
+  });
+
+  //Create Refresh Token
+  const refreshToken = createRefreshToken(session.id);
+
+  const baseConfig = { httpOnly: true, secure: true };
+
+  //Setting Access Token to the client PC
+  res.cookie("access_token", accessToken, {
+    ...baseConfig,
+    maxAge: ACCESS_TOKEN_EXPIRY,
+  });
+
+  //Setting Refresh Token to the client PC
+  res.cookie("refresh_token", refreshToken, {
+    ...baseConfig,
+    maxAge: REFRESH_TOKEN_EXPIRY,
+  });
+};
+
 export const refreshTokens = async (refreshToken) => {
   try {
     const decodedToken = verifytoken(refreshToken);
@@ -463,4 +500,74 @@ export const clearResetPasswordToken = async (userId) => {
   return await db
     .delete(forgotPasswordTable)
     .where(eq(forgotPasswordTable.userId, userId));
+};
+
+//Function for getUserWithOauthId
+export const getUserWithOauthId = async ({ email, provider }) => {
+  //Getting all the data of userTable and common data of oauthTable using join
+  const [user] = await db
+    .select({
+      id: usersTable.id,
+      name: usersTable.name,
+      email: usersTable.email,
+      role: usersTable.role,
+      isEmailValid: usersTable.isEmailValid,
+      providerAccountId: oauthTable.providerAccountId,
+      provider: oauthTable.provider,
+    })
+    .from(usersTable)
+    .where(eq(usersTable.email, email))
+    .leftJoin(
+      oauthTable,
+      and(
+        eq(oauthTable.provider, provider),
+        eq(oauthTable.userId, usersTable.id)
+      )
+    );
+
+  return user;
+};
+
+//Function for linkUserWithOauth
+export const linkUserWithOauth = async ({
+  userId,
+  provider,
+  providerAccountId,
+}) => {
+  await db.insert(oauthTable).values({ userId, provider, providerAccountId });
+};
+
+//Function for createUserWithOauth
+export const createUserWithOauth = async ({
+  name,
+  email,
+  provider,
+  providerAccountId,
+}) => {
+  const user = await db.transaction(async (trx) => {
+    //Insert into users table
+    const [user] = await trx
+      .insert(usersTable)
+      .values({ name, email, isEmailValid: true })
+      .$returningId();
+
+    //Insert into oauth Table
+    await trx.insert(oauthTable).values({
+      userId: user.id,
+      provider,
+      providerAccountId,
+    });
+
+    //Return values to the user
+    return {
+      id: user.id,
+      name,
+      email,
+      provider,
+      providerAccountId,
+    };
+  });
+
+  //Returning the user
+  return user;
 };

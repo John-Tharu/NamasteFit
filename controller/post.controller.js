@@ -1,17 +1,13 @@
 import { z } from "zod";
 import {
+  authenticateUser,
   checkEmail,
   checkPass,
   clearResetPasswordToken,
-  clearVerifyEmailTokens,
-  createAccessToken,
-  createRefreshToken,
   createResetPasswordLink,
-  createSession,
   deleteClassData,
   deleteProgramData,
   findUserById,
-  // generateToken,
   hashpass,
   liveClass,
   newEmailLink,
@@ -33,10 +29,6 @@ import {
   verifyEmail,
 } from "../validation/validation.js";
 import { randomBytes } from "crypto";
-import {
-  ACCESS_TOKEN_EXPIRY,
-  REFRESH_TOKEN_EXPIRY,
-} from "../config/constant.js";
 import { getForgotPasswordLinkPage } from "../lib/forgot-password-email.js";
 import { sendEmail } from "../lib/resend-email.js";
 
@@ -62,44 +54,12 @@ export const savedata = async (req, res) => {
 
   const pass = await hashpass(password);
 
-  const [id] = await saveData({ name, email, pass });
-  console.log(id);
+  const [user] = await saveData({ name, email, pass });
+  console.log(user);
 
-  //Saving sessions into the database
-  const session = await createSession(id.id, {
-    ip: req.clientIp,
-    userAgent: req.headers["user-agent"],
-  });
+  await authenticateUser({ req, res, user, name, email });
 
-  const role = "User";
-  //Create Access Token
-  const accessToken = createAccessToken({
-    id: id.id,
-    name: name,
-    email: email,
-    isEmailValid: false,
-    role: role,
-    sessionId: session.id,
-  });
-
-  //Create Refresh Token
-  const refreshToken = createRefreshToken(session.id);
-
-  const baseConfig = { httpOnly: true, secure: true };
-
-  //Setting Access Token to the client PC
-  res.cookie("access_token", accessToken, {
-    ...baseConfig,
-    maxAge: ACCESS_TOKEN_EXPIRY,
-  });
-
-  //Setting Refresh Token to the client PC
-  res.cookie("refresh_token", refreshToken, {
-    ...baseConfig,
-    maxAge: REFRESH_TOKEN_EXPIRY,
-  });
-
-  await newEmailLink({ userId: id.id, email });
+  await newEmailLink({ userId: user.id, email });
 
   res.redirect("/");
 };
@@ -125,6 +85,14 @@ export const loginData = async (req, res) => {
     return res.redirect("/login");
   }
 
+  if (!user.pass) {
+    req.flash(
+      "errors",
+      "You have created account using social login. Please login with your social account"
+    );
+    return res.redirect("/login");
+  }
+
   const checkedPass = await checkPass(user.pass, password);
 
   if (!checkedPass) {
@@ -141,38 +109,7 @@ export const loginData = async (req, res) => {
 
   // res.cookie("access_token", token);
 
-  //Saving sessions into the database
-  const session = await createSession(user.id, {
-    ip: req.clientIp,
-    userAgent: req.headers["user-agent"],
-  });
-
-  //Create Access Token
-  const accessToken = createAccessToken({
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    isEmailValid: user.isEmailValid,
-    role: user.role,
-    sessionId: session.id,
-  });
-
-  //Create Refresh Token
-  const refreshToken = createRefreshToken(session.id);
-
-  const baseConfig = { httpOnly: true, secure: true };
-
-  //Setting Access Token to the client PC
-  res.cookie("access_token", accessToken, {
-    ...baseConfig,
-    maxAge: ACCESS_TOKEN_EXPIRY,
-  });
-
-  //Setting Refresh Token to the client PC
-  res.cookie("refresh_token", refreshToken, {
-    ...baseConfig,
-    maxAge: REFRESH_TOKEN_EXPIRY,
-  });
+  await authenticateUser({ req, res, user });
 
   res.redirect("/");
 };

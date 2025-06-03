@@ -7,7 +7,9 @@ import {
   editProfile,
   editprogram,
   forgotPasswordPage,
+  getGoogleLoginCallback,
   getLiveClass,
+  googleLoginPage,
   homepage,
   loginpage,
   logout,
@@ -95,5 +97,9 @@ router
   .route("/reset-password/:token")
   .get(resetPasswordPage)
   .post(resetPassword);
+
+router.route("/google").get(googleLoginPage);
+
+router.route("/google/callback").get(getGoogleLoginCallback);
 
 export const routerdata = router;

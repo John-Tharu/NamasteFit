@@ -1,8 +1,10 @@
 import { z } from "zod";
 import {
+  authenticateUser,
   changeStatus,
   clearUserSession,
   clearVerifyEmailTokens,
+  createUserWithOauth,
   findUserById,
   findVerificationToken,
   getClassLink,
@@ -14,12 +16,17 @@ import {
   getStatus,
   getSubscription,
   getUser,
+  getUserWithOauthId,
+  linkUserWithOauth,
   newEmailLink,
   resetPasswordData,
   verifyEmailAndUpdate,
 } from "../model/model.js";
 //import { sendEmail } from "../lib/nodemailer.js";
 import { verifyTokenEmail } from "../validation/validation.js";
+import { decodeIdToken, generateCodeVerifier, generateState } from "arctic";
+import { OAUTH_EXCHANGE_EXPIRY } from "../config/constant.js";
+import { google } from "../lib/oauth/google.js";
 
 export const homepage = (req, res) => {
   res.render("homepage");
@@ -129,18 +136,25 @@ export const adminpage = async (req, res) => {
 
 export const userpage = async (req, res) => {
   if (!req.user) return res.redirect("/login");
-  const { id, name } = req.user;
+  const { id } = req.user;
+  //Getrting User data by id
+  const user = await findUserById(id);
+
+  //Getting Subscription data by ID
   const subscriptions = await getSubscription(id);
   //console.log(subscriptions);
 
+  //Plan list form subscription
   const planList = subscriptions.map((p) => p.plan);
 
+  //getting programs by planlist
   const programs = await getProgram(planList);
 
+  //Getting live class links according to planlist
   const classLinks = await getClassLink(planList);
   console.log(classLinks);
 
-  res.render("user", { name, programs, subscriptions, classLinks });
+  res.render("user", { name: user.name, programs, subscriptions, classLinks });
 };
 
 export const programpage = (req, res) => {
@@ -325,4 +339,122 @@ export const resetPasswordPage = async (req, res) => {
     token,
     msg: req.flash("errors"),
   });
+};
+
+//Function for googleLoginPage
+export const googleLoginPage = async (req, res) => {
+  //Check if user login then redirect to home page
+  if (req.user) return res.redirect("/");
+
+  //Generate State using Artic
+  const state = generateState();
+
+  //Generate codeVerifier using Artic
+  const codeVerifier = generateCodeVerifier();
+
+  //Generate URL using Artic
+  const url = google.createAuthorizationURL(state, codeVerifier, [
+    "openid", ///It gives tokens
+    "profile", //It gives profile
+    "email",
+  ]);
+
+  //Configuration for cookie
+  const cookieConfig = {
+    httpOnly: true,
+    secure: true,
+    maxAge: OAUTH_EXCHANGE_EXPIRY,
+    sameSite: "lax",
+  };
+
+  //Store state and codeVerifier as cookies at users browsers
+  res.cookie("google_oauth_state", state, cookieConfig);
+  res.cookie("google_code_verifier", codeVerifier, cookieConfig);
+
+  //Redirect to the google login page
+  res.redirect(url.toString());
+};
+
+//Function of getGoogleLoginCAllback
+export const getGoogleLoginCallback = async (req, res) => {
+  //Google returns code and stated in query params. We can use code to find user
+  const { code, state } = req.query;
+  //console.log(`code: ${code} and state ${state}`);
+
+  //Getting cookies from users Browser
+  const {
+    google_oauth_state: storedState,
+    google_code_verifier: codeVerifier,
+  } = req.cookies;
+
+  // console.log(
+  //   `google_oauth: ${storedState} and google_Secret: ${codeVerifier}`
+  // );
+
+  //check code,state,storedState,codeVerifier present or not
+  //also check state from google and state at user broswer equal or not
+  if (
+    !code ||
+    !state ||
+    !storedState ||
+    !codeVerifier ||
+    state !== storedState
+  ) {
+    //Returning the error and login page
+    req.flash(
+      "errors",
+      "Couldn't login with google because of invalid login attemp. Please try again!"
+    );
+
+    return res.redirect("/login");
+  }
+
+  //Verify the google code and users coderVerifier
+  let tokens;
+  try {
+    //Verifies code and codeVerifier using Artic NPM Package
+    tokens = await google.validateAuthorizationCode(code, codeVerifier);
+  } catch {
+    req.flash(
+      "errors",
+      "Couldn't login with google because of invalid login attemp. Please try again!"
+    );
+    return res.redirect("/login");
+  }
+
+  //console.log(`Token google ${tokens}`);
+
+  //After getting tokens we can claim userId,name,email using Artic
+  const claims = decodeIdToken(tokens.idToken());
+  const { sub: googleUserId, name, email } = claims;
+
+  //if user already linked then we will get the user
+  let user = await getUserWithOauthId({
+    provider: "google",
+    email,
+  });
+
+  //If user exists but user is not linked with oauth
+  if (user && !user.providerAccountId) {
+    await linkUserWithOauth({
+      userId: user.id,
+      provider: "google",
+      providerAccountId: googleUserId,
+    });
+  }
+
+  //if user doesn't exists
+  if (!user) {
+    user = await createUserWithOauth({
+      name,
+      email,
+      provider: "google",
+      providerAccountId: googleUserId,
+    });
+  }
+
+  //Creating Session with JWT and refresh token
+  await authenticateUser({ req, res, user, name, email });
+
+  res.redirect("/");
 };

@@ -3,6 +3,7 @@ import { boolean, text } from "drizzle-orm/gel-core";
 import {
   float,
   int,
+  mysqlEnum,
   mysqlTable,
   serial,
   timestamp,
@@ -25,7 +26,7 @@ export const usersTable = mysqlTable("users_table", {
   id: int().autoincrement().primaryKey(),
   name: varchar("name", { length: 255 }).notNull(),
   email: varchar("email", { length: 255 }).notNull().unique(),
-  pass: varchar("pass", { length: 255 }).notNull(),
+  pass: varchar("pass", { length: 255 }),
   isEmailValid: boolean("is_email_valid").default(false).notNull(),
   role: varchar("role", { length: 8 }).notNull().default("User"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
@@ -81,6 +82,18 @@ export const forgotPasswordTable = mysqlTable("forgot_password_table", {
     .default(sql`(CURRENT_TIMESTAMP + INTERVAL 1 DAY)`)
     .notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+export const oauthTable = mysqlTable("oauth_table", {
+  id: int().autoincrement().primaryKey(),
+  userId: int("user_id")
+    .notNull()
+    .references(() => usersTable.id, { onDelete: "cascade" }),
+  provider: mysqlEnum("provider", ["google", "github"]).notNull(),
+  providerAccountId: varchar("provider_account_id", { length: 255 })
+    .notNull()
+    .unique(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
 export const liveClassTable = mysqlTable("liveclass_table", {

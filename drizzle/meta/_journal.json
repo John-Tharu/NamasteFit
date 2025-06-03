@@ -15,6 +15,20 @@
       "when": 1748745570190,
       "tag": "0001_magenta_abomination",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1748962588648,
+      "tag": "0002_stormy_power_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1748964517935,
+      "tag": "0003_messy_venus",
+      "breakpoints": true
     }
   ]
 }
