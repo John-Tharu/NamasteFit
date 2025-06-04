@@ -55,7 +55,6 @@ export const savedata = async (req, res) => {
   const pass = await hashpass(password);
 
   const [user] = await saveData({ name, email, pass });
-  console.log(user);
 
   await authenticateUser({ req, res, user, name, email });
 
@@ -129,13 +128,10 @@ export const addprogram = async (req, res) => {
     link,
   });
 
-  console.log(saveprogram);
-
   res.redirect("/admin");
 };
 
 export const payment = async (req, res) => {
-  console.log(req.body);
   const { name, email } = req.user;
   const { plan, pkg, total } = req.body;
   const status = "Active";
@@ -150,7 +146,6 @@ export const payment = async (req, res) => {
     transId,
     userId: req.user.id,
   });
-  console.log(paymentData);
   res.redirect("/paymentdone");
 };
 
@@ -173,7 +168,6 @@ export const updateProgram = async (req, res) => {
       link,
       id,
     });
-    console.log(newUpdateProgram);
   } catch (error) {
     return res.status(200).send("Internal Server Error");
   }
@@ -204,7 +198,6 @@ export const addLiveClass = async (req, res) => {
   //console.log(req.body);
 
   const { data, error } = liveClassValidation.safeParse(req.body);
-  console.log(data);
   if (error) {
     req.flash("errors", error.errors[0].message);
     return res.redirect("/liveclass");
@@ -221,7 +214,6 @@ export const addLiveClass = async (req, res) => {
       time,
       link,
     });
-    console.log(liveclass);
   } catch (error) {
     req.flash("errors", "Internal server error");
     return res.redirect("/liveclass");

@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "8b4316ba-8f47-441f-8305-bb6a202d4fa5",
+  "id": "5c89673c-9ca2-43ff-a1c7-912aa84a6d3b",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "is_email_valid_table": {
@@ -64,6 +64,74 @@
       "compositePrimaryKeys": {
         "is_email_valid_table_id": {
           "name": "is_email_valid_table_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "forgot_password_table": {
+      "name": "forgot_password_table",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "hash_token": {
+          "name": "hash_token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(CURRENT_TIMESTAMP + INTERVAL 1 DAY)"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(now())"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "forgot_password_table_user_id_users_table_id_fk": {
+          "name": "forgot_password_table_user_id_users_table_id_fk",
+          "tableFrom": "forgot_password_table",
+          "tableTo": "users_table",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "forgot_password_table_id": {
+          "name": "forgot_password_table_id",
           "columns": [
             "id"
           ]
@@ -161,6 +229,80 @@
         }
       },
       "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "oauth_table": {
+      "name": "oauth_table",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "provider": {
+          "name": "provider",
+          "type": "enum('google','github')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "provider_account_id": {
+          "name": "provider_account_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(now())"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "oauth_table_user_id_users_table_id_fk": {
+          "name": "oauth_table_user_id_users_table_id_fk",
+          "tableFrom": "oauth_table",
+          "tableTo": "users_table",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "oauth_table_id": {
+          "name": "oauth_table_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {
+        "oauth_table_provider_account_id_unique": {
+          "name": "oauth_table_provider_account_id_unique",
+          "columns": [
+            "provider_account_id"
+          ]
+        }
+      },
       "checkConstraint": {}
     },
     "payment_table": {
@@ -469,7 +611,7 @@
           "name": "pass",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false
         },
         "is_email_valid": {

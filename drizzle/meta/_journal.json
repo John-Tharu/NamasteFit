@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1748318763441,
-      "tag": "0000_known_frog_thor",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1748745570190,
-      "tag": "0001_magenta_abomination",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1748962588648,
-      "tag": "0002_stormy_power_man",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1748964517935,
-      "tag": "0003_messy_venus",
+      "when": 1748980709034,
+      "tag": "0000_silky_dexter_bennett",
       "breakpoints": true
     }
   ]

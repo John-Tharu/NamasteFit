@@ -7,8 +7,10 @@ import {
   editProfile,
   editprogram,
   forgotPasswordPage,
+  getGithubLoginCallback,
   getGoogleLoginCallback,
   getLiveClass,
+  githubLoginPage,
   googleLoginPage,
   homepage,
   loginpage,
@@ -101,5 +103,9 @@ router
 router.route("/google").get(googleLoginPage);
 
 router.route("/google/callback").get(getGoogleLoginCallback);
+
+router.route("/github").get(githubLoginPage);
+
+router.route("/github/callback").get(getGithubLoginCallback);
 
 export const routerdata = router;

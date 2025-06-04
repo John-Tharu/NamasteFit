@@ -27,6 +27,7 @@ import { verifyTokenEmail } from "../validation/validation.js";
 import { decodeIdToken, generateCodeVerifier, generateState } from "arctic";
 import { OAUTH_EXCHANGE_EXPIRY } from "../config/constant.js";
 import { google } from "../lib/oauth/google.js";
+import { github } from "../lib/oauth/github.js";
 
 export const homepage = (req, res) => {
   res.render("homepage");
@@ -152,7 +153,6 @@ export const userpage = async (req, res) => {
 
   //Getting live class links according to planlist
   const classLinks = await getClassLink(planList);
-  console.log(classLinks);
 
   res.render("user", { name: user.name, programs, subscriptions, classLinks });
 };
@@ -201,7 +201,7 @@ export const editprogram = async (req, res) => {
 
   try {
     const [programs] = await getProgramById(id);
-    console.log(programs);
+
     if (!programs) {
       return res.res.status(200).send("Internal Server Error");
     }
@@ -302,8 +302,6 @@ export const verifyEmailToken = async (req, res) => {
 
 export const editProfile = async (req, res) => {
   if (!req.user) return res.redirect("/login");
-
-  console.log(req.user.id);
 
   const user = await findUserById(req.user.id);
 
@@ -454,6 +452,132 @@ export const getGoogleLoginCallback = async (req, res) => {
   }
 
   //Creating Session with JWT and refresh token
+  await authenticateUser({ req, res, user, name, email });
+
+  res.redirect("/");
+};
+
+//Function for githubLoginPage
+export const githubLoginPage = (req, res) => {
+  //Check user logged in or not
+  if (req.user) return res.redirect("/");
+
+  //Generate State using Artic
+  const state = generateState();
+
+  //Generate URL using Artic
+  const url = github.createAuthorizationURL(state, ["user:email"]);
+
+  //Configuration for cookie
+  const cookieConfig = {
+    httpOnly: true,
+    secure: true,
+    maxAge: OAUTH_EXCHANGE_EXPIRY,
+    sameSite: "lax",
+  };
+
+  //Store state and codeVerifier as cookies at users browsers
+  res.cookie("github_oauth_state", state, cookieConfig);
+
+  //Redirect to the google login page
+  res.redirect(url.toString());
+};
+
+export const getGithubLoginCallback = async (req, res) => {
+  //Getting code and state from URL provided by github
+  const { code, state } = req.query;
+
+  //Getting gihub cookies from users browser
+  const { github_oauth_state: storedState } = req.cookies;
+
+  //Function to handle error
+  function handleFailedLogin() {
+    req.flash(
+      "errors",
+      "Couldn't login with Github because of invalid login attempt. Please try again !"
+    );
+
+    //Return to login page
+    return res.redirect("/login");
+  }
+
+  //Check code, state, storedState are present or not
+  if (!code || !state || !storedState || state !== storedState) {
+    return handleFailedLogin();
+  }
+
+  let tokens;
+  try {
+    //Validate the code provided by github using artic
+    tokens = await github.validateAuthorizationCode(code);
+  } catch {
+    return handleFailedLogin();
+  }
+
+  //Fetching data of user from github using accessToken saved into tokens
+  const githubUserResponse = await fetch("https://api.github.com/user", {
+    headers: {
+      Authorization: `Bearer ${tokens.accessToken()}`,
+    },
+  });
+
+  //Check githubUserResponse present or not
+  if (!githubUserResponse.ok) return handleFailedLogin();
+
+  //if all going good convert into json
+  const githubUser = await githubUserResponse.json();
+
+  //After converting extract id and name from githubUserResponse
+  const { id: githubUserId, name } = githubUser;
+
+  //Fecth user email data from github using accessToken
+  const githubEmailResponse = await fetch(
+    "https://api.github.com/user/emails",
+    {
+      headers: {
+        Authorization: `Bearer ${tokens.accessToken()}`,
+      },
+    }
+  );
+
+  //Check githubEmailResponse present or not
+  if (!githubEmailResponse.ok) return handleFailedLogin();
+
+  //If all good then convert into json format
+  const emails = await githubEmailResponse.json();
+
+  //There are many emails addresss in github. To get primary email address we use this code
+  const email = emails.filter((e) => e.primary)[0].email;
+
+  //Check email is present or not
+  if (!email) return handleFailedLogin();
+
+  //User already exist with github's oauth linked
+  let user = await getUserWithOauthId({
+    provider: "github",
+    email,
+  });
+
+  //User already exists with same email but github account not linked
+  if (user && !user.providerAccountId) {
+    await linkUserWithOauth({
+      userId: user.id,
+      provider: "github",
+      providerAccountId: githubUserId,
+    });
+  }
+
+  //if user register and no github account link
+  if (!user) {
+    user = await createUserWithOauth({
+      name,
+      email,
+      provider: "github",
+      providerAccountId: githubUserId,
+    });
+  }
+
+  //This is for session
   await authenticateUser({ req, res, user, name, email });
 
   res.redirect("/");

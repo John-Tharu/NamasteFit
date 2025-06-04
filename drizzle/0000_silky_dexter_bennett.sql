@@ -7,6 +7,15 @@ CREATE TABLE `is_email_valid_table` (
 	CONSTRAINT `is_email_valid_table_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
+CREATE TABLE `forgot_password_table` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`user_id` int NOT NULL,
+	`hash_token` text NOT NULL,
+	`expires_at` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP + INTERVAL 1 DAY),
+	`created_at` timestamp NOT NULL DEFAULT (now()),
+	CONSTRAINT `forgot_password_table_id` PRIMARY KEY(`id`)
+);
+--> statement-breakpoint
 CREATE TABLE `liveclass_table` (
 	`id` int AUTO_INCREMENT NOT NULL,
 	`title` varchar(255) NOT NULL,
@@ -19,6 +28,16 @@ CREATE TABLE `liveclass_table` (
 	`created_at` timestamp NOT NULL DEFAULT (now()),
 	`updated_at` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
 	CONSTRAINT `liveclass_table_id` PRIMARY KEY(`id`)
+);
+--> statement-breakpoint
+CREATE TABLE `oauth_table` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`user_id` int NOT NULL,
+	`provider` enum('google','github') NOT NULL,
+	`provider_account_id` varchar(255) NOT NULL,
+	`created_at` timestamp NOT NULL DEFAULT (now()),
+	CONSTRAINT `oauth_table_id` PRIMARY KEY(`id`),
+	CONSTRAINT `oauth_table_provider_account_id_unique` UNIQUE(`provider_account_id`)
 );
 --> statement-breakpoint
 CREATE TABLE `payment_table` (
@@ -64,7 +83,7 @@ CREATE TABLE `users_table` (
 	`id` int AUTO_INCREMENT NOT NULL,
 	`name` varchar(255) NOT NULL,
 	`email` varchar(255) NOT NULL,
-	`pass` varchar(255) NOT NULL,
+	`pass` varchar(255),
 	`is_email_valid` boolean NOT NULL DEFAULT false,
 	`role` varchar(8) NOT NULL DEFAULT 'User',
 	`created_at` timestamp NOT NULL DEFAULT (now()),
@@ -74,5 +93,7 @@ CREATE TABLE `users_table` (
 );
 --> statement-breakpoint
 ALTER TABLE `is_email_valid_table` ADD CONSTRAINT `is_email_valid_table_user_id_users_table_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users_table`(`id`) ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `forgot_password_table` ADD CONSTRAINT `forgot_password_table_user_id_users_table_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users_table`(`id`) ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `oauth_table` ADD CONSTRAINT `oauth_table_user_id_users_table_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users_table`(`id`) ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `payment_table` ADD CONSTRAINT `payment_table_user_id_users_table_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users_table`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `session_table` ADD CONSTRAINT `session_table_user_id_users_table_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users_table`(`id`) ON DELETE no action ON UPDATE no action;
