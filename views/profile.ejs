@@ -48,11 +48,19 @@
         <div class="edit-btn">
           <a href="/edit-profile"><button class="btn">Edit Profile</button></a>
         </div>
-        <div class="edit-btn">
+        <% if(user.hasPassword){ %>
+          <div class="edit-btn">
           <a href="/change-password"
             ><button class="btn">Change Password</button></a
           >
         </div>
+       <% }else{ %>
+          <div class="edit-btn">
+          <a href="/set-password"
+            ><button class="btn">Set Password</button></a
+          >
+        </div>
+       <% } %>
         <div class="edit-btn">
           <a href="/logout"><button class="btn">Logout</button></a>
         </div>

@@ -259,7 +259,16 @@ export const pageNot = (req, res) => {
 export const profilePage = async (req, res) => {
   const user = await findUserById(req.user.id);
   if (!user) return res.redirect("/login");
-  res.render("profile", { user });
+  res.render("profile", {
+    user: {
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      isEmailValid: user.isEmailValid,
+      createdAt: user.createdAt,
+      hasPassword: Boolean(user.pass),
+    },
+  });
 };
 
 export const verifyEmail = async (req, res) => {
@@ -581,4 +590,10 @@ export const getGithubLoginCallback = async (req, res) => {
   await authenticateUser({ req, res, user, name, email });
 
   res.redirect("/");
+};
+
+export const getSetPasswordPage = (req, res) => {
+  if (!req.user) return redirect("/login");
+
+  res.render("setpassword", { msg: req.flash("errors") });
 };

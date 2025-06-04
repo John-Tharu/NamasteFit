@@ -10,6 +10,7 @@ import {
   getGithubLoginCallback,
   getGoogleLoginCallback,
   getLiveClass,
+  getSetPasswordPage,
   githubLoginPage,
   googleLoginPage,
   homepage,
@@ -39,6 +40,7 @@ import {
   payment,
   resetPassword,
   savedata,
+  setPassword,
   updateProfile,
   updateProgram,
 } from "../controller/post.controller.js";
@@ -107,5 +109,7 @@ router.route("/google/callback").get(getGoogleLoginCallback);
 router.route("/github").get(githubLoginPage);
 
 router.route("/github/callback").get(getGithubLoginCallback);
+
+router.route("/set-password").get(getSetPasswordPage).post(setPassword);
 
 export const routerdata = router;

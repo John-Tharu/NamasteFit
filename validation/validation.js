@@ -72,7 +72,7 @@ export const verifyEmail = z.object({
   email: emailSchema,
 });
 
-export const resetPasswordValidation = z
+const passSchema = z
   .object({
     newPassword: z
       .string()
@@ -85,3 +85,7 @@ export const resetPasswordValidation = z
     message: "Password not matched",
     path: ["confirmPassword"],
   });
+
+export const resetPasswordValidation = passSchema;
+
+export const setPasswordValidation = passSchema;

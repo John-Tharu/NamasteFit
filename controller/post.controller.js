@@ -25,6 +25,7 @@ import {
   nameValidation,
   registerValidate,
   resetPasswordValidation,
+  setPasswordValidation,
   verifyChangePassword,
   verifyEmail,
 } from "../validation/validation.js";
@@ -352,4 +353,34 @@ export const resetPassword = async (req, res) => {
 
   //Redirect to the login page
   res.redirect("/login");
+};
+
+export const setPassword = async (req, res) => {
+  if (!req.user) return res.redirect("/login");
+
+  const { data, error } = setPasswordValidation.safeParse(req.body);
+
+  if (error) {
+    const errorMessage = error.errors.map((err) => err.message);
+    req.flash("errors", errorMessage);
+    return res.redirect("/set-password");
+  }
+
+  const { newPassword } = req.body;
+
+  const user = await findUserById(req.user.id);
+
+  if (user.pass) {
+    req.flash(
+      "errors",
+      "You already have your password. Insted change your password"
+    );
+    return res.redirect("/set-password");
+  }
+
+  const pass = await hashpass(newPassword);
+
+  await updatePassword({ userId: req.user.id, pass });
+
+  res.redirect("/profile");
 };
