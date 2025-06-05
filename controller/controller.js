@@ -264,6 +264,7 @@ export const profilePage = async (req, res) => {
       name: user.name,
       email: user.email,
       role: user.role,
+      avatarUrl: user.avatarUrl,
       isEmailValid: user.isEmailValid,
       createdAt: user.createdAt,
       hasPassword: Boolean(user.pass),
@@ -314,7 +315,11 @@ export const editProfile = async (req, res) => {
 
   const user = await findUserById(req.user.id);
 
-  res.render("editprofile", { name: user.name, msg: req.flash("errors") });
+  res.render("editprofile", {
+    name: user.name,
+    avatarUrl: user.avatarUrl,
+    msg: req.flash("errors"),
+  });
 };
 
 export const changePasswordPage = (req, res) => {

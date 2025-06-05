@@ -27,6 +27,7 @@ export const usersTable = mysqlTable("users_table", {
   name: varchar("name", { length: 255 }).notNull(),
   email: varchar("email", { length: 255 }).notNull().unique(),
   pass: varchar("pass", { length: 255 }),
+  avatarUrl: text("avatar_url"),
   isEmailValid: boolean("is_email_valid").default(false).notNull(),
   role: varchar("role", { length: 8 }).notNull().default("User"),
   createdAt: timestamp("created_at").notNull().defaultNow(),

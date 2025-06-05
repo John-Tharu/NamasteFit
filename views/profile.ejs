@@ -16,11 +16,11 @@
     <div class="container">
       <!-- Profile Header -->
       <div class="profile-header">
-        <img
-          src="https://images.icon-icons.com/1378/PNG/512/avatardefault_92824.png"
-          alt="Profile"
-          class="profile-img"
-        />
+        <% if(user.avatarUrl){ %>
+            <img src="/uploads/<%= user.avatarUrl %>" alt="profile" class="profile-img" id="image-preview">
+            <% }else{ %>
+              <img src="/uploads/default.png" alt="profile">
+           <% } %>
         <div class="profile-info">
           <h2><%= user.name %></h2>
           <p>Email: <%= user.email %></p>
@@ -36,8 +36,8 @@
       <div class="verify-email">
         <% if (user.isEmailValid) { %>
           <div class="alert success">
-  ✅ Your email has been successfully Verified!
-</div>
+          ✅ Your email has been successfully Verified!
+        </div>
         <% } else { %>
           <div class="alert warning">
         ⚠️ Your email is not Verified. Click the link to verify your email. <a href="/verify-email">Click here</a>
@@ -66,5 +66,6 @@
         </div>
       </div>
     </div>
+     <%- include('partials/footer') %>
   </body>
 </html>

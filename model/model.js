@@ -440,10 +440,10 @@ export const newEmailLink = async ({ userId, email }) => {
   }).catch(console.error);
 };
 
-export const updateNameById = async ({ userId, name }) => {
+export const updateNameById = async ({ userId, name, avatarUrl }) => {
   return await db
     .update(usersTable)
-    .set({ name })
+    .set({ name, avatarUrl })
     .where(eq(usersTable.id, userId));
 };
 

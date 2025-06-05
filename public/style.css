@@ -269,7 +269,6 @@ section .content p {
   margin-bottom: 0.5rem;
   font-weight: 500;
 }
-.form-group input,
 .form-group select {
   width: 100%;
   padding: 0.75rem;
@@ -348,6 +347,24 @@ section .content p {
   font-size: 1rem;
   outline: none;
 }
+
+.form-group input[type="file"] {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  outline: none;
+  cursor: pointer;
+
+  &::file-selector-button {
+    padding: 0.75rem;
+    color: #fff;
+    background-color: #388e3c;
+    border: none;
+    border-radius: 0.35rem;
+    transition: background-color 0.3s ease-in;
+    font-size: 0.9rem;
+  }
+}
 .form-group input:focus {
   border-color: #4caf50;
 }
@@ -377,6 +394,7 @@ section .content p {
 }
 
 /****** Register CSS *****/
+.profile-section,
 .register-section {
   min-height: calc(100vh - 14vh);
   display: flex;
@@ -409,7 +427,6 @@ section .content p {
   margin-bottom: 0.5rem;
   font-weight: 500;
 }
-.register-form input,
 textarea {
   width: 100%;
   padding: 0.75rem;
@@ -536,9 +553,9 @@ table th {
 .inline-form {
   display: inline;
 }
+/* ********* Profile CSS ********* */
 
 /******* User CSS ******/
-
 .program-list,
 .user_profile {
   display: flex;
@@ -605,9 +622,7 @@ table th {
 }
 
 .entry-content p {
-  margin: 1rem 0;
-  color: #333;
-  font-size: 1rem;
+  color: gray;
 }
 
 .qr-box {
@@ -716,6 +731,14 @@ table th {
 }
 .forget {
   text-align: right;
+}
+.profileimage {
+  text-align: center;
+}
+.profileimage img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
 }
 /****** Responsive Design ******/
 @media (max-width: 726px) {

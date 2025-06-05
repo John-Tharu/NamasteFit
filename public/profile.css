@@ -1,5 +1,5 @@
 .container {
-  max-width: 900px;
+  max-width: 800px;
   margin: 40px auto;
   background-color: #fff;
   padding: 30px;
@@ -46,11 +46,10 @@ input::-webkit-inner-spin-button {
 }
 
 .profile-img {
-  width: 90px;
-  height: 90px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #4f46e5;
 }
 
 .profile-info {

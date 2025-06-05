@@ -249,7 +249,15 @@ export const updateProfile = async (req, res) => {
     return res.redirect("/edit-profile");
   }
 
-  await updateNameById({ userId: req.user.id, name: data.name });
+  //await updateNameById({ userId: req.user.id, name: data.name });
+
+  const fileUrl = req.file ? `${req.file.filename}` : undefined;
+
+  await updateNameById({
+    userId: req.user.id,
+    name: data.name,
+    avatarUrl: fileUrl,
+  });
 
   res.redirect("/profile");
 };

@@ -32,8 +32,12 @@
   <div class="dropdown-menu">
     <% if(user){ %>
     <li><a href="/">Home</a></li>
-    <li><a href="/plan">Plan</a></li>
-    <li><a href="/dashboard">Dashboard</a></li>
+    <% if(user.role == "Admin"){ %>
+      <li><a href="/admin">Dashboard</a></li>
+      <% } else{ %>
+      <li><a href="/plan">Plan</a></li>
+      <li><a href="/dashboard">Dashboard</a></li>
+      <% } %>
     <li><a href="/profile">Profile</a></li>
     <li><a href="/logout">Logout</a></li>
     <% }else{ %>

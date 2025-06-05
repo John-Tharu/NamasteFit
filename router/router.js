@@ -44,6 +44,8 @@ import {
   updateProfile,
   updateProgram,
 } from "../controller/post.controller.js";
+import multer from "multer";
+import path from "path";
 
 const router = Router();
 
@@ -91,7 +93,39 @@ router.route("/resendCode").post(resendCode);
 
 router.route("/verify-email-token").get(verifyEmailToken);
 
-router.route("/edit-profile").get(editProfile).post(updateProfile);
+const avatarStorage = multer.diskStorage({
+  //Setting the destination of file
+  destination: (req, file, cb) => {
+    cb(null, "public/uploads");
+  },
+
+  //Set the name of file
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    cb(null, `${Date.now()}_${Math.random()}${ext}`);
+  },
+});
+
+//To check file is image or not
+const avatarFileFilter = (req, file, cb) => {
+  if (file && file.mimetype && file.mimetype.startsWith("image/")) {
+    cb(null, true);
+  } else {
+    cb(new Error("Only image files are allowed!"), false);
+  }
+};
+
+//Setting all file into avatarUpload
+const avatarUpload = multer({
+  storage: avatarStorage,
+  fileFilter: avatarFileFilter,
+  limits: { fileSize: 5 * 1024 * 1024 }, //Image size is 5mb
+});
+
+router
+  .route("/edit-profile")
+  .get(editProfile)
+  .post(avatarUpload.single("avatar"), updateProfile);
 
 router.route("/change-password").get(changePasswordPage).post(changePassword);
 
