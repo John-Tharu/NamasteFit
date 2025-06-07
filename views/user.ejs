@@ -101,7 +101,7 @@
                 <td><%= expiry.toISOString().split('T')[0] %></td>
                 <td><%= remaining %> Days</td>
                 <td><span class="good"><%= status %></span></td>
-                <% if(remaining > 0){ %>
+                <% if(remaining > 0 && sub.plan !== "Free"){ %>
                 <td>
                   <a
                     href="/card?plan=<%= sub.plan %>&pkg=<%= sub.package %>&purchase=<%= sub.createdAt.toISOString().split('T')[0] %>&expire=<%= expiry.toISOString().split('T')[0] %>"

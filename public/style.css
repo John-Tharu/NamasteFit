@@ -661,7 +661,10 @@ table th {
   background-color: #c628283b;
   color: crimson;
 }
-
+.bad {
+  background-color: #fef3c7;
+  color: #92400e;
+}
 /****** Admin Form CSS ****/
 .model {
   position: absolute;

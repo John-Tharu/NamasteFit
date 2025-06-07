@@ -56,10 +56,11 @@
         <div class="form-group">
           <label for="pkg">Select Package</label>
           <select name="pkg" id="pkg">
-            <option value="">-- Choose a Package --</option>
-            <option value="monthly">monthly package</option>
-            <option value="semiannual">Semi annual package</option>
-            <option value="annual">annual package</option>
+            <option value="monthly">Monthly Package</option>
+            <% if(title != "Free"){ %>
+              <option value="semiannual">Semi Annual Package</option>
+              <option value="annual">Annual Package</option>
+           <% } %>
           </select>
         </div>
 

@@ -74,7 +74,7 @@
             <tbody>
               <% if(programs.length === 0){ %>
               <tr>
-                <td colspan="7">No Data Found</td>
+                <td colspan="7">No Programs Found</td>
               </tr>
               <% } else{ let count=1; programs.forEach(program => { %>
               <tr>
@@ -122,7 +122,7 @@
             <tbody>
               <% if(users.length === 0){ %>
               <tr>
-                <td colspan="5">No Data Found</td>
+                <td colspan="5">No Users Found</td>
               </tr>
               <% } else{ let sn=1; users.forEach(user => { %>
               <tr>
@@ -197,7 +197,7 @@
             <tbody>
               <% let amount = 0 %> <% if(payment.length === 0){%>
               <tr>
-                <td colspan="8">No Data Found</td>
+                <td colspan="8">No Payment Found</td>
               </tr>
               <% }else{ let num=1; payment.forEach(payment => { amount = amount
               + payment.amount %>

@@ -22,7 +22,7 @@
               <img src="/uploads/default.png" alt="profile">
            <% } %>
         <div class="profile-info">
-          <h2><%= user.name %></h2>
+          <h1><%= user.name %></h1>
           <p>Email: <%= user.email %></p>
           <p class="active-subscription">
             Date of Joining: <%= user.createdAt.toISOString().split('T')[0] %>
@@ -35,34 +35,34 @@
       <!-- Verify Email -->
       <div class="verify-email">
         <% if (user.isEmailValid) { %>
-          <div class="alert success">
-          ✅ Your email has been successfully Verified!
+          <div>
+          <span class="good">✅ Your email has been successfully Verified!</span>
         </div>
         <% } else { %>
-          <div class="alert warning">
-        ⚠️ Your email is not Verified. Click the link to verify your email. <a href="/verify-email">Click here</a>
-      </div>
+          <div>
+          <span class="good bad">⚠️ Your email is not Verified.<a href="/verify-email">Click here</a></span>
+        </div>
         <% } %>
       <!-- Action Details -->
       <div class="card">
-        <div class="edit-btn">
-          <a href="/edit-profile"><button class="btn">Edit Profile</button></a>
+        <div class="edit-btn" title="Edit Profile">
+          <a href="/edit-profile"><button class="btn"><i class="fa-solid fa-pen-to-square"></i></button></a>
         </div>
         <% if(user.hasPassword){ %>
-          <div class="edit-btn">
+          <div class="edit-btn" title="Change Password">
           <a href="/change-password"
-            ><button class="btn">Change Password</button></a
+            ><button class="btn"><i class="fa-solid fa-key"></i></button></a
           >
         </div>
        <% }else{ %>
-          <div class="edit-btn">
+          <div class="edit-btn" title="Set Password">
           <a href="/set-password"
-            ><button class="btn">Set Password</button></a
+            ><button class="btn"><i class="fa-solid fa-wrench"></i></button></a
           >
         </div>
        <% } %>
-        <div class="edit-btn">
-          <a href="/logout"><button class="btn">Logout</button></a>
+        <div class="edit-btn" title="Logout">
+          <a href="/logout"><button class="btn"><i class="fa-solid fa-right-from-bracket"></i></button></a>
         </div>
       </div>
     </div>
