@@ -25,14 +25,17 @@ import path from "path";
 import mjml2html from "mjml";
 import ejs from "ejs";
 
+//Getting all data from usersTable by using email
 export const checkEmail = async (email) => {
   return await db.select().from(usersTable).where(eq(usersTable.email, email));
 };
 
+//Hashing password using argon
 export const hashpass = async (password) => {
   return await argon2.hash(password);
 };
 
+//insert register data into database and return id
 export const saveData = async ({ name, email, pass }) => {
   return await db
     .insert(usersTable)
@@ -40,17 +43,19 @@ export const saveData = async ({ name, email, pass }) => {
     .$returningId();
 };
 
+//Comparing the hashed password and provided password
 export const checkPass = async (hash, pass) => {
   return await argon2.verify(hash, pass);
 };
 
+//Generation of session using JWT
 // export const generateToken = ({ id, name, email, role }) => {
 //   return jwt.sign({ id, name, email, role }, process.env.JWT_SECRET, {
 //     expiresIn: "30d",
 //   });
 // };
 
-//Storing session on database
+//Storing session on database and return id
 export const createSession = async (userId, { ip, userAgent }) => {
   const [session] = await db
     .insert(sessionTable)
@@ -91,6 +96,7 @@ export const saveProgram = async ({ title, slogan, duration, plan, link }) => {
     .$returningId();
 };
 
+//Getting all data of planTable using planList
 export const getProgram = async (planList) => {
   return await db
     .select()
@@ -98,18 +104,22 @@ export const getProgram = async (planList) => {
     .where(inArray(planTable.plan, planList));
 };
 
+//Getting all programs from plantable
 export const getPrograms = async () => {
   return await db.select().from(planTable);
 };
 
+//Getting programs using id
 export const getProgramById = async (id) => {
   return await db.select().from(planTable).where(eq(planTable.id, id));
 };
 
+//Getting user from usersTable
 export const getUser = async () => {
   return await db.select().from(usersTable);
 };
 
+//Storing payment data into database and return id
 export const paymentdata = async ({
   name,
   email,
@@ -135,10 +145,12 @@ export const paymentdata = async ({
     .$returningId();
 };
 
+//Getting payment data from paymentTable
 export const getPayment = async () => {
   return await db.select().from(paymentTable);
 };
 
+//Getting subscription data from database using id
 export const getSubscription = async (id) => {
   return await db
     .select()
@@ -146,6 +158,7 @@ export const getSubscription = async (id) => {
     .where(eq(paymentTable.userId, id));
 };
 
+//Updating programs using id
 export const updateProgramData = async ({
   title,
   slogan,
@@ -166,10 +179,12 @@ export const updateProgramData = async ({
     .where(eq(planTable.id, id));
 };
 
+//deleting data from database using id
 export const deleteProgramData = async (id) => {
   return await db.delete(planTable).where(eq(planTable.id, id));
 };
 
+//Storing live class data into database and return id
 export const liveClass = async ({
   title,
   slogan,
@@ -184,10 +199,12 @@ export const liveClass = async ({
     .$returningId();
 };
 
+//Getting liveclass data from database
 export const getLiveClassData = async () => {
   return await db.select().from(liveClassTable);
 };
 
+//Getting live class data from database using planList and status is true
 export const getClassLink = async (planList) => {
   return await db
     .select()
@@ -200,6 +217,7 @@ export const getClassLink = async (planList) => {
     );
 };
 
+//Getting live class status from database using id
 export const getStatus = async (id) => {
   return await db
     .select()
@@ -207,6 +225,7 @@ export const getStatus = async (id) => {
     .where(eq(liveClassTable.id, id));
 };
 
+//Changing status into database using id
 export const changeStatus = async (id, value) => {
   await db
     .update(liveClassTable)
@@ -214,10 +233,12 @@ export const changeStatus = async (id, value) => {
     .where(eq(liveClassTable.id, id));
 };
 
+//deleting liveclasses from database using id
 export const deleteClassData = async (id) => {
   return await db.delete(liveClassTable).where(eq(liveClassTable.id, id));
 };
 
+//Getting all data of users using id
 export const findUserById = async (userId) => {
   const [user] = await db
     .select()
@@ -227,6 +248,7 @@ export const findUserById = async (userId) => {
   return user;
 };
 
+//Finding session by sessionId
 const findSessionById = async (sessionId) => {
   const [session] = await db
     .select()
@@ -272,6 +294,7 @@ export const authenticateUser = async ({ req, res, user, name, email }) => {
   });
 };
 
+//Function for refreshtoken
 export const refreshTokens = async (refreshToken) => {
   try {
     const decodedToken = verifytoken(refreshToken);
@@ -440,6 +463,7 @@ export const newEmailLink = async ({ userId, email }) => {
   }).catch(console.error);
 };
 
+//Updating usersdata using user id
 export const updateNameById = async ({ userId, name, avatarUrl }) => {
   return await db
     .update(usersTable)
@@ -447,6 +471,7 @@ export const updateNameById = async ({ userId, name, avatarUrl }) => {
     .where(eq(usersTable.id, userId));
 };
 
+//Updating user password using userid
 export const updatePassword = async ({ userId, pass }) => {
   return await db
     .update(usersTable)
@@ -454,6 +479,7 @@ export const updatePassword = async ({ userId, pass }) => {
     .where(eq(usersTable.id, userId));
 };
 
+//creating reset link to send the user email
 export const createResetPasswordLink = async ({ userId }) => {
   //Generate Random 64 character token
   const randomToken = crypto.randomBytes(32).toString("hex");
@@ -496,6 +522,7 @@ export const resetPasswordData = async (token) => {
   return user;
 };
 
+//Clearing reset token
 export const clearResetPasswordToken = async (userId) => {
   return await db
     .delete(forgotPasswordTable)

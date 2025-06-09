@@ -29,11 +29,14 @@ import { OAUTH_EXCHANGE_EXPIRY } from "../config/constant.js";
 import { google } from "../lib/oauth/google.js";
 import { github } from "../lib/oauth/github.js";
 
+//Rendering homepage
 export const homepage = (req, res) => {
   res.render("homepage");
 };
 
+//Rendering planPage with dynamic data
 export const planpage = (req, res) => {
+  //Check user logged in or not
   if (!req.user) return res.redirect("/login");
   const plan = [
     {
@@ -89,7 +92,9 @@ export const planpage = (req, res) => {
   res.render("planpage", { plan });
 };
 
+//Rendering subscription page with dynamic data
 export const subscriptionpage = (req, res) => {
+  //Check user is logged in or not
   if (!req.user) return res.redirect("/login");
 
   const plans = {
@@ -110,34 +115,52 @@ export const subscriptionpage = (req, res) => {
   });
 };
 
+//Rendering loginpage
 export const loginpage = (req, res) => {
+  //check user loggedin or not. if loggedin then redirect to homepage
   if (req.user) return res.redirect("/");
   res.render("login", { msg: req.flash("errors") });
 };
 
+//Rendering register page
 export const registerpage = (req, res) => {
+  //check user loggedin or not. if loggedin then redirect to homepage
   if (req.user) return res.redirect("/");
   res.render("register", { msg: req.flash("errors") });
 };
 
+//Render admin page with database data
 export const adminpage = async (req, res) => {
+  //Check user is loggedin or not
   if (!req.user) return res.redirect("/login");
+
+  //check user is admin or not
   if (req.user.role != "Admin") return res.redirect("/404");
+
+  //Getting all programs data
   const programs = await getPrograms();
   //console.log(programs);
 
+  //Getting all users data
   const users = await getUser();
 
+  //Getting all paymentdata
   const payment = await getPayment();
 
+  //Getting all live classes data
   const liveclasses = await getLiveClassData();
 
   res.render("admin", { liveclasses, programs, users, payment });
 };
 
+//Rendering user page with database data
 export const userpage = async (req, res) => {
+  //check user is logged in or not
   if (!req.user) return res.redirect("/login");
+
+  //Getting user id from req.user
   const { id } = req.user;
+
   //Getrting User data by id
   const user = await findUserById(id);
 
@@ -157,17 +180,28 @@ export const userpage = async (req, res) => {
   res.render("user", { name: user.name, programs, subscriptions, classLinks });
 };
 
+//Rendering program page with database data
 export const programpage = (req, res) => {
+  //check user loggedin or not.
   if (!req.user) return res.redirect("/login");
+
+  //Check user is admin or not
   if (req.user.role != "Admin") return res.redirect("/404");
   res.render("programpage");
 };
 
+//Rendering card page
 export const cardpage = (req, res) => {
+  //Check user loggedin or not
   if (!req.user) return res.redirect("/login");
 
+  //Getting datas from url
   const { plan, pkg, purchase, expire } = req.query;
+
+  //Getting name from req.user
   const user = req.user.name;
+
+  //All data saved into qrdata in object format
   const qrData = {
     name: user,
     plan: plan,
@@ -176,52 +210,78 @@ export const cardpage = (req, res) => {
     expiry: expire,
   };
 
+  //Converting object into json format
   const jsonString = JSON.stringify(qrData);
+
+  //Encoding the data into url
   const encodedData = encodeURIComponent(jsonString);
+
+  //sending data to api for generate qr
   const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodedData}`;
 
   res.render("card", { user, plan, pkg, purchase, expire, qrCodeUrl });
 };
 
+//Function for logout
 export const logout = async (req, res) => {
-  // console.log(req.user.sessionId);
+  //Clearing the previous session using session id
   await clearUserSession(req.user.sessionId);
+
+  //clearing access token from user device
   res.clearCookie("access_token");
+
+  //clearing refresh token from user device
   res.clearCookie("refresh_token");
+
+  //returining to home page
   res.redirect("/");
 };
 
+//Rendering edit program page
 export const editprogram = async (req, res) => {
+  //Check user is loggedin or not
   if (!req.user) return res.redirect("/login");
+
+  //Check user is admin or not
   if (req.user.role != "Admin") return res.redirect("/404");
 
+  //Id converted into integer using zod
   const { data: id, error } = z.coerce.number().int().safeParse(req.params.id);
 
+  //If there is ant error during validation then sending internal server error
   if (error) return res.status(200).send("Internal Server Error");
 
   try {
+    //Getting all programs using id
     const [programs] = await getProgramById(id);
 
+    //If there is no any program then sending internal server error
     if (!programs) {
       return res.res.status(200).send("Internal Server Error");
     }
+
     res.render("editprogram", { programs });
   } catch (error) {
+    //for error
     return res.status(200).send("Internal Server Error");
   }
 };
 
+//Rendering live class page
 export const getLiveClass = async (req, res) => {
+  //Check user is loggedin or not
   if (!req.user) return res.redirect("/login");
   try {
     res.render("liveclass", { msg: req.flash("errors") });
   } catch (error) {
+    //for erro
     res.status(400).send("Inernal Server error");
   }
 };
 
+//Rendering edit class page
 export const editclass = async (req, res) => {
-  //Check cookie present or not
+  //Check user loggedin or not
   if (!req.user) return res.redirect("/login");
 
   //Check Admin login or not
@@ -247,17 +307,23 @@ export const editclass = async (req, res) => {
   res.redirect("/admin");
 };
 
+//Rendering payment page
 export const paymentPage = (req, res) => {
   if (!req.user) return res.redirect("/login");
   res.render("paymentdone");
 };
 
+//Rendering page not found page
 export const pageNot = (req, res) => {
   res.render("404");
 };
 
+//Rendering profile page with dynamic data
 export const profilePage = async (req, res) => {
+  //Getting user data using req.user.id
   const user = await findUserById(req.user.id);
+
+  //Check user is present or not
   if (!user) return res.redirect("/login");
   res.render("profile", {
     user: {
@@ -272,11 +338,15 @@ export const profilePage = async (req, res) => {
   });
 };
 
+//Rendering verify email page
 export const verifyEmail = async (req, res) => {
+  //Check user is loggedin or not
   if (!req.user) return res.redirect("/login");
 
+  //Getting user data from database using id
   const user = await findUserById(req.user.id);
 
+  //Check user is present or not or user email is valid or not
   if (!user || user.isEmailValid) return res.redirect("/");
 
   return res.render("emailVerify", {
@@ -284,35 +354,47 @@ export const verifyEmail = async (req, res) => {
   });
 };
 
+//Function for resend code to the users gmail
 export const resendCode = async (req, res) => {
   //Check user loggedin or not
   if (!req.user) return res.redirect("/login");
 
+  //Getting email link
   await newEmailLink({ userId: req.user.id, email: req.user.email });
 
   return res.redirect("/verify-email");
 };
 
+//Function to check email link is valid or not
 export const verifyEmailToken = async (req, res) => {
+  //Getting email link from url and send to zod validation for validate
   const { data, error } = verifyTokenEmail.safeParse(req.query);
 
+  //If there is any during velidation then return link invalid
   if (error)
     return res.status(400).send("Varification link invalid or expired");
 
+  //Getting token from database by using url token
   const [token] = await findVerificationToken(data);
 
+  //Check token is present or not
   if (!token) return res.send("Varification link invalid or expired");
 
+  //After verify the token then update the database
   await verifyEmailAndUpdate(token.email);
 
+  //After update clear the previous token
   await clearVerifyEmailTokens(token.userId);
 
   res.redirect("/profile");
 };
 
+//Rendering edit profile page
 export const editProfile = async (req, res) => {
+  //Check user is logged in or not
   if (!req.user) return res.redirect("/login");
 
+  //Getting user data from database using user id
   const user = await findUserById(req.user.id);
 
   res.render("editprofile", {
@@ -322,11 +404,14 @@ export const editProfile = async (req, res) => {
   });
 };
 
+//Rendering change password page
 export const changePasswordPage = (req, res) => {
+  //Check user is loggedin or not
   if (!req.user) return res.redirect("/login");
   res.render("changepass", { msg: req.flash("errors") });
 };
 
+//Rendering forgotpassword page
 export const forgotPasswordPage = (req, res) => {
   res.render("forgotPassword", {
     formSubmittted: req.flash("formsubmitted")[0],
@@ -597,7 +682,9 @@ export const getGithubLoginCallback = async (req, res) => {
   res.redirect("/");
 };
 
+//Rendering set password page
 export const getSetPasswordPage = (req, res) => {
+  //Check user is logged in or not
   if (!req.user) return redirect("/login");
 
   res.render("setpassword", { msg: req.flash("errors") });

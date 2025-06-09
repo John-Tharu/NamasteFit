@@ -5,11 +5,11 @@ import {
   int,
   mysqlEnum,
   mysqlTable,
-  serial,
   timestamp,
   varchar,
 } from "drizzle-orm/mysql-core";
 
+//Schema for email validate or not
 export const emailValidTable = mysqlTable("is_email_valid_table", {
   id: int().autoincrement().primaryKey(),
   userId: int("user_id")
@@ -22,6 +22,7 @@ export const emailValidTable = mysqlTable("is_email_valid_table", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
+//Schema for usersTable
 export const usersTable = mysqlTable("users_table", {
   id: int().autoincrement().primaryKey(),
   name: varchar("name", { length: 255 }).notNull(),
@@ -34,6 +35,7 @@ export const usersTable = mysqlTable("users_table", {
   updatedAt: timestamp("updated_at").notNull().defaultNow().onUpdateNow(),
 });
 
+//Schema for sessionTable
 export const sessionTable = mysqlTable("session_table", {
   id: int().autoincrement().primaryKey(),
   userId: int("user_id")
@@ -46,6 +48,7 @@ export const sessionTable = mysqlTable("session_table", {
   updatedAt: timestamp("updated_at").notNull().defaultNow().onUpdateNow(),
 });
 
+//Schema for planTable
 export const planTable = mysqlTable("plan_table", {
   id: int().autoincrement().primaryKey(),
   title: varchar("title", { length: 255 }).notNull(),
@@ -57,6 +60,7 @@ export const planTable = mysqlTable("plan_table", {
   updatedAt: timestamp("updated_at").notNull().defaultNow().onUpdateNow(),
 });
 
+//Schema for paymentTable
 export const paymentTable = mysqlTable("payment_table", {
   id: int().autoincrement().primaryKey(),
   name: varchar("name", { length: 255 }).notNull(),
@@ -73,6 +77,7 @@ export const paymentTable = mysqlTable("payment_table", {
   updatedAt: timestamp("updated_at").notNull().defaultNow().onUpdateNow(),
 });
 
+//Schema fpr forgotPasswordTable
 export const forgotPasswordTable = mysqlTable("forgot_password_table", {
   id: int().autoincrement().primaryKey(),
   userId: int("user_id")
@@ -85,6 +90,7 @@ export const forgotPasswordTable = mysqlTable("forgot_password_table", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
+//Schema for oauthTable
 export const oauthTable = mysqlTable("oauth_table", {
   id: int().autoincrement().primaryKey(),
   userId: int("user_id")
@@ -97,6 +103,7 @@ export const oauthTable = mysqlTable("oauth_table", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+//Schema for liveClassTable
 export const liveClassTable = mysqlTable("liveclass_table", {
   id: int().autoincrement().primaryKey(),
   title: varchar("title", { length: 255 }).notNull(),
@@ -110,11 +117,13 @@ export const liveClassTable = mysqlTable("liveclass_table", {
   updatedAt: timestamp("updated_at").notNull().defaultNow().onUpdateNow(),
 });
 
+//Relationship between usersTable with paymentTable and sessionTable
 export const userRelation = relations(usersTable, ({ many }) => ({
   payment: many(paymentTable),
   session: many(sessionTable),
 }));
 
+//Relationship between paymentTable and usersTable
 export const paymentRelation = relations(paymentTable, ({ one }) => ({
   user: one(usersTable, {
     fields: [paymentTable.userId],
@@ -122,6 +131,7 @@ export const paymentRelation = relations(paymentTable, ({ one }) => ({
   }),
 }));
 
+//Relationship between sessionTable and usersTable
 export const sessionRelation = relations(sessionTable, ({ one }) => ({
   user: one(usersTable, {
     fields: [sessionTable.userId], //Foregin Key

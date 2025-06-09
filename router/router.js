@@ -93,6 +93,7 @@ router.route("/resendCode").post(resendCode);
 
 router.route("/verify-email-token").get(verifyEmailToken);
 
+//For file uploads
 const avatarStorage = multer.diskStorage({
   //Setting the destination of file
   destination: (req, file, cb) => {

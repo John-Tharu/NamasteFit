@@ -1,22 +1,27 @@
 import { z } from "zod";
 
+//Validation for name
 const nameSchema = z
   .string()
   .trim()
   .nonempty({ message: "Fill name field" })
   .max(50);
 
+//validation for email
 const emailSchema = z.string().email({ message: "Email not valid" });
 
+//Validation for password
 const passwordSchema = z
   .string()
   .min(6, { message: "Password must contain at least 6 characters" });
 
+//validatiob for login Form data
 export const loginValidation = z.object({
   email: emailSchema,
   password: passwordSchema,
 });
 
+//validation fro registration data
 export const registerValidate = loginValidation
   .extend({
     name: nameSchema,
@@ -31,6 +36,7 @@ export const registerValidate = loginValidation
     path: ["confirmPassword"],
   });
 
+//Validation for live classes data
 export const liveClassValidation = z.object({
   title: z.string().trim().nonempty({ message: "Fill Title field" }).max(50),
   slogan: z.string().nonempty({ message: "Fill slogan field" }).max(50),
@@ -42,15 +48,18 @@ export const liveClassValidation = z.object({
   link: z.string().url({ message: "Invalid URL format" }),
 });
 
+//validation for token and email
 export const verifyTokenEmail = z.object({
   token: z.string().trim().length(8),
   email: emailSchema,
 });
 
+//name validation
 export const nameValidation = z.object({
   name: nameSchema,
 });
 
+//Validation for change password data
 export const verifyChangePassword = z
   .object({
     currentPassword: z
@@ -68,10 +77,12 @@ export const verifyChangePassword = z
     path: ["confirmPassword"],
   });
 
+//Email validation
 export const verifyEmail = z.object({
   email: emailSchema,
 });
 
+//Password and Confirmpassword validation
 const passSchema = z
   .object({
     newPassword: z
