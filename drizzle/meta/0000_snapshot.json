@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "5c89673c-9ca2-43ff-a1c7-912aa84a6d3b",
+  "id": "d46af28d-eea7-40ce-afaa-cfc54c32585a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "is_email_valid_table": {
@@ -610,6 +610,13 @@
         "pass": {
           "name": "pass",
           "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "avatar_url": {
+          "name": "avatar_url",
+          "type": "text",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false

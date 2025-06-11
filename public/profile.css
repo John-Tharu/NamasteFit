@@ -44,7 +44,7 @@ input::-webkit-inner-spin-button {
   margin-bottom: 20px;
 }
 
-.profile-img {
+.profile-header img {
   width: 150px;
   height: 150px;
   border-radius: 50%;

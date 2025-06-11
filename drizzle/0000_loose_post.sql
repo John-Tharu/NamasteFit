@@ -84,6 +84,7 @@ CREATE TABLE `users_table` (
 	`name` varchar(255) NOT NULL,
 	`email` varchar(255) NOT NULL,
 	`pass` varchar(255),
+	`avatar_url` text,
 	`is_email_valid` boolean NOT NULL DEFAULT false,
 	`role` varchar(8) NOT NULL DEFAULT 'User',
 	`created_at` timestamp NOT NULL DEFAULT (now()),

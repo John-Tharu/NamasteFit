@@ -162,7 +162,88 @@ section .content p {
   box-shadow: 0 6px 18px rgba(76, 175, 80, 0.4);
 }
 .home {
-  min-height: calc(100vh - 14vh); /* 100vh minus header and footer height */
+  min-height: calc(100vh - 8vh); /* 100vh minus header and footer height */
+}
+
+/************* About Us **********/
+.head h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #4caf50;
+  margin-bottom: 20px;
+}
+.about h1 {
+  font-size: 4rem;
+}
+.section {
+  min-height: calc(100vh - 14vh);
+  padding: 2rem 15%;
+  background-color: #f9f9f9;
+  font-family: "Inter", sans-serif;
+  text-align: center;
+}
+.section-content {
+  display: flex;
+  padding: 2rem;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.sections {
+  width: 50%;
+}
+.sections img {
+  width: 30rem;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+.sections-text {
+  text-align: left;
+}
+.sections-text h1 {
+  margin-bottom: 20px;
+}
+.section-image img {
+  width: 35rem;
+  border-radius: 10px;
+}
+.cards {
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  border-radius: 5px;
+  width: 350px;
+}
+.cards img {
+  width: 100%;
+  height: 250px;
+  border-radius: 5px;
+}
+.cards-text {
+  padding: 20px;
+}
+.cards h2 {
+  margin: 10px 0;
+  font-size: 1.8rem;
+  color: #4caf50;
+}
+.cards ol li {
+  padding: 10px 0;
+}
+.contact {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  place-items: center;
+}
+.card-contact {
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  width: 300px;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+.card-contact .fa-solid {
+  font-size: 2.6rem;
+  padding: 20px;
 }
 /****** Plan CSS *****/
 .plans-section {
@@ -622,6 +703,7 @@ table th {
 }
 
 .entry-content p {
+  padding: 5px;
   color: gray;
 }
 
@@ -775,6 +857,23 @@ table th {
   .user_profile {
     flex-direction: column;
     align-items: center;
+  }
+  .section {
+    padding: 2rem 0px;
+  }
+  .section-content {
+    flex-direction: column;
+    align-items: center;
+  }
+  .sections,
+  .section-image img,
+  .sections img,
+  .card {
+    width: 100%;
+  }
+  .contact {
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
 }
 
