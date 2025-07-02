@@ -78,7 +78,7 @@ NamasteFit is a subscription-based fitness and yoga platform built specifically 
 ## Screenshots
 
 ### Homepage  
-*(Insert image here)*
+
 
 ### Login Page  
 *(Insert image here)*
@@ -131,3 +131,41 @@ GITHUB_CLIENT_SECRET="YOUR_GITHUB_CLIENT_SECRET"
 
 # 4. Start the development server with auto-reload
 node --watch ./app.js
+
+```
+## Challenges Faced
+
+- **JWT Expiry & Token Refresh Logic:**  
+  Implemented refresh token mechanism and planned silent renewal for smoother user experience.
+
+- **Email Reset Link Logic:**  
+  Ensured secure password resets using expiring JWT tokens and user ID in reset URLs.
+
+- **OAuth Integration (Google & GitHub):**  
+  Managed callback URL complexities via environment variables and proper redirect URIs.
+
+- **Payment Integration (Ongoing):**  
+  Researching Khalti API integration due to limited documentation and test environments.
+
+- **GitHub Push Conflicts:**  
+  Adopted best Git practices with regular pulls, feature branches, and clear commits.
+
+---
+
+## Future Improvements
+
+- Integrate payment gateways like Khalti and Stripe for secure online payments.
+
+- Implement token auto-refresh and silent login for improved UX.
+
+- Develop frontend UI for both users and admins.
+
+- Add real-time notifications for live sessions.
+
+- Optimize deployment and scalability using CI/CD pipelines.
+
+---
+
+## Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request to discuss improvements or bug fixes.
