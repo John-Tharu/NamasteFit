@@ -1,7 +1,5 @@
 # NamasteFit: Fitness & Yoga Subscription Platform
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-
 ---
 
 ## Table of Contents
@@ -13,7 +11,6 @@
 - [Challenges Faced](#challenges-faced)  
 - [Future Improvements](#future-improvements)  
 - [Contributing](#contributing)  
-- [License](#license)
 
 ---
 
@@ -81,27 +78,26 @@ NamasteFit is a subscription-based fitness and yoga platform built specifically 
 
 
 ### Login Page  
-*(Insert image here)*
+![Homepage](./views/partials/Homepage.png)
 
 ### Register Page  
-*(Insert image here)*
+![Homepage](./views/partials/Registerpage.png)
 
 ### Plan Page  
-*(Insert image here)*
+![Homepage](./views/partials/Planpage.png)
 
 ### Subscription Page  
-*(Insert image here)*
+![Homepage](./views/partials/Scubscribepage.png)
 
 ### User Dashboard  
-*(Insert image here)*
+![Homepage](./views/partials/Userpage.png)
 
 ### Profile Page  
-*(Insert image here)*
+![Homepage](./views/partials/Userprofile.png)
 
 ### Admin Dashboard  
-*(Insert image here)*
-
-*(Add screenshots in your repo’s `/screenshots` folder and link here)*
+![Homepage](./views/partials/Admindashboard.png)
+![Homepage](./views/partials/Listuser.png)
 
 ---
 
